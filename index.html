@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FlatFit · furnish a flat in 3D</title>
+  <meta name="description" content="Furnish an apartment in 3D with real furniture from local stores, with prices by country, fit checks and photoreal path-traced renders in the browser.">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c2410c'/%3E%3Cpath d='M7 23V12l9-6 9 6v11h-6v-6h-6v6z' fill='%23fff'/%3E%3C/svg%3E">
+  <script>
+    // apply the saved theme before first paint
+    try { const t = JSON.parse(localStorage.getItem('flatfit.prefs') || '{}').theme; if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#list" data-i18n="skip">Skip to the shopping list</a>
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7"/><path d="M7 23V12l9-6 9 6v11h-6v-6h-6v6z"/></svg>
+      <div><strong>FlatFit</strong><span class="tagline" data-i18n="app.tagline"></span></div>
+    </div>
+    <div class="controls">
+      <label class="field"><span data-i18n="nav.project"></span><select id="project"></select></label>
+      <button type="button" class="btn ghost" id="edit-plan" data-i18n="nav.edit"></button>
+      <label class="field"><span data-i18n="nav.country"></span><select id="country"></select></label>
+      <label class="field"><span data-i18n="nav.lang"></span><select id="lang"></select></label>
+      <button type="button" class="icon" id="theme" data-i18n-label="nav.theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg></button>
+      <button type="button" class="icon" id="help" data-i18n-label="nav.help"><span aria-hidden="true">?</span></button>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="stage" aria-labelledby="views-label">
+      <h2 id="views-label" class="sr-only" data-i18n="view.label"></h2>
+      <div class="views" id="views" role="tablist"></div>
+      <div class="viewer" id="viewer">
+        <div class="labels" id="labels" aria-hidden="true"></div>
+        <div class="toolbar">
+          <button type="button" class="btn primary" id="render-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg><span data-i18n="render.btn"></span></button>
+        </div>
+        <div class="nav-pad" aria-hidden="true">
+          <button type="button" data-turn="left" tabindex="-1">◀</button><button type="button" data-turn="right" tabindex="-1">▶</button>
+        </div>
+        <div class="card" id="card" hidden></div>
+        <p class="nogl" id="nogl" hidden data-i18n="misc.noWebgl"></p>
+      </div>
+    </section>
+
+    <aside class="panel" id="list" tabindex="-1" aria-label="Shopping list">
+      <div class="presets"><h2 data-i18n="preset.label"></h2><div id="presets" class="chips"></div></div>
+      <div class="summary" id="summary" aria-live="polite"></div>
+      <div id="slots"></div>
+      <div class="actions">
+        <button type="button" class="btn" id="share" data-i18n="act.share"></button>
+        <button type="button" class="btn ghost" id="csv" data-i18n="act.csv"></button>
+      </div>
+      <p class="foot" id="foot"></p>
+    </aside>
+  </main>
+
+  <dialog id="render-dlg" class="dlg wide" aria-labelledby="render-title">
+    <div class="dlg-head"><h2 id="render-title" data-i18n="render.title"></h2><button type="button" class="icon" data-close data-i18n-label="render.close">✕</button></div>
+    <div class="render-body">
+      <div class="render-img"><canvas id="pt-canvas"></canvas><img id="pt-img" alt="" hidden></div>
+      <div class="render-side">
+        <fieldset class="quality" id="quality"><legend data-i18n="render.quality"></legend></fieldset>
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="pt-bar"><i id="pt-fill"></i></div>
+        <p id="pt-status" aria-live="polite"></p>
+        <div class="row">
+          <button type="button" class="btn primary" id="pt-start" data-i18n="render.start"></button>
+          <button type="button" class="btn" id="pt-finish" data-i18n="render.finish" hidden></button>
+          <button type="button" class="btn ghost" id="pt-cancel" data-i18n="render.cancel" hidden></button>
+          <a class="btn" id="pt-save" download="flatfit.jpg" hidden data-i18n="render.save"></a>
+        </div>
+        <p class="muted small" data-i18n="render.note"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="editor-dlg" class="dlg full" aria-labelledby="editor-title"></dialog>
+  <dialog id="help-dlg" class="dlg" aria-labelledby="help-title"></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

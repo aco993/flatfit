@@ -1,0 +1,32 @@
+name: Refresh catalogues
+
+# Prices change: once a week the IKEA catalogues for Germany and Austria are rebuilt from the live pages.
+# The unit tests validate the new data before a pull request is opened for review.
+on:
+  schedule:
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node scripts/ikea-catalog.mjs de
+      - run: node scripts/ikea-catalog.mjs at
+      - run: npm test
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: catalog-refresh
+          title: 'Refresh IKEA catalogues (DE, AT)'
+          commit-message: 'data: refresh IKEA catalogues'
+          body: 'Automated weekly refresh of prices, sizes and colours. Unit tests passed on the new data.'
