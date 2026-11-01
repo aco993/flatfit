@@ -61,7 +61,7 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     # Pages needs a public repo on the free plan; this job starts deploying once the repo is made public.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && !github.event.repository.private
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && !github.event.repository.private
     needs: [check, e2e]
     runs-on: ubuntu-latest
     permissions:
