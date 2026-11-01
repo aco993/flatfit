@@ -40,6 +40,18 @@ describe.each(Object.entries(CATS))('catalogue %s', (id, cat) => {
   });
 });
 
+describe('price check dates (Serbia)', () => {
+  it('every product says when its price was confirmed, never after the catalogue date', () => {
+    for (const p of CATS.rs.products) {
+      expect(p.checked, p.id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(p.checked! <= CATS.rs.checked, p.id).toBe(true);
+    }
+  });
+  it('a promotion found by the price check comes with its regular price', () => {
+    for (const p of CATS.rs.products) if (p.until && p.checked === CATS.rs.checked) expect(p.regular, p.id).toBeGreaterThan(p.price);
+  });
+});
+
 describe('hand-picked looks', () => {
   it('only use products that exist in the Serbian catalogue and match their slot', () => {
     const byId = new Map(CATS.rs.products.map(p => [p.id, p]));
@@ -47,6 +59,7 @@ describe('hand-picked looks', () => {
       if (!id) continue;
       expect(byId.get(id), `${name}.${slot}=${id}`).toBeTruthy();
       expect(byId.get(id)!.slot).toBe(slot);
+      expect(byId.get(id)!.unavailable, `${name}.${slot}=${id} is no longer sold`).toBeFalsy();
     }
   });
 });

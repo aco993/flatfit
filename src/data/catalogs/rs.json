@@ -1,7 +1,7 @@
 {
  "country": "rs",
  "currency": "RSD",
- "checked": "2026-10-27",
+ "checked": "2026-11-01",
  "stores": [
   {
    "id": "fi",
@@ -46,14 +46,13 @@
    "store": "fi",
    "name": "Ležaj VEGAS, siva (na razvlačenje)",
    "url": "https://formaideale.rs/artikal/lezaj-vegas",
-   "price": 26305,
+   "price": 34988,
    "color": "siva",
    "hex": "#9a9b9c",
    "w": 190,
    "d": 83,
    "h": 91,
-   "regular": 34988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-quatro",
@@ -61,14 +60,13 @@
    "store": "fi",
    "name": "Ležaj QUATRO, bež (na razvlačenje)",
    "url": "https://formaideale.rs/artikal/lezaj-quatro",
-   "price": 37884,
+   "price": 49988,
    "color": "bež",
    "hex": "#d6c8b0",
    "w": 200,
    "d": 88,
    "h": 77,
-   "regular": 49988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-enco",
@@ -81,7 +79,8 @@
    "hex": "#c6c5c1",
    "w": 220,
    "d": 88,
-   "h": 77
+   "h": 77,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-mirello",
@@ -89,12 +88,14 @@
    "store": "fi",
    "name": "Ležaj MIRELLO, plava (na razvlačenje)",
    "url": "https://formaideale.rs/artikal/lezaj-mirello",
-   "price": 52488,
+   "price": 41042,
    "color": "tamnoplava",
    "hex": "#2f3f5c",
    "w": 198,
    "d": 95,
-   "h": 78
+   "h": 78,
+   "checked": "2026-11-01",
+   "regular": 52488
   },
   {
    "id": "fi-luella",
@@ -102,15 +103,14 @@
    "store": "fi",
    "name": "Ugaona garnitura LUELLA, svijetlozelena",
    "url": "https://formaideale.rs/artikal/ugaona-garnitura-luella",
-   "price": 39989,
+   "price": 52488,
    "color": "svetlo zelena",
    "hex": "#9fbb9a",
    "w": 202,
    "d": 152,
    "h": 80,
-   "regular": 52488,
-   "until": "2026-10-31",
-   "corner": true
+   "corner": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "les-krem",
@@ -125,7 +125,8 @@
    "d": 77,
    "h": 81,
    "until": "2026-11-02",
-   "note": "samo online"
+   "note": "samo online",
+   "checked": "2026-10-27"
   },
   {
    "id": "les-mint",
@@ -139,7 +140,8 @@
    "w": 195,
    "d": 94,
    "h": 90,
-   "until": "2026-12-31"
+   "until": "2026-12-31",
+   "checked": "2026-10-27"
   },
   {
    "id": "moe-cloud",
@@ -152,7 +154,8 @@
    "hex": "#2f3f5c",
    "w": 196,
    "d": 92,
-   "h": 98
+   "h": 98,
+   "checked": "2026-10-27"
   },
   {
    "id": "emz-omega",
@@ -160,13 +163,13 @@
    "store": "emz",
    "name": "Omega trosed sa ležajem, zelena",
    "url": "https://www.emmezeta.rs/omega-trosed-sa-lezajem-200x95x90-cm-zelena-688112.html",
-   "price": 39999,
+   "price": 49999,
    "color": "zelena",
    "hex": "#6f8f6f",
    "w": 200,
    "d": 95,
    "h": 90,
-   "regular": 49999
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-alvdalen",
@@ -179,7 +182,8 @@
    "hex": "#55585b",
    "w": 194,
    "d": 82,
-   "h": 81
+   "h": 81,
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-friheten",
@@ -192,7 +196,8 @@
    "hex": "#55585b",
    "w": 225,
    "d": 105,
-   "h": 83
+   "h": 83,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-teddy",
@@ -200,14 +205,13 @@
    "store": "fi",
    "name": "Fotelja TEDDY, siva / crna",
    "url": "https://formaideale.rs/artikal/fotelja-teddy",
-   "price": 7358,
+   "price": 12488,
    "color": "siva",
    "hex": "#9a9b9c",
    "w": 57.5,
    "d": 57,
    "h": 69,
-   "regular": 12488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-zora",
@@ -215,14 +219,13 @@
    "store": "fi",
    "name": "Fotelja ZORA, bijela / siva",
    "url": "https://formaideale.rs/artikal/fotelja-zora",
-   "price": 11568,
+   "price": 14988,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 59,
    "d": 64,
    "h": 83,
-   "regular": 14988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "les-fot",
@@ -236,7 +239,8 @@
    "w": 63,
    "d": 76,
    "h": 80,
-   "until": "2026-10-31"
+   "until": "2026-10-31",
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-line",
@@ -244,15 +248,14 @@
    "store": "fi",
    "name": "Klub sto LINE 110×60, bijela / sonoma",
    "url": "https://formaideale.rs/artikal/klub-sto-line-110x60-1",
-   "price": 5253,
+   "price": 6863,
    "color": "bela, sonoma",
    "hex": "#f2f1ec",
    "hex2": "#d0b48a",
    "w": 110,
    "d": 60,
    "h": 44,
-   "regular": 6863,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-clent",
@@ -260,14 +263,13 @@
    "store": "fi",
    "name": "Klub sto CLENT, artisan hrast",
    "url": "https://formaideale.rs/artikal/klub-sto-clent",
-   "price": 5253,
+   "price": 7487,
    "color": "artisan hrast",
    "hex": "#c9a679",
    "w": 90,
    "d": 49.5,
    "h": 45.5,
-   "regular": 7487,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-seaford",
@@ -275,15 +277,14 @@
    "store": "fi",
    "name": "Klub sto SEAFORD 80×80, crna / hrast",
    "url": "https://formaideale.rs/artikal/klub-sto-seaford-77415",
-   "price": 6305,
+   "price": 8738,
    "color": "hrast, crna",
    "hex": "#b58a5c",
    "hex2": "#1d1e20",
    "w": 80,
    "d": 80,
    "h": 45,
-   "regular": 8738,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-belfort-k",
@@ -291,15 +292,14 @@
    "store": "fi",
    "name": "Klub sto BELFORT, artisan hrast / kašmir",
    "url": "https://formaideale.rs/artikal/klub-sto-belfort",
-   "price": 7358,
+   "price": 9988,
    "color": "artisan hrast, kašmir",
    "hex": "#c9a679",
    "hex2": "#d8ccb9",
    "w": 101,
    "d": 54.5,
    "h": 46,
-   "regular": 9988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-lack",
@@ -312,7 +312,8 @@
    "hex": "#f2f1ec",
    "w": 90,
    "d": 55,
-   "h": 45
+   "h": 45,
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-vittsjo",
@@ -326,7 +327,8 @@
    "w": 75,
    "d": 75,
    "h": 40,
-   "round": true
+   "round": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "les-xora-k",
@@ -341,7 +343,8 @@
    "w": 100,
    "d": 50,
    "h": 44,
-   "until": "2026-10-31"
+   "until": "2026-10-31",
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-remo",
@@ -349,15 +352,14 @@
    "store": "fi",
    "name": "TV polica REMO, artisan hrast / bijela",
    "url": "https://formaideale.rs/artikal/tv-polica-remo",
-   "price": 11568,
+   "price": 14987,
    "color": "artisan hrast, bela",
    "hex": "#c9a679",
    "hex2": "#f2f1ec",
    "w": 162,
    "d": 41.5,
    "h": 43.5,
-   "regular": 14987,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-essex",
@@ -365,15 +367,14 @@
    "store": "fi",
    "name": "TV polica ESSEX 154, artisan hrast / kašmir",
    "url": "https://formaideale.rs/artikal/tv-polica-essex-tv-154-3k2v",
-   "price": 10516,
+   "price": 13737,
    "color": "artisan hrast, kašmir",
    "hex": "#c9a679",
    "hex2": "#d8ccb9",
    "w": 154,
    "d": 41.5,
    "h": 50.5,
-   "regular": 13737,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-laval",
@@ -381,15 +382,14 @@
    "store": "fi",
    "name": "TV polica LAVAL 131, artisan hrast / crna",
    "url": "https://formaideale.rs/artikal/tv-polica-laval-tv-131-2k2v",
-   "price": 8411,
+   "price": 12488,
    "color": "artisan hrast, crna",
    "hex": "#c9a679",
    "hex2": "#1d1e20",
    "w": 131.5,
    "d": 40,
    "h": 52,
-   "regular": 12488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-valencia",
@@ -397,15 +397,14 @@
    "store": "fi",
    "name": "TV polica VALENCIA 150, bijela / artisan hrast",
    "url": "https://formaideale.rs/artikal/tv-polica-valencia-tv-150-3k1f",
-   "price": 14726,
+   "price": 19988,
    "color": "bela, artisan hrast",
    "hex": "#f2f1ec",
    "hex2": "#c9a679",
    "w": 147,
    "d": 41,
    "h": 47.5,
-   "regular": 19988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-kallax",
@@ -419,7 +418,7 @@
    "w": 147,
    "d": 39,
    "h": 78,
-   "regular": 11999
+   "checked": "2026-11-01"
   },
   {
    "id": "moe-move",
@@ -432,7 +431,8 @@
    "hex": "#c9a679",
    "w": 80,
    "d": 35,
-   "h": 46
+   "h": 46,
+   "checked": "2026-10-27"
   },
   {
    "id": "les-xora-tv",
@@ -446,7 +446,8 @@
    "w": 120,
    "d": 34,
    "h": 40,
-   "until": "2026-12-31"
+   "until": "2026-12-31",
+   "checked": "2026-10-27"
   },
   {
    "id": "emz-sumica",
@@ -460,7 +461,8 @@
    "hex2": "#cdbb9b",
    "w": 159.6,
    "d": 34.8,
-   "h": 49.7
+   "h": 49.7,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-sam43",
@@ -468,14 +470,13 @@
    "store": "fi",
    "name": "SAMSUNG TV 43\" UE43U8072",
    "url": "https://formaideale.rs/artikal/samsung-tv-ue43u8072fuxxh",
-   "price": 31568,
+   "price": 43738,
    "color": "crna",
    "hex": "#1d1e20",
    "w": 96.5,
    "d": 8,
    "h": 56,
-   "regular": 43738,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-his43",
@@ -488,7 +489,8 @@
    "hex": "#1d1e20",
    "w": 96.5,
    "d": 8,
-   "h": 56
+   "h": 56,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-his55",
@@ -501,7 +503,8 @@
    "hex": "#1d1e20",
    "w": 122.5,
    "d": 8,
-   "h": 71
+   "h": 71,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-lingon-n",
@@ -509,12 +512,13 @@
    "store": "jysk",
    "name": "Tepih LINGON 140×200, natur",
    "url": "https://jysk.rs/pokucstvo/tepisi/veliki-tepisi/tepih-lingon-140x200-natur",
-   "price": 4500,
+   "price": 6500,
    "color": "natur",
    "hex": "#d9c49c",
    "w": 140,
    "d": 200,
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-lingon-p",
@@ -522,12 +526,13 @@
    "store": "jysk",
    "name": "Tepih LINGON 140×200, tamni pijesak",
    "url": "https://jysk.rs/pokucstvo/tepisi/veliki-tepisi/tepih-lingon-140x200-tamni-pesak",
-   "price": 4500,
+   "price": 6500,
    "color": "pesak",
    "hex": "#cdbb9b",
    "w": 140,
    "d": 200,
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-storrapp",
@@ -535,13 +540,14 @@
    "store": "jysk",
    "name": "Tepih STORRAPP 140×200, antracit siva",
    "url": "https://jysk.rs/pokucstvo/tepisi/unutrasnji-i-spoljasnji-tepisi/tepih-storrapp-140x200-antracit-siva",
-   "price": 8000,
+   "price": 11000,
    "color": "antracit",
    "hex": "#3d4044",
    "w": 140,
    "d": 200,
    "regular": 11999,
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-balsatre",
@@ -555,7 +561,9 @@
    "w": 160,
    "d": 230,
    "regular": 9999,
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01",
+   "until": "2026-11-29"
   },
   {
    "id": "moe-selma",
@@ -568,7 +576,8 @@
    "hex": "#f2f1ec",
    "w": 160,
    "d": 230,
-   "until": "2026-12-31"
+   "until": "2026-12-31",
+   "checked": "2026-10-27"
   },
   {
    "id": "moe-ravin",
@@ -580,7 +589,8 @@
    "color": "krem",
    "hex": "#e8dcc6",
    "w": 160,
-   "d": 230
+   "d": 230,
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-cz",
@@ -588,14 +598,13 @@
    "store": "fi",
    "name": "Trpezarijski sto CZ-N2315B 120×75, bijeli",
    "url": "https://formaideale.rs/artikal/trpezarijski-sto-cz-n2315b",
-   "price": 6305,
+   "price": 8737,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 120,
    "d": 75,
    "h": 75,
-   "regular": 8737,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-domus",
@@ -603,15 +612,14 @@
    "store": "fi",
    "name": "Trpezarijski sto DOMUS 135×80, bijela / sonoma",
    "url": "https://formaideale.rs/artikal/trpezarijski-sto-domus-135x80",
-   "price": 7358,
+   "price": 9987,
    "color": "bela, sonoma",
    "hex": "#f2f1ec",
    "hex2": "#d0b48a",
    "w": 135,
    "d": 80.5,
    "h": 74.5,
-   "regular": 9987,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-adrian",
@@ -619,15 +627,14 @@
    "store": "fi",
    "name": "Trpezarijski sto ADRIAN 80×80, bijela / natur",
    "url": "https://formaideale.rs/artikal/trpezarijski-sto-adrian-80x80",
-   "price": 7358,
+   "price": 9988,
    "color": "bela, natur",
    "hex": "#f2f1ec",
    "hex2": "#d9c49c",
    "w": 80,
    "d": 80,
    "h": 76,
-   "regular": 9988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-coburg",
@@ -635,15 +642,14 @@
    "store": "fi",
    "name": "Sto COBURG 80+40×80, artisan hrast / crna (razvlači se)",
    "url": "https://formaideale.rs/artikal/trpezarijski-sto-coburg-80-40x80",
-   "price": 11568,
+   "price": 16238,
    "color": "artisan hrast, crna",
    "hex": "#c9a679",
    "hex2": "#1d1e20",
    "w": 80,
    "d": 80,
    "h": 76.5,
-   "regular": 16238,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-yale",
@@ -651,15 +657,14 @@
    "store": "fi",
    "name": "Trpezarijski sto YALE Ø120, hrast",
    "url": "https://formaideale.rs/artikal/trpezarijski-sto-yale-fi-120",
-   "price": 30516,
+   "price": 38738,
    "color": "hrast",
    "hex": "#b58a5c",
    "w": 120,
    "d": 120,
    "h": 75,
-   "regular": 38738,
-   "until": "2026-10-31",
-   "round": true
+   "round": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "moe-crni",
@@ -675,7 +680,8 @@
    "d": 120,
    "h": 76,
    "until": "2026-11-03",
-   "round": true
+   "round": true,
+   "checked": "2026-10-27"
   },
   {
    "id": "moe-severin",
@@ -688,7 +694,8 @@
    "hex": "#b58a5c",
    "w": 110,
    "d": 80,
-   "h": 76
+   "h": 76,
+   "checked": "2026-10-27"
   },
   {
    "id": "les-xora-t",
@@ -701,7 +708,8 @@
    "hex": "#d0b48a",
    "w": 120,
    "d": 70,
-   "h": 76.5
+   "h": 76.5,
+   "checked": "2026-10-27"
   },
   {
    "id": "ik-vihals",
@@ -716,7 +724,8 @@
    "d": 107,
    "h": 75,
    "includesChairs": "bela",
-   "round": true
+   "round": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-hagernas",
@@ -730,7 +739,8 @@
    "w": 118,
    "d": 74,
    "h": 75,
-   "includesChairs": "borovina"
+   "includesChairs": "borovina",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-htc118",
@@ -743,7 +753,8 @@
    "hex": "#f2f1ec",
    "w": 46,
    "d": 54,
-   "h": 83
+   "h": 83,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-kjc29",
@@ -756,7 +767,8 @@
    "hex": "#9a9b9c",
    "w": 45,
    "d": 57.5,
-   "h": 88
+   "h": 88,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-helena",
@@ -769,7 +781,8 @@
    "hex": "#d6c8b0",
    "w": 46.5,
    "d": 55.5,
-   "h": 85.5
+   "h": 85.5,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-asama",
@@ -777,14 +790,13 @@
    "store": "fi",
    "name": "Stolica ASAMA, crna",
    "url": "https://formaideale.rs/artikal/trpezarijska-stolica-asama",
-   "price": 7358,
+   "price": 9363,
    "color": "crna",
    "hex": "#1d1e20",
    "w": 56,
    "d": 44,
    "h": 95,
-   "regular": 9363,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "moe-svsiva",
@@ -798,7 +810,8 @@
    "w": 45,
    "d": 54.5,
    "h": 88,
-   "until": "2026-12-31"
+   "until": "2026-12-31",
+   "checked": "2026-10-27"
   },
   {
    "id": "moe-franzi",
@@ -811,7 +824,8 @@
    "hex": "#1d1e20",
    "w": 42,
    "d": 51,
-   "h": 95
+   "h": 95,
+   "checked": "2026-10-27"
   },
   {
    "id": "les-time-ch",
@@ -824,7 +838,8 @@
    "hex": "#55585b",
    "w": 45,
    "d": 55,
-   "h": 87
+   "h": 87,
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-savona",
@@ -832,7 +847,7 @@
    "store": "fi",
    "name": "Kuhinja SAVONA 180, bijela / artisan hrast",
    "url": "https://formaideale.rs/artikal/kuhinja-savona-180",
-   "price": 37488,
+   "price": 28411,
    "color": "bela, artisan hrast",
    "hex": "#f2f1ec",
    "hex2": "#c9a679",
@@ -840,7 +855,9 @@
    "d": 56.5,
    "h": 200,
    "needsWorktop": true,
-   "note": "cijena je bez radne ploče"
+   "note": "cijena je bez radne ploče",
+   "checked": "2026-11-01",
+   "regular": 37488
   },
   {
    "id": "fi-belfort-kuh",
@@ -848,7 +865,7 @@
    "store": "fi",
    "name": "Kuhinja BELFORT 200, kašmir mat / artisan hrast",
    "url": "https://formaideale.rs/artikal/kuhinja-belfort-200",
-   "price": 49987,
+   "price": 38937,
    "color": "kašmir, artisan hrast",
    "hex": "#d8ccb9",
    "hex2": "#c9a679",
@@ -856,7 +873,9 @@
    "d": 51.5,
    "h": 200,
    "needsWorktop": true,
-   "note": "cijena je bez radne ploče"
+   "note": "cijena je bez radne ploče",
+   "checked": "2026-11-01",
+   "regular": 49987
   },
   {
    "id": "fi-rajna",
@@ -864,7 +883,7 @@
    "store": "fi",
    "name": "Kuhinja RAJNA 200, bijela / crna mat",
    "url": "https://formaideale.rs/artikal/kuhinja-rajna-200",
-   "price": 46238,
+   "price": 29463,
    "color": "crna, bela",
    "hex": "#1d1e20",
    "hex2": "#f2f1ec",
@@ -872,7 +891,9 @@
    "d": 51,
    "h": 200,
    "needsWorktop": true,
-   "note": "cijena je bez radne ploče"
+   "note": "cijena je bez radne ploče",
+   "checked": "2026-11-01",
+   "regular": 46238
   },
   {
    "id": "fi-diana",
@@ -888,7 +909,8 @@
    "d": 51,
    "h": 200,
    "needsWorktop": true,
-   "note": "cijena je bez radne ploče i ugradnih elemenata"
+   "note": "cijena je bez radne ploče i ugradnih elemenata",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-diva",
@@ -896,16 +918,15 @@
    "store": "fi",
    "name": "Kuhinja DIVA 200, bijeli lak",
    "url": "https://formaideale.rs/artikal/kuhinja-diva-200",
-   "price": 42095,
+   "price": 54988,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 200,
    "d": 51,
    "h": 200,
-   "regular": 54988,
-   "until": "2026-10-31",
    "needsWorktop": true,
-   "note": "cijena je bez radne ploče i sudopere"
+   "note": "cijena je bez radne ploče i sudopere",
+   "checked": "2026-11-01"
   },
   {
    "id": "les-xora-kuh",
@@ -921,7 +942,8 @@
    "d": 60,
    "h": 210,
    "until": "2026-12-31",
-   "note": "provjeriti u radnji da li je radna ploča uključena"
+   "note": "provjeriti u radnji da li je radna ploča uključena",
+   "checked": "2026-10-27"
   },
   {
    "id": "emz-irma",
@@ -935,7 +957,8 @@
    "w": 180,
    "d": 60,
    "h": 200,
-   "note": "provjeriti u radnji da li je radna ploča uključena"
+   "note": "provjeriti u radnji da li je radna ploča uključena",
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-knoxhult",
@@ -949,7 +972,8 @@
    "w": 160,
    "d": 61,
    "h": 200,
-   "note": "zbir četiri elementa (12.500 + 7.500 + 5.500 + 2.500); radna ploča je na podnim elementima"
+   "note": "zbir četiri elementa (12.500 + 7.500 + 5.500 + 2.500); radna ploča je na podnim elementima",
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-wt-siva",
@@ -962,7 +986,8 @@
    "hex": "#9a9b9c",
    "w": 202,
    "d": 60,
-   "h": 2.8
+   "h": 2.8,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-wt-pesak",
@@ -975,7 +1000,8 @@
    "hex": "#cdbb9b",
    "w": 200,
    "d": 60,
-   "h": 3.8
+   "h": 3.8,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-wt-hrast",
@@ -988,7 +1014,8 @@
    "hex": "#b58a5c",
    "w": 100,
    "d": 60,
-   "h": 3.8
+   "h": 3.8,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-nera",
@@ -1000,7 +1027,8 @@
    "color": "inox",
    "hex": "#b9bcbe",
    "w": 79,
-   "d": 50
+   "d": 50,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-atos",
@@ -1012,7 +1040,8 @@
    "color": "crna",
    "hex": "#1d1e20",
    "w": 50,
-   "d": 50
+   "d": 50,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-xvenera",
@@ -1020,13 +1049,12 @@
    "store": "fi",
    "name": "Okrugla granitna sudopera XVENERA, crna",
    "url": "https://formaideale.rs/artikal/okrugla-usadna-granitna-sudopera-xvenera-f90",
-   "price": 13674,
+   "price": 17488,
    "color": "crna",
    "hex": "#1d1e20",
    "w": 51,
    "d": 51,
-   "regular": 17488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-eco",
@@ -1036,7 +1064,8 @@
    "url": "https://formaideale.rs/artikal/baterija-za-sudoperu-eco-lula",
    "price": 6238,
    "color": "inox",
-   "hex": "#b9bcbe"
+   "hex": "#b9bcbe",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-mamba",
@@ -1046,7 +1075,8 @@
    "url": "https://formaideale.rs/artikal/baterija-za-sudoperu-mamba-f-crna",
    "price": 8737,
    "color": "crna",
-   "hex": "#1d1e20"
+   "hex": "#1d1e20",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-lux",
@@ -1056,7 +1086,8 @@
    "url": "https://formaideale.rs/artikal/baterija-za-sudoperu-lux",
    "price": 9988,
    "color": "inox",
-   "hex": "#b9bcbe"
+   "hex": "#b9bcbe",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-hic",
@@ -1064,13 +1095,12 @@
    "store": "fi",
    "name": "BEKO staklokeramička ploča HIC 64404 T",
    "url": "https://formaideale.rs/artikal/beko-ugradna-ploca-hic-64404-t",
-   "price": 22491,
+   "price": 29988,
    "color": "crna",
    "hex": "#1d1e20",
    "w": 59,
    "d": 52,
-   "regular": 29988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-hii",
@@ -1078,13 +1108,12 @@
    "store": "fi",
    "name": "BEKO indukciona ploča HII 64400 TO",
    "url": "https://formaideale.rs/artikal/beko-ugradna-ploca-hii-64400-to",
-   "price": 28116,
+   "price": 37488,
    "color": "crna",
    "hex": "#1d1e20",
    "w": 59,
    "d": 52,
-   "regular": 37488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-wq2160",
@@ -1092,13 +1121,12 @@
    "store": "fi",
    "name": "WHIRLPOOL indukciona ploča WS Q2160 NE",
    "url": "https://formaideale.rs/artikal/whirlpool-ugradna-indukciona-ploca-ws-q2160-ne",
-   "price": 34679,
+   "price": 46238,
    "color": "crna",
    "hex": "#1d1e20",
    "w": 59,
    "d": 51,
-   "regular": 46238,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-midea-oven",
@@ -1106,14 +1134,13 @@
    "store": "fi",
    "name": "MIDEA ugradna rerna 7NM30E0B",
    "url": "https://formaideale.rs/artikal/midea-ugradna-rerna-7nm30e0b",
-   "price": 37884,
+   "price": 53738,
    "color": "crna",
    "hex": "#1d1e20",
    "w": 59.5,
    "d": 56.5,
    "h": 59.5,
-   "regular": 53738,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-vox-hood",
@@ -1126,7 +1153,8 @@
    "hex": "#f2f1ec",
    "w": 59.5,
    "d": 31,
-   "h": 25.5
+   "h": 25.5,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-midea-hood",
@@ -1139,7 +1167,8 @@
    "hex": "#b9bcbe",
    "w": 52,
    "d": 28.5,
-   "h": 30
+   "h": 30,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-beko-hood",
@@ -1147,14 +1176,13 @@
    "store": "fi",
    "name": "BEKO ugradni aspirator CTB 6250 B",
    "url": "https://formaideale.rs/artikal/beko-ugradni-aspirator-ctb-6250-b",
-   "price": 14054,
+   "price": 18738,
    "color": "inox",
    "hex": "#b9bcbe",
    "w": 60,
    "d": 28,
    "h": 18,
-   "regular": 18738,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-vox-black",
@@ -1168,7 +1196,8 @@
    "w": 60,
    "d": 20.5,
    "h": 48,
-   "chimney": true
+   "chimney": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-beko-fr",
@@ -1176,14 +1205,13 @@
    "store": "fi",
    "name": "BEKO kombinovani frižider B1RCSO264W, bijeli",
    "url": "https://formaideale.rs/artikal/beko-kombinovani-frizider-b1rcso264w",
-   "price": 29991,
+   "price": 39988,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 54,
    "d": 55,
    "h": 177,
-   "regular": 39988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-beko-fr-s",
@@ -1191,14 +1219,13 @@
    "store": "fi",
    "name": "BEKO kombinovani frižider B1RCNO254S, srebrni",
    "url": "https://formaideale.rs/artikal/beko-kombinovani-fri-ider-b1rcno254s",
-   "price": 42095,
+   "price": 52488,
    "color": "inox",
    "hex": "#b9bcbe",
    "w": 54,
    "d": 57.5,
    "h": 180,
-   "regular": 52488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "giga-candy",
@@ -1212,8 +1239,8 @@
    "w": 55,
    "d": 55,
    "h": 145,
-   "regular": 28999,
-   "note": "dimenzije približne, provjeriti na stranici"
+   "note": "dimenzije približne, provjeriti na stranici",
+   "checked": "2026-11-01"
   },
   {
    "id": "giga-gorenje",
@@ -1227,8 +1254,8 @@
    "w": 55,
    "d": 56,
    "h": 180,
-   "regular": 41629,
-   "note": "dimenzije približne, provjeriti na stranici"
+   "note": "dimenzije približne, provjeriti na stranici",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-beko-wash",
@@ -1236,14 +1263,13 @@
    "store": "fi",
    "name": "BEKO veš mašina B3WFU410415WW",
    "url": "https://formaideale.rs/artikal/beko-masina-za-pranje-vesa-b3wfu410415ww-es",
-   "price": 38429,
+   "price": 51238,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 58,
    "d": 60,
    "h": 84.5,
-   "regular": 51238,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-midea-wash",
@@ -1251,14 +1277,13 @@
    "store": "fi",
    "name": "MIDEA veš mašina MF200W80WB (uska, 47 cm)",
    "url": "https://formaideale.rs/artikal/midea-ves-masina-mf200w80wb-w-hr",
-   "price": 41042,
+   "price": 56238,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 59.5,
    "d": 47,
    "h": 85,
-   "regular": 56238,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-varadero",
@@ -1266,16 +1291,15 @@
    "store": "fi",
    "name": "Bračni krevet VARADERO 160, artisan hrast",
    "url": "https://formaideale.rs/artikal/bracni-krevet-varadero-160",
-   "price": 13674,
+   "price": 18738,
    "color": "artisan hrast",
    "hex": "#c9a679",
    "w": 175,
    "d": 206,
    "h": 92,
-   "regular": 18738,
-   "until": "2026-10-31",
    "needsBase": true,
-   "note": "cijena je bez podnice i dušeka"
+   "note": "cijena je bez podnice i dušeka",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-salona",
@@ -1283,16 +1307,15 @@
    "store": "fi",
    "name": "Bračni krevet SALONA 160, kašmir",
    "url": "https://formaideale.rs/artikal/bracni-krevet-salona-160",
-   "price": 17884,
+   "price": 24988,
    "color": "kašmir",
    "hex": "#d8ccb9",
    "w": 172.5,
    "d": 210.5,
    "h": 102,
-   "regular": 22488,
-   "until": "2026-10-31",
    "needsBase": true,
-   "note": "cijena je bez podnice i dušeka"
+   "note": "cijena je bez podnice i dušeka",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-belfort-b",
@@ -1308,7 +1331,8 @@
    "d": 210.5,
    "h": 115.5,
    "needsBase": true,
-   "note": "cijena je bez dodatne opreme"
+   "note": "cijena je bez dodatne opreme",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-astor",
@@ -1323,7 +1347,8 @@
    "d": 208.5,
    "h": 100.5,
    "needsBase": true,
-   "note": "cijena je bez podnice i dušeka"
+   "note": "cijena je bez podnice i dušeka",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-aberdeen",
@@ -1331,16 +1356,15 @@
    "store": "fi",
    "name": "Bračni krevet ABERDEEN 160, bijeli",
    "url": "https://formaideale.rs/artikal/bracni-krevet-aberdeen-160",
-   "price": 27358,
+   "price": 41238,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 178,
    "d": 214,
    "h": 115,
-   "regular": 33738,
-   "until": "2026-10-31",
    "needsBase": true,
-   "note": "cijena je bez podnice i dušeka"
+   "note": "cijena je bez podnice i dušeka",
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-tarva",
@@ -1354,7 +1378,8 @@
    "w": 168,
    "d": 209,
    "h": 92,
-   "note": "podnica LURÖY uključena; IKEA Family cijena 16.999"
+   "note": "podnica LURÖY uključena; IKEA Family cijena 16.999",
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-slattum",
@@ -1368,7 +1393,8 @@
    "w": 164,
    "d": 206,
    "h": 85,
-   "note": "podnica uključena"
+   "note": "podnica uključena",
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-fagel",
@@ -1376,13 +1402,14 @@
    "store": "ik",
    "name": "FÅGELFJÄLLET krevet sa podnicom, prljavobijela, 160×200",
    "url": "https://www.ikea.com/rs/sr/p/fagelfjaellet-okvir-kreveta-prljavobela-luroey-s89620817/",
-   "price": 24999,
+   "price": 20999,
    "color": "prljavobela",
    "hex": "#ece6da",
    "w": 172,
    "d": 207,
    "h": 101,
-   "note": "podnica LURÖY uključena"
+   "note": "podnica LURÖY uključena",
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-ramne",
@@ -1396,7 +1423,8 @@
    "w": 174,
    "d": 210,
    "h": 100,
-   "note": "podnica LINDBÅDEN uključena"
+   "note": "podnica LINDBÅDEN uključena",
+   "checked": "2026-11-01"
   },
   {
    "id": "moe-madrid",
@@ -1410,7 +1438,8 @@
    "w": 166,
    "d": 205,
    "h": 85,
-   "note": "mjere ležišta 160×200; spoljne mjere i podnicu provjeriti na stranici"
+   "note": "mjere ležišta 160×200; spoljne mjere i podnicu provjeriti na stranici",
+   "checked": "2026-10-27"
   },
   {
    "id": "moe-sienna",
@@ -1425,7 +1454,8 @@
    "d": 210,
    "h": 105,
    "until": "2026-11-03",
-   "note": "mjere ležišta 160×200; spoljne mjere i podnicu provjeriti na stranici"
+   "note": "mjere ležišta 160×200; spoljne mjere i podnicu provjeriti na stranici",
+   "checked": "2026-10-27"
   },
   {
    "id": "les-krevet",
@@ -1440,7 +1470,8 @@
    "w": 166,
    "d": 205,
    "h": 90,
-   "note": "samo online; spoljne mjere provjeriti"
+   "note": "samo online; spoljne mjere provjeriti",
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-pod",
@@ -1450,7 +1481,8 @@
    "url": "https://formaideale.rs/artikal/pod-za-krevet-160-d",
    "price": 11238,
    "color": "",
-   "hex": "#d9d6d0"
+   "hex": "#d9d6d0",
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-cloud",
@@ -1463,7 +1495,8 @@
    "hex": "#f2f1ec",
    "w": 160,
    "d": 200,
-   "h": 20
+   "h": 20,
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-fortuna",
@@ -1471,12 +1504,14 @@
    "store": "fi",
    "name": "Dušek FORTUNA 160×200, 21 cm",
    "url": "https://formaideale.rs/artikal/dusek-fortuna-dimenzija-160x200",
-   "price": 32488,
+   "price": 23147,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 160,
    "d": 200,
-   "h": 21
+   "h": 21,
+   "checked": "2026-11-01",
+   "regular": 32488
   },
   {
    "id": "fi-green",
@@ -1484,14 +1519,13 @@
    "store": "fi",
    "name": "Dušek GREEN PLUS 160×200, 26 cm",
    "url": "https://formaideale.rs/artikal/dusek-green-plus-160x200",
-   "price": 36832,
+   "price": 47488,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 160,
    "d": 200,
    "h": 26,
-   "regular": 47488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-vesteroy",
@@ -1505,7 +1539,7 @@
    "w": 160,
    "d": 200,
    "h": 20,
-   "regular": 24999
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-afjall",
@@ -1518,7 +1552,8 @@
    "hex": "#f2f1ec",
    "w": 160,
    "d": 200,
-   "h": 18
+   "h": 18,
+   "checked": "2026-11-01"
   },
   {
    "id": "moe-star",
@@ -1531,7 +1566,8 @@
    "hex": "#f2f1ec",
    "w": 160,
    "d": 200,
-   "h": 18
+   "h": 18,
+   "checked": "2026-10-27"
   },
   {
    "id": "moe-dzep",
@@ -1544,7 +1580,8 @@
    "hex": "#f2f1ec",
    "w": 160,
    "d": 200,
-   "h": 22
+   "h": 22,
+   "checked": "2026-10-27"
   },
   {
    "id": "les-dusek",
@@ -1557,7 +1594,8 @@
    "hex": "#f2f1ec",
    "w": 160,
    "d": 200,
-   "h": 20
+   "h": 20,
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-mokkaris",
@@ -1565,14 +1603,13 @@
    "store": "fi",
    "name": "Ormar MOKKARIS 3K2F, bijeli",
    "url": "https://formaideale.rs/artikal/ormar-mokkaris-3k2f",
-   "price": 18937,
+   "price": 24988,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 145,
    "d": 53,
    "h": 200,
-   "regular": 24988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-charlotta",
@@ -1580,14 +1617,13 @@
    "store": "fi",
    "name": "Ormar CHARLOTTA 3V2F, kašmir",
    "url": "https://formaideale.rs/artikal/ormar-charlotta-3v2f",
-   "price": 21042,
+   "price": 31238,
    "color": "kašmir",
    "hex": "#d8ccb9",
    "w": 120,
    "d": 54,
    "h": 196,
-   "regular": 27487,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-mont",
@@ -1595,15 +1631,14 @@
    "store": "fi",
    "name": "Ormar MONT 6V2F, bijela / artisan hrast",
    "url": "https://formaideale.rs/artikal/ormar-mont-6v2f",
-   "price": 31568,
+   "price": 41238,
    "color": "bela, artisan hrast",
    "hex": "#f2f1ec",
    "hex2": "#c9a679",
    "w": 158,
    "d": 55,
    "h": 207,
-   "regular": 39988,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-varadero-o",
@@ -1611,15 +1646,14 @@
    "store": "fi",
    "name": "Ormar VARADERO 4K1F1O, artisan hrast / crna",
    "url": "https://formaideale.rs/artikal/ormar-varadero-4k1f1o",
-   "price": 26305,
+   "price": 37488,
    "color": "artisan hrast, crna",
    "hex": "#c9a679",
    "hex2": "#1d1e20",
    "w": 157.5,
    "d": 53,
    "h": 203.5,
-   "regular": 37488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-kleppstad",
@@ -1632,7 +1666,8 @@
    "hex": "#f2f1ec",
    "w": 117,
    "d": 55,
-   "h": 176
+   "h": 176,
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-brimnes",
@@ -1645,7 +1680,8 @@
    "hex": "#f2f1ec",
    "w": 117,
    "d": 50,
-   "h": 190
+   "h": 190,
+   "checked": "2026-11-01"
   },
   {
    "id": "moe-olli",
@@ -1659,7 +1695,8 @@
    "w": 119.6,
    "d": 53.5,
    "h": 196.3,
-   "until": "2026-11-03"
+   "until": "2026-11-03",
+   "checked": "2026-10-27"
   },
   {
    "id": "les-ormar150",
@@ -1673,7 +1710,8 @@
    "w": 150,
    "d": 51.3,
    "h": 176,
-   "note": "samo online"
+   "note": "samo online",
+   "checked": "2026-10-27"
   },
   {
    "id": "les-time-o",
@@ -1688,7 +1726,8 @@
    "w": 159.3,
    "d": 53.5,
    "h": 196.3,
-   "until": "2026-10-31"
+   "until": "2026-10-31",
+   "checked": "2026-10-27"
   },
   {
    "id": "les-carry-o",
@@ -1702,7 +1741,8 @@
    "hex2": "#c9a679",
    "w": 120,
    "d": 53.5,
-   "h": 196.3
+   "h": 196.3,
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-pepe",
@@ -1710,15 +1750,14 @@
    "store": "fi",
    "name": "Noćni ormarić PEPE, bijela / natur",
    "url": "https://formaideale.rs/artikal/nocni-ormaric-pepe",
-   "price": 4726,
+   "price": 6238,
    "color": "bela, natur",
    "hex": "#f2f1ec",
    "hex2": "#d9c49c",
    "w": 40,
    "d": 40.5,
    "h": 42.5,
-   "regular": 6238,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-salona-n",
@@ -1726,14 +1765,13 @@
    "store": "fi",
    "name": "Noćni ormarić SALONA, kašmir",
    "url": "https://formaideale.rs/artikal/nocni-ormaric-salona-no1f",
-   "price": 5253,
+   "price": 7488,
    "color": "kašmir",
    "hex": "#d8ccb9",
    "w": 48,
    "d": 40,
    "h": 52,
-   "regular": 7488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-marron",
@@ -1741,15 +1779,14 @@
    "store": "fi",
    "name": "Noćni ormarić MARRON, kašmir / crna",
    "url": "https://formaideale.rs/artikal/nocni-ormaric-marron-no2f",
-   "price": 6832,
+   "price": 8738,
    "color": "kašmir, crna",
    "hex": "#d8ccb9",
    "hex2": "#1d1e20",
    "w": 48,
    "d": 40,
    "h": 55,
-   "regular": 8738,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-varadero-n",
@@ -1757,16 +1794,15 @@
    "store": "fi",
    "name": "Noćni ormarići VARADERO, artisan hrast / bijela (paket od 2)",
    "url": "https://formaideale.rs/artikal/nocni-ormaric-varadero-2no1f",
-   "price": 5779,
+   "price": 8738,
    "color": "artisan hrast, bela",
    "hex": "#c9a679",
    "hex2": "#f2f1ec",
    "w": 42,
    "d": 33,
    "h": 42,
-   "regular": 7488,
-   "until": "2026-10-31",
-   "pack": 2
+   "pack": 2,
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-kronoren",
@@ -1779,7 +1815,8 @@
    "hex": "#e0c08f",
    "w": 39,
    "d": 32,
-   "h": 55
+   "h": 55,
+   "checked": "2026-11-01"
   },
   {
    "id": "ik-grafjallet",
@@ -1792,7 +1829,8 @@
    "hex": "#3d4044",
    "w": 45,
    "d": 36,
-   "h": 59
+   "h": 59,
+   "checked": "2026-11-01"
   },
   {
    "id": "moe-pepe",
@@ -1806,7 +1844,8 @@
    "hex2": "#d0b48a",
    "w": 39,
    "d": 28,
-   "h": 41
+   "h": 41,
+   "checked": "2026-10-27"
   },
   {
    "id": "les-midyou-n",
@@ -1821,7 +1860,8 @@
    "w": 50,
    "d": 42.5,
    "h": 42.5,
-   "note": "samo online"
+   "note": "samo online",
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-tirion",
@@ -1829,14 +1869,13 @@
    "store": "fi",
    "name": "Cipelar TIRION, bijeli",
    "url": "https://formaideale.rs/artikal/cipelar-tirion",
-   "price": 9463,
+   "price": 12488,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 50,
    "d": 32,
    "h": 182,
-   "regular": 12488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-neo",
@@ -1844,14 +1883,13 @@
    "store": "fi",
    "name": "Cipelar NEO, artisan hrast",
    "url": "https://formaideale.rs/artikal/cipelar-neo",
-   "price": 9463,
+   "price": 16238,
    "color": "artisan hrast",
    "hex": "#c9a679",
    "w": 60,
    "d": 33,
    "h": 191.5,
-   "regular": 16238,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-magic",
@@ -1859,14 +1897,13 @@
    "store": "fi",
    "name": "Cipelar MAGIC 2V, bijeli",
    "url": "https://formaideale.rs/artikal/cipelar-magic-2v",
-   "price": 11568,
+   "price": 16238,
    "color": "bela",
    "hex": "#f2f1ec",
    "w": 63,
    "d": 35,
    "h": 116,
-   "regular": 16238,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "moe-rudi",
@@ -1879,7 +1916,8 @@
    "hex": "#f2f1ec",
    "w": 60,
    "d": 24,
-   "h": 118
+   "h": 118,
+   "checked": "2026-10-27"
   },
   {
    "id": "les-boxxx-c",
@@ -1893,7 +1931,8 @@
    "hex2": "#b58a5c",
    "w": 69,
    "d": 34,
-   "h": 176
+   "h": 176,
+   "checked": "2026-10-27"
   },
   {
    "id": "fi-love",
@@ -1901,11 +1940,10 @@
    "store": "fi",
    "name": "Čiviluk LOVE, sonoma",
    "url": "https://formaideale.rs/artikal/civiluk-love",
-   "price": 2621,
+   "price": 3738,
    "color": "sonoma",
    "hex": "#d0b48a",
-   "regular": 3738,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "fi-zoom",
@@ -1913,11 +1951,10 @@
    "store": "fi",
    "name": "Čiviluk ZOOM, bijeli (stojeći)",
    "url": "https://formaideale.rs/artikal/civiluk-zoom",
-   "price": 5779,
+   "price": 7488,
    "color": "bela",
    "hex": "#f2f1ec",
-   "regular": 7488,
-   "until": "2026-10-31"
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-stad-b",
@@ -1929,7 +1966,8 @@
    "color": "bež",
    "hex": "#d6c8b0",
    "storeOnly": true,
-   "pack": 1
+   "pack": 1,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-stad-s",
@@ -1941,7 +1979,8 @@
    "color": "siva",
    "hex": "#9a9b9c",
    "storeOnly": true,
-   "pack": 1
+   "pack": 1,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-amungen",
@@ -1954,7 +1993,8 @@
    "hex": "#9a9b9c",
    "storeOnly": true,
    "pack": 1,
-   "note": "treba skratiti"
+   "note": "treba skratiti",
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-madrid",
@@ -1962,10 +2002,12 @@
    "store": "jysk",
    "name": "Garnišna MADRID 120–225 cm, bijela",
    "url": "https://jysk.rs/zavese/garnisne-i-dodaci-za-zavese/garnisne-i-sine-za-zavese/garnisna-madrid-o12-10mm-120-225cm",
-   "price": 750,
+   "price": 600,
    "color": "bela",
    "hex": "#f2f1ec",
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01",
+   "regular": 750
   },
   {
    "id": "jysk-ball",
@@ -1973,10 +2015,11 @@
    "store": "jysk",
    "name": "Garnišna set BALL 120–210 cm, crna",
    "url": "https://jysk.rs/zavese/garnisne-i-dodaci-za-zavese/garnisne-i-sine-za-zavese/garnisna-set-ball-120-210cm-crna",
-   "price": 2850,
+   "price": 4500,
    "color": "crna",
    "hex": "#1d1e20",
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-eivin",
@@ -1987,7 +2030,8 @@
    "price": 1350,
    "color": "bela",
    "hex": "#f2f1ec",
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-markus",
@@ -1999,7 +2043,9 @@
    "color": "siva",
    "hex": "#9a9b9c",
    "regular": 3999,
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01",
+   "until": "2026-11-29"
   },
   {
    "id": "jysk-hjalte",
@@ -2010,7 +2056,8 @@
    "price": 4499,
    "color": "inox",
    "hex": "#b9bcbe",
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-kent",
@@ -2022,7 +2069,9 @@
    "color": "bež",
    "hex": "#d6c8b0",
    "regular": 5999,
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01",
+   "until": "2026-11-29"
   },
   {
    "id": "jysk-hugo",
@@ -2034,7 +2083,9 @@
    "color": "crna",
    "hex": "#1d1e20",
    "regular": 5999,
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01",
+   "until": "2026-11-29"
   },
   {
    "id": "jysk-aborg-p",
@@ -2045,7 +2096,7 @@
    "price": 9500,
    "color": "pesak",
    "hex": "#cdbb9b",
-   "regular": 11000
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-aborg-z",
@@ -2056,7 +2107,8 @@
    "price": 9500,
    "color": "zelena",
    "hex": "#6f8f6f",
-   "storeOnly": true
+   "storeOnly": true,
+   "checked": "2026-11-01"
   },
   {
    "id": "jysk-aborg-c",
@@ -2067,7 +2119,7 @@
    "price": 9500,
    "color": "patlidžan",
    "hex": "#5b3a4a",
-   "regular": 11000
+   "checked": "2026-11-01"
   }
  ]
 }

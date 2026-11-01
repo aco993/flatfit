@@ -42,6 +42,8 @@ export interface Project {
   demo?: boolean;
   /** chosen product ids per country: { rs: { preset: 'scandi', sel: { sofa: 'fi-vegas', … } } } */
   choices?: Record<string, { preset: string; sel: Partial<Record<SlotId, string>> }>;
+  /** furniture moved by hand: where the anchor of each movable piece ends up */
+  moves?: Moves;
   updatedAt?: number;
 }
 
@@ -93,6 +95,10 @@ export interface Product {
   chimney?: boolean;
   estimate?: boolean;
   storeOnly?: boolean;
+  /** date the price was last confirmed on the store page */
+  checked?: string;
+  /** the store no longer sells it (kept so old share links still resolve to something sensible) */
+  unavailable?: boolean;
 }
 
 export interface Store { id: string; name: string; web: string; note?: string }
@@ -120,6 +126,10 @@ export interface Placement {
   gap?: number;
   /** points used for multi-item placements (chairs, curtains, nightstands) */
   extra?: { x: number; z: number; rot: number; w?: number }[];
+  /** placed by hand, not by the planner */
+  moved?: boolean;
 }
+
+export type Moves = Partial<Record<SlotId, { x: number; z: number; rot: number }>>;
 
 export interface View { id: string; label: string; pos: [number, number, number]; target: [number, number, number]; interior: boolean; room?: string }

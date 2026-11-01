@@ -4,6 +4,13 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import type { SlotId, View } from '../types';
 
 export interface Label { text: string; x: number; z: number }
+export interface Pose { x: number; z: number; rot: number }
+/** What the app decides while a piece is dragged: which piece a click grabs, where it may land, and the drop. */
+export interface DragHandler {
+  grab: (slot: SlotId) => { key: SlotId; group: SlotId[]; pose: Pose } | null;
+  move: (key: SlotId, x: number, z: number, rot: number) => { pose: Pose; ok: boolean };
+  drop: (key: SlotId, pose: Pose) => void;
+}
 
 /**
  * Raster 3D view. Two camera modes: an orbiting overview of the whole flat (low walls),
@@ -17,6 +24,9 @@ export class Viewer {
   root: THREE.Object3D | null = null;
   interior = false;
   onPick: (slot: SlotId | null) => void = () => {};
+  drag: DragHandler | null = null;
+  /** true while a piece is being dragged (tests and the app read it) */
+  dragging = false;
   private look = { yaw: 0, pitch: 0 };
   private dirty = true;
   private anim: { from: THREE.Vector3; to: THREE.Vector3; ft: THREE.Vector3; tt: THREE.Vector3; t0: number; dur: number } | null = null;
@@ -110,27 +120,83 @@ export class Viewer {
   private bindPointer() {
     const el = this.renderer.domElement;
     let down: { x: number; y: number; id: number; moved: boolean } | null = null;
-    el.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY, id: e.pointerId, moved: false }; if (this.interior) el.setPointerCapture(e.pointerId); });
+    let grab: { key: SlotId; from: Pose; floor0: THREE.Vector3; objs: { o: THREE.Object3D; p: THREE.Vector3; q: THREE.Quaternion }[]; to: Pose; started: boolean } | null = null;
+    // capture phase on the host: decide about dragging before the orbit controls see the press
+    this.host.addEventListener('pointerdown', e => {
+      grab = null;
+      if (!this.drag || e.button !== 0 || e.target !== el) return;
+      const hit = this.hit(e), g = hit && this.drag.grab(hit);
+      const floor0 = g && this.floorPoint(e);
+      if (!g || !floor0) return;
+      this.controls.enabled = false;
+      const objs = (this.root?.children || []).filter(c => { let any = false; c.traverse(o => { if (g.group.includes(o.userData.slot)) any = true; }); return any; })
+        .map(o => ({ o, p: o.position.clone(), q: o.quaternion.clone() }));
+      grab = { key: g.key, from: g.pose, floor0, objs, to: g.pose, started: false };
+    }, { capture: true });
+    el.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY, id: e.pointerId, moved: false }; if (this.interior || grab) { try { el.setPointerCapture(e.pointerId); } catch { /* synthetic pointer */ } } });
     el.addEventListener('pointermove', e => {
       if (!down || down.id !== e.pointerId) return;
       const dx = e.clientX - down.x, dy = e.clientY - down.y;
       if (Math.abs(dx) + Math.abs(dy) > 4) down.moved = true;
+      if (grab && down.moved) {
+        const f = this.floorPoint(e); if (!f || !this.drag) return;
+        if (!grab.started) { grab.started = true; this.dragging = true; el.style.cursor = 'grabbing'; }
+        const r = this.drag.move(grab.key, grab.from.x + f.x - grab.floor0.x, grab.from.z + f.z - grab.floor0.z, grab.from.rot);
+        grab.to = r.pose; this.applyPose(grab.objs, grab.from, r.pose); this.selOk = r.ok; this.updateSelBox(); this.dirty = true;
+        return;
+      }
       if (this.interior && down.moved) { this.turn(-dx * 0.005, -dy * 0.004); down.x = e.clientX; down.y = e.clientY; }
     });
-    el.addEventListener('pointerup', e => { if (down && !down.moved) this.pick(e); down = null; });
+    el.addEventListener('pointerup', e => {
+      const g = grab; grab = null;
+      if (g?.started) { this.dragging = false; el.style.cursor = ''; this.selOk = true; this.controls.enabled = !this.interior; this.drag?.drop(g.key, g.to); down = null; return; }
+      if (g) this.controls.enabled = !this.interior;
+      if (down && !down.moved) this.pick(e);
+      down = null;
+    });
+    el.addEventListener('pointercancel', () => {
+      if (grab?.started) { this.applyPose(grab.objs, grab.from, grab.from); this.dragging = false; this.selOk = true; this.updateSelBox(); this.dirty = true; }
+      if (grab) this.controls.enabled = !this.interior;
+      grab = null; down = null; el.style.cursor = '';
+    });
     el.addEventListener('wheel', e => { if (!this.interior) return; e.preventDefault(); this.zoom(e.deltaY > 0 ? 1.06 : 1 / 1.06); }, { passive: false });
   }
 
+  /** Move the meshes of a dragged piece from one pose to another without rebuilding the scene. */
+  private applyPose(objs: { o: THREE.Object3D; p: THREE.Vector3; q: THREE.Quaternion }[], from: Pose, to: Pose) {
+    const dr = to.rot - from.rot, Y = new THREE.Vector3(0, 1, 0), qr = new THREE.Quaternion().setFromAxisAngle(Y, dr);
+    for (const { o, p, q } of objs) {
+      o.position.set(p.x - from.x, p.y, p.z - from.z).applyAxisAngle(Y, dr).add(new THREE.Vector3(to.x, 0, to.z));
+      o.quaternion.copy(qr).multiply(q);
+    }
+    this.root?.updateMatrixWorld(true);
+  }
+  private floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  private floorPoint(e: { clientX: number; clientY: number }) {
+    this.setRay(e); return this.ray.ray.intersectPlane(this.floorPlane, new THREE.Vector3());
+  }
+
   private ray = new THREE.Raycaster();
-  pick(e: { clientX: number; clientY: number }) {
-    if (!this.root) return;
+  private setRay(e: { clientX: number; clientY: number }) {
     const r = this.renderer.domElement.getBoundingClientRect();
     this.ray.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), this.camera);
-    const hit = this.ray.intersectObject(this.root, true).find(h => (h.object as THREE.Mesh).isMesh && h.object.visible);
-    this.onPick((hit?.object.userData.slot as SlotId) || null);
+  }
+  /** Slot of the furniture under the pointer, if any. */
+  hit(e: { clientX: number; clientY: number }): SlotId | null {
+    if (!this.root) return null;
+    this.setRay(e);
+    const h = this.ray.intersectObject(this.root, true).find(x => (x.object as THREE.Mesh).isMesh && x.object.visible);
+    return (h?.object.userData.slot as SlotId) || null;
+  }
+  pick(e: { clientX: number; clientY: number }) { if (this.root) this.onPick(this.hit(e)); }
+  /** Screen position of a world point, for tests that drag with a real mouse. */
+  toScreen(x: number, y: number, z: number) {
+    const v = new THREE.Vector3(x, y, z).project(this.camera), r = this.renderer.domElement.getBoundingClientRect();
+    return { x: r.left + ((v.x + 1) / 2) * r.width, y: r.top + ((1 - v.y) / 2) * r.height };
   }
 
   private selSlot: SlotId | null = null;
+  private selOk = true;
   highlight(slot: SlotId | null) { this.selSlot = slot; this.updateSelBox(); this.dirty = true; }
   private updateSelBox() {
     if (this.sel) { this.scene.remove(this.sel); this.sel = null; }
@@ -138,7 +204,7 @@ export class Viewer {
     const box = new THREE.Box3(); let any = false;
     this.root.traverse(o => { if ((o as THREE.Mesh).isMesh && o.userData.slot === this.selSlot) { box.expandByObject(o); any = true; } });
     if (!any) return;
-    this.sel = new THREE.Box3Helper(box.expandByScalar(0.03), new THREE.Color('#e0662e')); this.scene.add(this.sel);
+    this.sel = new THREE.Box3Helper(box.expandByScalar(0.03), new THREE.Color(this.dragging ? (this.selOk ? '#2f9e5b' : '#d92d20') : '#e0662e')); this.scene.add(this.sel);
   }
   /** Centre of all meshes of a slot, to turn the camera toward it. */
   slotCenter(slot: SlotId) {

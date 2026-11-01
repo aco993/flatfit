@@ -167,3 +167,40 @@ test.describe('Shopping list export', () => {
     expect(rows.slice(1).every(r => /https:\/\//.test(r))).toBe(true);
   });
 });
+
+test.describe('Sara · rearranges the living room with the mouse', () => {
+  test.use({ locale: 'en-GB' });
+  test('drags the sofa, sees what it hits, turns it, and undoes it all', async ({ page }) => {
+    await page.goto('./#c=rs&l=en');
+    await ready(page);
+    await page.getByRole('tab', { name: /Whole flat/ }).click();
+    await page.waitForTimeout(900);
+    const at = (x: number, y: number, z: number) => page.evaluate(([x, y, z]) => (window as any).flatfit.viewer.toScreen(x, y, z), [x, y, z]);
+    const centre = await page.evaluate(() => { const c = (window as any).flatfit.viewer.slotCenter('sofa'); return [c.x, c.z]; });
+    const s = await at(centre[0], 0.35, centre[1]);
+    // first click selects, then the selected piece can be dragged
+    await page.mouse.click(s.x, s.y);
+    await expect(page.locator('#card h3')).toHaveText('Sofa');
+    await expect(page.locator('#card')).toContainText('Drag it in the 3D view');
+    const s0 = await at(centre[0], 0, centre[1]), t = await at(centre[0] + 1.2, 0, centre[1]);
+    await page.mouse.move(s.x, s.y);
+    await page.mouse.down();
+    await page.mouse.move(s.x + (t.x - s0.x) / 2, s.y + (t.y - s0.y) / 2, { steps: 6 });
+    expect(await page.evaluate(() => (window as any).flatfit.viewer.dragging)).toBe(true);
+    await page.mouse.move(s.x + (t.x - s0.x), s.y + (t.y - s0.y), { steps: 6 });
+    await page.mouse.up();
+    // pushed into the middle of the room it runs into the coffee table
+    await expect(page.getByTestId('issues')).toContainText(/Sofa: Runs \d+ cm into: Coffee table/);
+    await expect(page.locator('#card')).toContainText('Back to suggested place');
+    await page.keyboard.press('t');
+    const turned = await page.evaluate(() => (window as any).flatfit.project.moves.sofa.rot);
+    expect(Math.abs(turned)).toBeLessThan(0.01 + Math.PI);
+    await page.getByRole('button', { name: 'Undo' }).click();
+    await page.keyboard.press('Control+z');
+    await expect(page.getByTestId('issues')).not.toContainText('Sofa:');
+    expect(await page.evaluate(() => Object.keys((window as any).flatfit.project.moves || {}).length)).toBe(0);
+    await expect(page.getByRole('button', { name: 'Undo' })).toBeDisabled();
+    await page.keyboard.press('Control+y');
+    await expect(page.getByTestId('issues')).toContainText('Sofa:');
+  });
+});

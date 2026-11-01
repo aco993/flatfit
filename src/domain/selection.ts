@@ -2,6 +2,7 @@ import LZString from 'lz-string';
 import type { Catalog, Product, Project, SlotId } from '../types';
 import { activeSlots, curtainWindows, roomsOfType, slotDef } from './slots';
 import { autoLayout, type Dims, type Layout } from './layout';
+import { applyMoves, moveIssues } from './moves';
 
 export type Selection = Partial<Record<SlotId, string>>;
 export type Style = 'cheap' | 'light' | 'warm' | 'dark' | 'color';
@@ -9,7 +10,7 @@ export type Style = 'cheap' | 'light' | 'warm' | 'dark' | 'color';
 export interface Index { cat: Catalog; byId: Map<string, Product>; bySlot: Map<SlotId, Product[]> }
 export function indexCatalog(cat: Catalog): Index {
   const byId = new Map<string, Product>(), bySlot = new Map<SlotId, Product[]>();
-  for (const p of cat.products) { byId.set(p.id, p); (bySlot.get(p.slot) || bySlot.set(p.slot, []).get(p.slot)!).push(p); }
+  for (const p of cat.products) { if (p.unavailable) continue; byId.set(p.id, p); (bySlot.get(p.slot) || bySlot.set(p.slot, []).get(p.slot)!).push(p); }
   return { cat, byId, bySlot };
 }
 
@@ -107,7 +108,7 @@ const cm = (m: number) => Math.round(m * 100);
 
 export function fitIssues(proj: Project, sel: Selection, ix: Index, layout?: Layout): Issue[] {
   const D = (s: SlotId) => dimsOf(get(ix, sel, s), s);
-  const L = layout || autoLayout(proj, D);
+  const L = layout || applyMoves(autoLayout(proj, D), proj.moves);
   const out: Issue[] = [];
   const pl = (s: SlotId) => L.placements.find(p => p.slot === s);
   const over = (slot: SlotId, need: number, have: number, code: string, extra: Record<string, number | string> = {}) => {
@@ -132,6 +133,7 @@ export function fitIssues(proj: Project, sel: Selection, ix: Index, layout?: Lay
   const k = get(ix, sel, 'kitchen'); if (k?.needsWorktop && !has('worktop')) out.push({ slot: 'worktop', hard: true, code: 'needsWorktop', v: {} });
   const b = get(ix, sel, 'bed'); if (b?.needsBase && !has('base')) out.push({ slot: 'base', hard: true, code: 'needsBase', v: {} });
   const t = get(ix, sel, 'table'); if (t && !t.includesChairs && !has('chairs')) out.push({ slot: 'chairs', hard: true, code: 'needsChairs', v: {} });
+  for (const mi of moveIssues(proj, L, D, has)) out.push({ slot: mi.slot, hard: true, code: mi.code, v: { other: mi.other || '', over: mi.over || 0 } });
   const m = get(ix, sel, 'mattress'); if (b && m && b.w && m.w && Math.abs((b.w - (b.w > m.w + 12 ? 10 : 0)) - m.w) > 12) out.push({ slot: 'mattress', hard: false, code: 'mattressSize', v: { bed: b.w, mattress: m.w } });
   return out;
 }
