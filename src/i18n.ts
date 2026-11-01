@@ -48,6 +48,7 @@ const en = {
   'editor.x': 'X (m)', 'editor.z': 'Y (m)', 'editor.w': 'Width (m)', 'editor.d': 'Depth (m)', 'editor.area': 'Area', 'editor.total': 'Total area: {a} m²',
   'editor.openings': 'Doors and windows', 'editor.addOpening': 'Add', 'editor.kind': 'Type', 'editor.side': 'Wall', 'editor.at': 'From corner (m)', 'editor.width': 'Width (m)', 'editor.removeOpening': 'Remove',
   'kind.door': 'Door', 'kind.entry': 'Entrance door', 'kind.window': 'Window', 'kind.balcony': 'Balcony door',
+  'editor.wallItems': 'Radiators and TV socket', 'editor.addWallItem': 'Add radiator or socket', 'editor.wiHint': 'The planner keeps wardrobes and the kitchen off radiators and puts the TV by its socket.', 'bd.title': 'Plan image to trace', 'bd.load': 'Load image (PNG, JPG)', 'bd.hint': 'Load a photo or screenshot of the floor plan, set its scale, then draw the rooms over it. For a PDF, take a screenshot.', 'bd.opacity': 'Visibility', 'bd.width': 'Image width (m)', 'bd.move': 'Move image', 'bd.measure': 'Set scale', 'bd.remove': 'Remove image', 'bd.calHint': 'Click two points on the image whose real distance you know, for example the ends of a wall with its length written on the plan.', 'bd.calDist': 'Real distance (m)', 'bd.apply': 'Apply scale', 'bd.done': 'Scale set: the image is {w} m wide.', 'bd.fail': 'Could not read this image.', 'wi.radiator': 'Radiator', 'wi.tv': 'TV / internet socket', 'issue.radiator': 'Stands in front of a radiator.',
   'side.n': 'Top', 'side.s': 'Bottom', 'side.w': 'Left', 'side.e': 'Right',
   'editor.open': 'No wall towards', 'editor.save': 'Save and show in 3D', 'editor.cancel': 'Cancel', 'editor.wallH': 'Ceiling height (m)', 'editor.projectName': 'Apartment name',
   'editor.hint': 'Drag a room to move it, drag its corner to resize. Arrow keys move the selected room by 5 cm, Shift+arrows resize.',
@@ -58,6 +59,7 @@ const en = {
   'help.title': 'Keyboard shortcuts', 'help.views': 'Switch camera view', 'help.look': 'Look around / orbit', 'help.zoom': 'Zoom', 'help.render': 'Photoreal render', 'help.edit': 'Edit floor plan', 'help.lang': 'Next language', 'help.esc': 'Close, cancel, clear selection', 'help.help': 'This help',
   'help.about': 'Prices and sizes come from the stores’ own pages. Click furniture in 3D to see what it is and swap it. Fit checks use the floor plan, so measure before you buy.',
   'misc.loading': 'Loading…', 'misc.catalogFail': 'The product catalogue could not be loaded.', 'misc.noWebgl': 'This browser cannot show 3D (WebGL is off).', 'misc.area': '{a} m²',
+  'misc.feedback': 'Send feedback', 'misc.source': 'Source code',
   'misc.footer': 'Open source. Furniture prices as listed by the stores on the check date; not affiliated with any store.',
 };
 export type Key = keyof typeof en;
@@ -110,6 +112,7 @@ const de: Record<Key, string> = {
   'editor.x': 'X (m)', 'editor.z': 'Y (m)', 'editor.w': 'Breite (m)', 'editor.d': 'Tiefe (m)', 'editor.area': 'Fläche', 'editor.total': 'Gesamtfläche: {a} m²',
   'editor.openings': 'Türen und Fenster', 'editor.addOpening': 'Hinzufügen', 'editor.kind': 'Art', 'editor.side': 'Wand', 'editor.at': 'Ab Ecke (m)', 'editor.width': 'Breite (m)', 'editor.removeOpening': 'Entfernen',
   'kind.door': 'Tür', 'kind.entry': 'Eingangstür', 'kind.window': 'Fenster', 'kind.balcony': 'Balkontür',
+  'editor.wallItems': 'Heizkörper und TV-Anschluss', 'editor.addWallItem': 'Heizkörper oder Anschluss hinzufügen', 'editor.wiHint': 'Der Planer stellt Schränke und die Küche nicht vor Heizkörper und den Fernseher an den Anschluss.', 'bd.title': 'Plan-Bild zum Nachzeichnen', 'bd.load': 'Bild laden (PNG, JPG)', 'bd.hint': 'Lade ein Foto oder einen Screenshot des Grundrisses, stelle den Maßstab ein und zeichne die Räume darüber. Bei einem PDF einen Screenshot machen.', 'bd.opacity': 'Sichtbarkeit', 'bd.width': 'Bildbreite (m)', 'bd.move': 'Bild verschieben', 'bd.measure': 'Maßstab setzen', 'bd.remove': 'Bild entfernen', 'bd.calHint': 'Klicke zwei Punkte im Bild an, deren echten Abstand du kennst, z. B. die Enden einer bemaßten Wand.', 'bd.calDist': 'Echter Abstand (m)', 'bd.apply': 'Maßstab übernehmen', 'bd.done': 'Maßstab gesetzt: das Bild ist {w} m breit.', 'bd.fail': 'Dieses Bild konnte nicht gelesen werden.', 'wi.radiator': 'Heizkörper', 'wi.tv': 'TV-/Internetanschluss', 'issue.radiator': 'Steht vor einem Heizkörper.',
   'side.n': 'Oben', 'side.s': 'Unten', 'side.w': 'Links', 'side.e': 'Rechts',
   'editor.open': 'Keine Wand zu', 'editor.save': 'Speichern und in 3D zeigen', 'editor.cancel': 'Abbrechen', 'editor.wallH': 'Deckenhöhe (m)', 'editor.projectName': 'Name der Wohnung',
   'editor.hint': 'Raum ziehen zum Verschieben, Ecke ziehen zum Ändern der Größe. Pfeiltasten verschieben um 5 cm, Umschalt+Pfeile ändern die Größe.',
@@ -120,6 +123,7 @@ const de: Record<Key, string> = {
   'help.title': 'Tastenkürzel', 'help.views': 'Kameraansicht wechseln', 'help.look': 'Umsehen / drehen', 'help.zoom': 'Zoomen', 'help.render': 'Fotorealistisches Bild', 'help.edit': 'Grundriss bearbeiten', 'help.lang': 'Nächste Sprache', 'help.esc': 'Schließen, abbrechen, Auswahl aufheben', 'help.help': 'Diese Hilfe',
   'help.about': 'Preise und Maße stammen von den Seiten der Läden. Klicke ein Möbel in 3D an, um es zu sehen und zu tauschen. Die Passprüfung nutzt den Grundriss – vor dem Kauf nachmessen.',
   'misc.loading': 'Lädt…', 'misc.catalogFail': 'Der Produktkatalog konnte nicht geladen werden.', 'misc.noWebgl': 'Dieser Browser kann kein 3D anzeigen (WebGL ist aus).', 'misc.area': '{a} m²',
+  'misc.feedback': 'Feedback geben', 'misc.source': 'Quellcode',
   'misc.footer': 'Open Source. Möbelpreise laut Läden zum Prüfdatum; keine Verbindung zu einem Laden.',
 };
 
@@ -171,6 +175,7 @@ const sr: Record<Key, string> = {
   'editor.x': 'X (m)', 'editor.z': 'Y (m)', 'editor.w': 'Širina (m)', 'editor.d': 'Dubina (m)', 'editor.area': 'Površina', 'editor.total': 'Ukupna površina: {a} m²',
   'editor.openings': 'Vrata i prozori', 'editor.addOpening': 'Dodaj', 'editor.kind': 'Vrsta', 'editor.side': 'Zid', 'editor.at': 'Od ugla (m)', 'editor.width': 'Širina (m)', 'editor.removeOpening': 'Ukloni',
   'kind.door': 'Vrata', 'kind.entry': 'Ulazna vrata', 'kind.window': 'Prozor', 'kind.balcony': 'Balkonska vrata',
+  'editor.wallItems': 'Radijatori i TV utičnica', 'editor.addWallItem': 'Dodaj radijator ili utičnicu', 'editor.wiHint': 'Planer ne stavlja ormane ni kuhinju ispred radijatora, a TV stavlja kod utičnice.', 'bd.title': 'Slika osnove za precrtavanje', 'bd.load': 'Učitaj sliku (PNG, JPG)', 'bd.hint': 'Učitaj fotografiju ili snimak ekrana osnove, podesi razmeru, pa preko nje nacrtaj prostorije. Za PDF napravi snimak ekrana.', 'bd.opacity': 'Vidljivost', 'bd.width': 'Širina slike (m)', 'bd.move': 'Pomeri sliku', 'bd.measure': 'Podesi razmeru', 'bd.remove': 'Ukloni sliku', 'bd.calHint': 'Klikni dve tačke na slici čije stvarno rastojanje znaš, na primer krajeve zida čija je dužina upisana na planu.', 'bd.calDist': 'Stvarno rastojanje (m)', 'bd.apply': 'Primeni razmeru', 'bd.done': 'Razmera podešena: slika je široka {w} m.', 'bd.fail': 'Ova slika ne može da se pročita.', 'wi.radiator': 'Radijator', 'wi.tv': 'TV / internet utičnica', 'issue.radiator': 'Stoji ispred radijatora.',
   'side.n': 'Gore', 'side.s': 'Dole', 'side.w': 'Levo', 'side.e': 'Desno',
   'editor.open': 'Bez zida prema', 'editor.save': 'Sačuvaj i prikaži u 3D-u', 'editor.cancel': 'Otkaži', 'editor.wallH': 'Visina plafona (m)', 'editor.projectName': 'Naziv stana',
   'editor.hint': 'Prevuci prostoriju da je pomeriš, prevuci ugao da promeniš veličinu. Strelice pomeraju za 5 cm, Shift+strelice menjaju veličinu.',
@@ -181,6 +186,7 @@ const sr: Record<Key, string> = {
   'help.title': 'Prečice na tastaturi', 'help.views': 'Promeni pogled kamere', 'help.look': 'Razgledanje / okretanje', 'help.zoom': 'Zum', 'help.render': 'Fotorealistična slika', 'help.edit': 'Uredi osnovu stana', 'help.lang': 'Sledeći jezik', 'help.esc': 'Zatvori, otkaži, poništi izbor', 'help.help': 'Ova pomoć',
   'help.about': 'Cene i mere su sa stranica radnji. Klikni na nameštaj u 3D-u da vidiš šta je i da ga zameniš. Provera da li staje koristi osnovu stana, zato izmeri pre kupovine.',
   'misc.loading': 'Učitavam…', 'misc.catalogFail': 'Katalog proizvoda nije mogao da se učita.', 'misc.noWebgl': 'Ovaj pregledač ne može da prikaže 3D (WebGL je isključen).', 'misc.area': '{a} m²',
+  'misc.feedback': 'Pošalji utisak', 'misc.source': 'Izvorni kod',
   'misc.footer': 'Otvoreni kod. Cene nameštaja su onakve kakve su radnje objavile na dan provere; nije povezano ni sa jednom radnjom.',
 };
 

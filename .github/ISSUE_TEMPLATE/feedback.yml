@@ -1,0 +1,29 @@
+name: Feedback from using FlatFit
+description: Tried it on your own flat? Tell what was unclear, missing or wrong.
+labels: [feedback]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: What were you trying to do?
+      placeholder: e.g. furnish a 40 m² flat in Belgrade for about 3,000 €
+    validations:
+      required: true
+  - type: textarea
+    id: unclear
+    attributes:
+      label: What was unclear or got in the way?
+  - type: textarea
+    id: missing
+    attributes:
+      label: What did you miss? (stores, furniture types, room shapes, …)
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options: [Desktop or laptop, Tablet, Phone]
+  - type: input
+    id: link
+    attributes:
+      label: Share link (optional)
+      description: The “Copy link to this setup” button; it contains your plan and product choices, no personal data.

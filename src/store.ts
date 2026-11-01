@@ -33,5 +33,7 @@ export function deleteProject(id: string) { write(KEY_PROJECTS, read<Project[]>(
 export function isProject(x: any): x is Project {
   return !!x && typeof x === 'object' && typeof x.id === 'string' && typeof x.name === 'string' && Array.isArray(x.rooms) && Array.isArray(x.openings) && Array.isArray(x.open)
     && x.rooms.every((r: any) => typeof r.id === 'string' && ['living', 'kitchen', 'dining', 'bedroom', 'bathroom', 'hall', 'terrace'].includes(r.type) && [r.x, r.z, r.w, r.d].every(n => typeof n === 'number' && isFinite(n)) && r.w > 0 && r.d > 0)
-    && x.openings.every((o: any) => typeof o.room === 'string' && ['n', 's', 'e', 'w'].includes(o.side) && ['door', 'entry', 'window', 'balcony'].includes(o.kind) && typeof o.at === 'number' && typeof o.width === 'number');
+    && x.openings.every((o: any) => typeof o.room === 'string' && ['n', 's', 'e', 'w'].includes(o.side) && ['door', 'entry', 'window', 'balcony'].includes(o.kind) && typeof o.at === 'number' && typeof o.width === 'number')
+    && (x.backdrop === undefined || (typeof x.backdrop === 'object' && typeof x.backdrop.src === 'string' && /^data:image\/(png|jpeg|webp);/.test(x.backdrop.src) && [x.backdrop.x, x.backdrop.z, x.backdrop.w, x.backdrop.ar].every((n: unknown) => typeof n === 'number' && isFinite(n as number))))
+    && (x.wallItems === undefined || (Array.isArray(x.wallItems) && x.wallItems.every((w: any) => typeof w.room === 'string' && ['n', 's', 'e', 'w'].includes(w.side) && ['radiator', 'tv'].includes(w.kind) && typeof w.at === 'number' && typeof w.width === 'number')));
 }

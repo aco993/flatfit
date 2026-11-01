@@ -18,13 +18,13 @@
   <header class="top">
     <div class="brand">
       <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7"/><path d="M7 23V12l9-6 9 6v11h-6v-6h-6v6z"/></svg>
-      <div><strong>FlatFit</strong><span class="tagline" data-i18n="app.tagline"></span></div>
+      <div><strong>FlatFit</strong><span class="tagline" data-i18n="app.tagline">Furnish a flat in 3D with real furniture from local stores</span></div>
     </div>
     <div class="controls">
-      <label class="field"><span data-i18n="nav.project"></span><select id="project"></select></label>
-      <button type="button" class="btn ghost" id="edit-plan" data-i18n="nav.edit"></button>
-      <label class="field"><span data-i18n="nav.country"></span><select id="country"></select></label>
-      <label class="field"><span data-i18n="nav.lang"></span><select id="lang"></select></label>
+      <label class="field"><span data-i18n="nav.project">Apartment</span><select id="project"></select></label>
+      <button type="button" class="btn ghost" id="edit-plan" data-i18n="nav.edit">Edit floor plan</button>
+      <label class="field"><span data-i18n="nav.country">Country</span><select id="country"></select></label>
+      <label class="field"><span data-i18n="nav.lang">Language</span><select id="lang"></select></label>
       <button type="button" class="icon" id="theme" data-i18n-label="nav.theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg></button>
       <button type="button" class="icon" id="help" data-i18n-label="nav.help"><span aria-hidden="true">?</span></button>
     </div>
@@ -32,36 +32,37 @@
 
   <main class="app">
     <section class="stage" aria-labelledby="views-label">
-      <h2 id="views-label" class="sr-only" data-i18n="view.label"></h2>
+      <h2 id="views-label" class="sr-only" data-i18n="view.label">Camera view</h2>
       <div class="views" id="views" role="tablist"></div>
       <div class="viewer" id="viewer">
         <div class="labels" id="labels" aria-hidden="true"></div>
         <div class="toolbar">
           <button type="button" class="btn icon-btn" id="undo" data-i18n-label="act.undo" disabled>↶</button><button type="button" class="btn icon-btn" id="redo" data-i18n-label="act.redo" disabled>↷</button>
-          <button type="button" class="btn primary" id="render-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg><span data-i18n="render.btn"></span></button>
+          <button type="button" class="btn primary" id="render-btn" data-i18n-label="render.btn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg><span data-i18n="render.btn">Photoreal render</span></button>
         </div>
         <div class="nav-pad" aria-hidden="true">
           <button type="button" data-turn="left" tabindex="-1">◀</button><button type="button" data-turn="right" tabindex="-1">▶</button>
         </div>
         <div class="card" id="card" hidden></div>
-        <p class="nogl" id="nogl" hidden data-i18n="misc.noWebgl"></p>
+        <p class="nogl" id="nogl" hidden data-i18n="misc.noWebgl">This browser cannot show 3D (WebGL is off).</p>
       </div>
     </section>
 
     <aside class="panel" id="list" tabindex="-1" aria-label="Shopping list">
-      <div class="presets"><h2 data-i18n="preset.label"></h2><div id="presets" class="chips"></div></div>
+      <div class="presets"><h2 data-i18n="preset.label">Ready-made looks</h2><div id="presets" class="chips"></div></div>
       <div class="summary" id="summary" aria-live="polite"></div>
       <div id="slots"></div>
       <div class="actions">
-        <button type="button" class="btn" id="share" data-i18n="act.share"></button>
-        <button type="button" class="btn ghost" id="csv" data-i18n="act.csv"></button>
+        <button type="button" class="btn" id="share" data-i18n="act.share">Copy link to this setup</button>
+        <button type="button" class="btn ghost" id="csv" data-i18n="act.csv">Download shopping list (CSV)</button>
       </div>
       <p class="foot" id="foot"></p>
+      <p class="foot links"><a href="https://github.com/aco993/flatfit/issues/new?template=feedback.yml" target="_blank" rel="noopener" data-i18n="misc.feedback">Send feedback</a> · <a href="https://github.com/aco993/flatfit" target="_blank" rel="noopener" data-i18n="misc.source">Source code</a></p>
     </aside>
   </main>
 
   <dialog id="render-dlg" class="dlg wide" aria-labelledby="render-title">
-    <div class="dlg-head"><h2 id="render-title" data-i18n="render.title"></h2><button type="button" class="icon" data-close data-i18n-label="render.close">✕</button></div>
+    <div class="dlg-head"><h2 id="render-title" data-i18n="render.title">Photoreal render</h2><button type="button" class="icon" data-close data-i18n-label="render.close">✕</button></div>
     <div class="render-body">
       <div class="render-img"><canvas id="pt-canvas"></canvas><img id="pt-img" alt="" hidden></div>
       <div class="render-side">
@@ -69,12 +70,12 @@
         <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="pt-bar"><i id="pt-fill"></i></div>
         <p id="pt-status" aria-live="polite"></p>
         <div class="row">
-          <button type="button" class="btn primary" id="pt-start" data-i18n="render.start"></button>
-          <button type="button" class="btn" id="pt-finish" data-i18n="render.finish" hidden></button>
-          <button type="button" class="btn ghost" id="pt-cancel" data-i18n="render.cancel" hidden></button>
-          <a class="btn" id="pt-save" download="flatfit.jpg" hidden data-i18n="render.save"></a>
+          <button type="button" class="btn primary" id="pt-start" data-i18n="render.start">Start</button>
+          <button type="button" class="btn" id="pt-finish" data-i18n="render.finish" hidden>Finish now</button>
+          <button type="button" class="btn ghost" id="pt-cancel" data-i18n="render.cancel" hidden>Cancel</button>
+          <a class="btn" id="pt-save" download="flatfit.jpg" hidden data-i18n="render.save">Save image</a>
         </div>
-        <p class="muted small" data-i18n="render.note"></p>
+        <p class="muted small" data-i18n="render.note">Light is traced bounce by bounce (path tracing) on your graphics card. Esc cancels at any moment.</p>
       </div>
     </div>
   </dialog>

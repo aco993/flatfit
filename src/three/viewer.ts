@@ -47,13 +47,15 @@ export class Viewer {
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.0;
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.domElement.setAttribute('aria-hidden', 'true');
+    // status queries after each shader compile are synchronous GPU round trips; only useful while developing
+    this.renderer.debug.checkShaderErrors = !!import.meta.env.DEV;
     // software rendering (no GPU, e.g. some VMs and CI): keep it light so the page stays usable
     if (Viewer.software(this.renderer)) { this.renderer.setPixelRatio(1); this.renderer.shadowMap.enabled = false; this.soft = true; }
     host.appendChild(this.renderer.domElement);
 
-    const pm = new THREE.PMREMGenerator(this.renderer);
-    this.scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture; pm.dispose();
+    // soft image-based light; generated after the first frames so it does not hold up the page
     this.scene.environmentIntensity = 0.55;
+    setTimeout(() => this.makeEnv(), 300);
     this.scene.background = new THREE.Color('#dfe6ec');
     const hemi = new THREE.HemisphereLight(0xffffff, 0xcfc6ba, 0.55); this.scene.add(hemi);
     const sun = new THREE.DirectionalLight(0xfff3e2, 1.6);
@@ -73,11 +75,39 @@ export class Viewer {
   }
 
   setRoot(root: THREE.Object3D, bounds?: THREE.Box3) {
-    if (this.root) { this.scene.remove(this.root); this.root.traverse(o => { const m = o as THREE.Mesh; if (m.geometry) m.geometry.dispose(); }); }
+    if (this.root) { this.scene.remove(this.root); this.root.traverse(o => { const m = o as THREE.Mesh; if (m.geometry && !m.geometry.userData.shared) m.geometry.dispose(); }); }
     this.root = root; this.scene.add(root);
     if (bounds) this.bounds.copy(bounds).expandByScalar(1.5);
-    this.updateSelBox(); this.dirty = true;
+    this.updateSelBox(); this.recompile();
   }
+
+  /**
+   * Compile new shaders off the main thread (KHR_parallel_shader_compile) before drawing. On Windows a synchronous
+   * compile of every material takes seconds; meanwhile the canvas keeps showing the last finished frame.
+   */
+  private compiling = 0;
+  private recompile() {
+    const id = ++this.compiling;
+    this.renderer.compileAsync(this.scene, this.camera).catch(() => undefined).then(() => { if (id === this.compiling) { this.compiling = 0; this.dirty = true; } });
+  }
+  /**
+   * Soft image-based light from three's RoomEnvironment. PMREM compiles its blur shaders synchronously, which on a
+   * cold Windows shader cache blocks the page for seconds; so its materials are created first and compiled in
+   * parallel (for the same render target, so the variants match), and the environment is baked once they are ready.
+   */
+  private async makeEnv() {
+    const r = this.renderer, pm = new THREE.PMREMGenerator(r), P = pm as unknown as Record<string, any>, room = new RoomEnvironment();
+    try {
+      P._setSize(256); const rt = P._allocateTargets(), prev = r.getRenderTarget(), cam = new THREE.PerspectiveCamera(90, 1, 0.1, 100);
+      const shaders = new THREE.Scene();
+      for (const m of [P._blurMaterial, P._ggxMaterial]) if (m) shaders.add(new THREE.Mesh(new THREE.BufferGeometry(), m));
+      r.setRenderTarget(rt); const ready = Promise.all([r.compileAsync(shaders, cam), r.compileAsync(room, cam)]); r.setRenderTarget(prev); rt.dispose();
+      await ready;
+    } catch { /* private API changed: fall back to baking right away */ }
+    this.scene.environment = pm.fromScene(room, 0.04).texture; pm.dispose(); this.recompile();
+  }
+  /** Prepare the shaders of objects that will be added later (decorative models), without drawing them. */
+  warm(obj: THREE.Object3D) { return this.renderer.compileAsync(obj, this.camera, this.scene).catch(() => undefined); }
 
   setView(v: View, instant = false) {
     this.interior = v.interior;
@@ -254,7 +284,7 @@ export class Viewer {
       if (k >= 1) { this.anim = null; this.finishMove(); }
       this.dirty = true;
     } else if (!this.interior && this.controls.update()) this.dirty = true;
-    if (!this.dirty || document.hidden) return;
+    if (!this.dirty || document.hidden || this.compiling) return;
     this.dirty = false;
     this.renderer.render(this.scene, this.camera); this.placeLabels();
   }

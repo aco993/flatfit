@@ -204,3 +204,40 @@ test.describe('Sara · rearranges the living room with the mouse', () => {
     await expect(page.getByTestId('issues')).toContainText('Sofa:');
   });
 });
+
+test.describe('Nina · has only a picture of her floor plan', () => {
+  test.use({ locale: 'en-GB' });
+  test('loads the picture, sets its scale from a known wall and draws a room over it', async ({ page }) => {
+    await page.goto('./#c=de&l=en');
+    await ready(page);
+    await page.locator('#project').selectOption('__new');
+    const dlg = page.getByRole('dialog', { name: 'Floor plan' });
+    await dlg.getByRole('button', { name: /Empty/ }).click();
+    await dlg.locator('#ed-bd-file').setInputFiles('tests/e2e/fixtures/plan.png');
+    await expect(dlg.getByRole('status')).toContainText('Click two points');
+    // the 8 m dimension line runs from pixel (100,120) to (900,120) of the 1000 px wide picture
+    const toScreen = (px: number, py: number) => page.evaluate(([px, py]) => {
+      const svg = document.getElementById('ed-svg') as unknown as SVGSVGElement, img = svg.querySelector('image')!;
+      const x = +img.getAttribute('x')!, y = +img.getAttribute('y')!, w = +img.getAttribute('width')!, h = +img.getAttribute('height')!;
+      const p = svg.createSVGPoint(); p.x = x + px / 1000 * w; p.y = y + py / 700 * h;
+      const q = p.matrixTransform(svg.getScreenCTM()!); return { x: q.x, y: q.y };
+    }, [px, py]);
+    const a = await toScreen(100, 120), b = await toScreen(900, 120);
+    await page.mouse.click(a.x, a.y);
+    await page.mouse.click(b.x, b.y);
+    await dlg.getByLabel('Real distance (m)').fill('8');
+    await dlg.getByRole('button', { name: 'Apply scale' }).click();
+    // 1000 px at 100 px per metre is 10 m
+    const width = Number(await dlg.getByLabel('Image width (m)').inputValue());
+    expect(Math.abs(width - 10)).toBeLessThan(0.15);
+    // the room drawn to the picture's living room (5 × 4.5 m) matches its outline
+    await dlg.locator('[data-f="w"]').fill('5');
+    await dlg.locator('[data-f="d"]').fill('4.5');
+    await expect(dlg.locator('#ed-total')).toContainText('22.5');
+    await dlg.getByRole('button', { name: 'Save and show in 3D' }).click();
+    await ready(page);
+    // the picture stays with the flat but never goes into a share link
+    const shared = await page.evaluate(() => (window as any).flatfit.shareUrl());
+    expect(shared.length).toBeLessThan(4000);
+  });
+});

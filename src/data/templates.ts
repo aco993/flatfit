@@ -46,6 +46,11 @@ export function fromTemplate(t: TemplateId, name: string, country: string): Proj
       { id: 'd3', kind: 'door', room: 'bath', side: 'w', at: 0.6, width: 0.7 },
       { id: 'e1', kind: 'entry', room: 'hall', side: 's', at: 0.15, width: 0.9 },
     ],
+    wallItems: [
+      { id: 'h1', kind: 'radiator', room: 'living', side: 'n', at: 3.4, width: 1.2 },
+      { id: 'h2', kind: 'radiator', room: 'bedroom', side: 'w', at: 1.0, width: 1.4 },
+      { id: 'h3', kind: 'tv', room: 'living', side: 'w', at: 2.0, width: 0.1 },
+    ],
   };
   return { ...base, rooms: [{ id: 'r1', type: 'living', x: 0, z: 0, w: 4, d: 3.5 }], openings: [] };
 }

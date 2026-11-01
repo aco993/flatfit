@@ -30,6 +30,12 @@ export interface Opening {
   head?: number;
 }
 
+/** Things on a wall that matter for furnishing: radiators (nothing tall in front) and the TV/antenna socket. */
+export type WallItemKind = 'radiator' | 'tv';
+export interface WallItem { id: string; kind: WallItemKind; room: string; side: Side; at: number; width: number }
+
+export interface Backdrop { src: string; x: number; z: number; w: number; ar: number; opacity: number }
+
 export interface Project {
   id: string;
   name: string;
@@ -39,6 +45,9 @@ export interface Project {
   /** pairs of room ids with no wall between them (open plan) */
   open: [string, string][];
   openings: Opening[];
+  wallItems?: WallItem[];
+  /** a scanned or photographed plan shown under the rooms while drawing; w is its width in metres, ar = height / width */
+  backdrop?: Backdrop;
   demo?: boolean;
   /** chosen product ids per country: { rs: { preset: 'scandi', sel: { sofa: 'fi-vegas', … } } } */
   choices?: Record<string, { preset: string; sel: Partial<Record<SlotId, string>> }>;

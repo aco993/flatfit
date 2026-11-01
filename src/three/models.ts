@@ -20,6 +20,8 @@ export class Models {
   }
 
   get ready() { return this.src.size > 0; }
+  /** All loaded models in one group (not added to any scene), to compile their shaders ahead of time. */
+  sample() { const g = new THREE.Group(); for (const m of this.src.values()) g.add(m.clone(true)); return g; }
 
   /** Place a copy with its bottom at y, centred at (x, z), scaled to height h or largest width w (metres). */
   place(parent: THREE.Object3D, name: ModelName, x: number, y: number, z: number, o: { h?: number; w?: number; ry?: number; tint?: string; tag?: string | null } = {}): boolean {

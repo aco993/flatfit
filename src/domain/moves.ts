@@ -72,7 +72,9 @@ const overlap = (a: Rect, b: Rect) => Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1
   ? Math.min(Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1), Math.min(a.z2, b.z2) - Math.max(a.z1, b.z1)) : 0;
 const FIXTURE_SIZE = { wc: [0.4, 0.65], vanity: [0.52, 0.45], shower: [0.92, 0.92] } as const;
 
-export interface MoveIssue { slot: SlotId; code: 'outside' | 'overlap' | 'door'; other?: string; over?: number }
+export interface MoveIssue { slot: SlotId; code: 'outside' | 'overlap' | 'door' | 'radiator'; other?: string; over?: number }
+/** Tall pieces that must not stand in front of a radiator. */
+const TALL = new Set<SlotId>(['wardrobe', 'hall']);
 
 /** Is a floor point inside the flat and not inside a wall? */
 function onFloor(p: Project, walls: ReturnType<typeof deriveWalls>, x: number, z: number) {
@@ -96,6 +98,12 @@ export function moveIssues(p: Project, L: Layout, D: DimsFn, has: (s: SlotId) =>
     const c1 = s.c + (s.axis === 'x' ? nz : nx) * HALF, c2 = c1 + (s.axis === 'x' ? nz : nx) * depth;
     return s.axis === 'x' ? { x1: s.a, x2: s.b, z1: Math.min(c1, c2), z2: Math.max(c1, c2) } : { z1: s.a, z2: s.b, x1: Math.min(c1, c2), x2: Math.max(c1, c2) };
   });
+  const radiators = (p.wallItems || []).filter(w => w.kind === 'radiator').flatMap(w => {
+    const r = p.rooms.find(x => x.id === w.room); if (!r) return [];
+    const e = edgeOf(r, w.side), [nx, nz] = inward(w.side), a = e.a1 + w.at, b = a + w.width;
+    const c1 = e.c + (e.axis === 'x' ? nz : nx) * HALF, c2 = c1 + (e.axis === 'x' ? nz : nx) * 0.15;
+    return [e.axis === 'x' ? { x1: a, x2: b, z1: Math.min(c1, c2), z2: Math.max(c1, c2) } : { z1: a, z2: b, x1: Math.min(c1, c2), x2: Math.max(c1, c2) }];
+  });
   const done = new Set<string>();
   for (const m of moved) {
     const key = moveKey(m.slot)!, mine = footprints(m, D);
@@ -111,6 +119,7 @@ export function moveIssues(p: Project, L: Layout, D: DimsFn, has: (s: SlotId) =>
         if (ov > 0.02) { out.push({ slot: key, code: 'overlap', other: o.slot.startsWith('fixture.') ? o.slot : 'slot.' + (moveKey(o.slot as SlotId) || o.slot), over: Math.round(ov * 100) }); done.add(key + ':' + o.key); }
       }
       if (!done.has(key + ':door') && doors.some(d => overlap(r, d) > 0.02)) { out.push({ slot: key, code: 'door' }); done.add(key + ':door'); }
+      if (TALL.has(m.slot) && !done.has(key + ':radiator') && radiators.some(d => overlap(r, d) > 0.02)) { out.push({ slot: key, code: 'radiator' }); done.add(key + ':radiator'); }
     }
   }
   return out;

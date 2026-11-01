@@ -24,7 +24,7 @@ function subtract(spans: Span[], cut: Span): Span[] {
 const len = (s: Span) => s[1] - s[0];
 const longest = (spans: Span[]) => spans.reduce<Span | null>((best, s) => (!best || len(s) > len(best) ? s : best), null);
 
-interface SideInfo { side: Side; wall: boolean; low: Span[]; tall: Span[]; windows: number; edge: ReturnType<typeof edgeOf> }
+interface SideInfo { side: Side; wall: boolean; low: Span[]; tall: Span[]; windows: number; edge: ReturnType<typeof edgeOf>; /** position of a TV socket on this side */ tvAt?: number }
 
 /** Free stretches along each side of a room: "low" ignores windows (sofa, bed), "tall" avoids them (wardrobe, fridge). */
 export function sideInfo(p: Project, r: Room, walls = deriveWalls(p)): SideInfo[] {
@@ -45,7 +45,14 @@ export function sideInfo(p: Project, r: Room, walls = deriveWalls(p)): SideInfo[
       // a door swings into the room that owns it: keep its whole width clear on that side plus the swing radius
       low = subtract(low, [s.a - pad, s.b + pad]); tall = subtract(tall, [s.a - pad, s.b + pad]);
     }
-    return { side, wall, low, tall, windows, edge: e };
+    // radiators: nothing tall in front of them; a TV socket marks where the TV wants to be
+    let tvAt: number | undefined;
+    for (const it of p.wallItems || []) {
+      if (it.room !== r.id || it.side !== side) continue;
+      const a = e.a1 + it.at, b = a + it.width;
+      if (it.kind === 'radiator') tall = subtract(tall, [a - 0.05, b + 0.05]); else tvAt = (a + b) / 2;
+    }
+    return { side, wall, low, tall, windows, edge: e, tvAt };
   });
 }
 
@@ -68,22 +75,27 @@ const fitIn = (span: Span, w: number, want: number) => len(span) <= w ? (span[0]
 function living(p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement[]) {
   const walls = si.filter(s => s.wall && s.low.length);
   if (!walls.length) return;
-  const sofaSide = walls.slice().sort((a, b) => len(longest(b.low)!) - len(longest(a.low)!))[0];
+  const byLen = (list: SideInfo[]) => list.slice().sort((a, b) => len(longest(b.low)!) - len(longest(a.low)!));
+  // a TV socket decides the TV wall and the sofa faces it; otherwise the sofa takes the longest wall
+  const sock = walls.find(s => s.tvAt !== undefined);
+  let sofaSide = byLen(walls)[0];
+  if (sock) sofaSide = walls.find(s => s.side === opposite(sock.side)) || byLen(walls.filter(s => s !== sock))[0] || sofaSide;
   const opp = si.find(s => s.side === opposite(sofaSide.side))!;
-  const tvSide = opp.wall && opp.low.length && len(longest(opp.low)!) >= 1 ? opp
-    : walls.filter(s => s !== sofaSide).sort((a, b) => len(longest(b.low)!) - len(longest(a.low)!))[0];
+  const tvSide = sock && sock !== sofaSide ? sock
+    : opp.wall && opp.low.length && len(longest(opp.low)!) >= 1 ? opp : byLen(walls.filter(s => s !== sofaSide))[0];
   const sofa = D('sofa'), sSpan = longest(sofaSide.low)!;
-  let tvSpan = tvSide ? longest(tvSide.low)! : null;
+  const tvSpan = tvSide ? (tvSide.tvAt !== undefined && tvSide.low.find(([a, b]) => tvSide.tvAt! >= a && tvSide.tvAt! <= b)) || longest(tvSide.low)! : null;
+  const tvWant = tvSide?.tvAt ?? (tvSpan ? (tvSpan[0] + tvSpan[1]) / 2 : 0);
   const along = (sofaSide.side === 'n' || sofaSide.side === 's');
   let center = (sSpan[0] + sSpan[1]) / 2;
-  if (tvSide && tvSide.side === opposite(sofaSide.side) && tvSpan) center = fitIn(sSpan, sofa.w, (tvSpan[0] + tvSpan[1]) / 2);
+  if (tvSide && tvSide.side === opposite(sofaSide.side) && tvSpan) center = fitIn(sSpan, sofa.w, tvWant);
   else center = fitIn(sSpan, sofa.w, center);
   out.push(wallItem('sofa', r, sofaSide.side, center, sSpan, roomDepth(r, sofaSide.side)));
   const [nx, nz] = inward(sofaSide.side), depth = roomDepth(r, sofaSide.side);
   const [fx, fz] = facePoint(r, sofaSide.side, center);
   if (tvSide && tvSpan) {
     const tv = D('tvunit');
-    const tvT = tvSide.side === opposite(sofaSide.side) ? fitIn(tvSpan, tv.w, center) : fitIn(tvSpan, tv.w, (tvSpan[0] + tvSpan[1]) / 2);
+    const tvT = tvSide.side === opposite(sofaSide.side) ? fitIn(tvSpan, tv.w, tvSide.tvAt ?? center) : fitIn(tvSpan, tv.w, tvWant);
     out.push(wallItem('tvunit', r, tvSide.side, tvT, tvSpan, roomDepth(r, tvSide.side)));
     const t = out[out.length - 1]; out.push({ ...t, slot: 'tv' });
   }

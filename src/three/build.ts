@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import type { Placement, Product, Project, SlotId } from '../types';
-import { WALL_T, deriveWalls, inward } from '../domain/geometry';
+import { WALL_T, deriveWalls, edgeOf, inward } from '../domain/geometry';
 import type { Dims, Layout } from '../domain/layout';
 import { Materials, isWood, type Kind } from './materials';
 import { Models } from './models';
@@ -17,13 +17,21 @@ export interface Furnish { product: (s: SlotId) => Product | undefined; dims: (s
 const FLOOR: Record<string, 'oak' | 'marble' | 'tile' | 'bathTile'> = { living: 'oak', bedroom: 'oak', dining: 'marble', kitchen: 'marble', hall: 'marble', bathroom: 'tile', terrace: 'tile' };
 
 /** Small helper that adds tagged meshes; the tag (slot id) is what a click on the 3D view selects. */
+/** Rounded boxes are the costly part of a build; identical sizes (legs, fins, doors) share one geometry across builds. */
+const GEO = new Map<string, THREE.BufferGeometry>();
 export class Builder {
   tag: SlotId | null = null;
   constructor(public M: Materials, public lowPoly = false) {}
   private geo(w: number, h: number, d: number, soft: boolean) {
-    const s = Math.min(w, h, d);
-    if (s > 0.025) { const r = Math.min(soft ? 0.045 : 0.008, s / 2 - 0.002); return new RoundedBoxGeometry(w, h, d, this.lowPoly ? (soft ? 2 : 1) : (soft ? 4 : 2), r); }
-    return new THREE.BoxGeometry(w, h, d);
+    const s = Math.min(w, h, d), seg = this.lowPoly ? (soft ? 2 : 1) : (soft ? 4 : 2);
+    const key = `${w.toFixed(3)}|${h.toFixed(3)}|${d.toFixed(3)}|${s > 0.025 ? seg : 0}|${soft ? 1 : 0}`;
+    let g = GEO.get(key);
+    if (!g) {
+      if (GEO.size > 4000) { for (const x of GEO.values()) x.dispose(); GEO.clear(); }
+      g = s > 0.025 ? new RoundedBoxGeometry(w, h, d, seg, Math.min(soft ? 0.045 : 0.008, s / 2 - 0.002)) : new THREE.BoxGeometry(w, h, d);
+      g.userData.shared = true; GEO.set(key, g);
+    }
+    return g;
   }
   /** box with its bottom centre at (x, y, z) */
   B(g: THREE.Object3D, w: number, h: number, d: number, x: number, y: number, z: number, mat: THREE.Material, o: { ry?: number; rx?: number; rz?: number; shadow?: boolean } = {}) {
@@ -98,6 +106,22 @@ export function buildApartment(p: Project, f: Furnish | null, opt: BuildOptions,
     }
     seg(pos, end, 0, h);
     if (w.kind === 'parapet') { if (w.axis === 'x') b.B(root, w.a2 - w.a1 + 0.2, 0.03, 0.26, (w.a1 + w.a2) / 2, h, w.c, M.get('#2b2c2e', 'stone')); else b.B(root, 0.26, 0.03, w.a2 - w.a1 + 0.2, w.c, h, (w.a1 + w.a2) / 2, M.get('#2b2c2e', 'stone')); }
+  }
+  // radiators and TV sockets on the inner face of their wall
+  for (const it of p.wallItems || []) {
+    const r = p.rooms.find(x => x.id === it.room); if (!r) continue;
+    const e = edgeOf(r, it.side), [nx, nz] = inward(it.side), n = e.axis === 'x' ? nz : nx, mid = e.a1 + it.at + it.width / 2;
+    const face = e.c + n * WALL_T / 2;
+    b.tag = null;
+    if (it.kind === 'radiator') {
+      const RAD = M.get('#f5f5f2', 'lacquer', { roughness: 0.35 }), hh = Math.min(0.6, H - 0.2), d = 0.08, c = face + n * (0.035 + d / 2);
+      const fins = Math.max(3, Math.round(it.width / 0.05));
+      if (e.axis === 'x') { b.B(root, it.width, hh, d * 0.5, mid, 0.15, c - n * d / 4, RAD); for (let k = 0; k < fins; k++) b.B(root, 0.025, hh, d, mid - it.width / 2 + (k + 0.5) * it.width / fins, 0.15, c, RAD); }
+      else { b.B(root, d * 0.5, hh, it.width, c - n * d / 4, 0.15, mid, RAD); for (let k = 0; k < fins; k++) b.B(root, d, hh, 0.025, c, 0.15, mid - it.width / 2 + (k + 0.5) * it.width / fins, RAD); }
+    } else {
+      const PLATE = M.get('#fbfbf9', 'lacquer'), c = face + n * 0.006;
+      if (e.axis === 'x') b.B(root, 0.08, 0.08, 0.012, mid, 0.3, c, PLATE, { shadow: false }); else b.B(root, 0.012, 0.08, 0.08, c, 0.3, mid, PLATE, { shadow: false });
+    }
   }
   // ceiling and warm room lights for interior views
   if (full && opt.ceiling !== false) {

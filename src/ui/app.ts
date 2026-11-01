@@ -56,7 +56,11 @@ export class App {
     this.bindChrome();
     this.applyLang();
     await this.loadCountry(this.prefs.country!, this.hashSel);
-    this.models.load(BASE).then(() => this.rebuild());
+    // decorative models (plants, lamp, vase) arrive later; add them when the browser is idle
+    this.models.load(BASE).then(async () => {
+      if (this.viewer) await this.viewer.warm(this.models.sample());
+      const go = () => this.rebuild(); 'requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : setTimeout(go, 200);
+    });
     window.addEventListener('keydown', e => this.key(e));
   }
 
@@ -75,7 +79,7 @@ export class App {
   }
   shareUrl() {
     const h = new URLSearchParams({ c: this.prefs.country!, l: getLang(), p: this.project.id, s: encodeSelection(this.sel) });
-    if (!this.project.demo) { const { choices, ...plan } = this.project; void choices; h.set('plan', LZString.compressToEncodedURIComponent(JSON.stringify(plan))); }
+    if (!this.project.demo) { const { choices, backdrop, ...plan } = this.project; void choices; void backdrop; h.set('plan', LZString.compressToEncodedURIComponent(JSON.stringify(plan))); }
     else if (this.project.moves && Object.keys(this.project.moves).length) h.set('m', LZString.compressToEncodedURIComponent(JSON.stringify(this.project.moves)));
     return location.href.split('#')[0] + '#' + h.toString();
   }
@@ -125,7 +129,7 @@ export class App {
     this.layout = applyMoves(this.baseLayout, this.project.moves);
     if (newViews) { this.views = autoViews(this.project); this.viewIdx = Math.min(this.viewIdx, this.views.length - 1); this.renderViews(); }
     this.renderList();
-    clearTimeout(this.rebuildTimer); this.rebuildTimer = window.setTimeout(() => { this.rebuild(); if (newViews) this.setView(this.viewIdx, true); document.body.dataset.ready = '1'; }, 20);
+    clearTimeout(this.rebuildTimer); this.rebuildTimer = window.setTimeout(() => { if (newViews) this.setView(this.viewIdx, true, true); else this.rebuild(); document.body.dataset.ready = '1'; }, 20);
     this.renderHistory();
   }
 
@@ -186,7 +190,7 @@ export class App {
   wallH() { return this.views[this.viewIdx]?.interior ? this.project.wallHeight : 1.05; }
   buildRoot(lowPoly = false, wallH = this.wallH()) {
     const f = this.layout && this.ix ? { product: this.product, dims: (s: SlotId) => dimsOf(this.product(s), s), layout: this.layout } : null;
-    return buildApartment(this.project, f, { wallH, lowPoly }, this.M, this.models);
+    return buildApartment(this.project, f, { wallH, lowPoly: lowPoly || !!this.viewer?.soft }, this.M, this.models);
   }
   rebuild() {
     if (!this.viewer) return;
@@ -194,12 +198,12 @@ export class App {
     this.viewer.setRoot(this.buildRoot(), new THREE.Box3(new THREE.Vector3(b.x1, 0, b.z1), new THREE.Vector3(b.x2, 3, b.z2)));
     this.viewer.setLabels(this.views[this.viewIdx]?.interior ? [] : this.project.rooms.map(r => ({ text: `${this.roomName(r.id)} · ${t('misc.area', { a: fmtNum(roomArea(r), 1) })}`, x: r.x + r.w / 2, z: r.z + r.d / 2 })));
   }
-  setView(i: number, instant = false) {
+  setView(i: number, instant = false, forceBuild = false) {
     if (!this.views[i]) return;
     const wasInterior = this.views[this.viewIdx]?.interior;
     this.viewIdx = i;
     $('#views').querySelectorAll('button').forEach((b, k) => { b.setAttribute('aria-selected', String(k === i)); b.tabIndex = k === i ? 0 : -1; });
-    if (wasInterior !== this.views[i].interior || instant) this.rebuild();
+    if (wasInterior !== this.views[i].interior || forceBuild) this.rebuild();
     this.viewer?.setView(this.views[i], instant);
     $('#viewer').classList.toggle('interior', this.views[i].interior);
   }
@@ -246,10 +250,15 @@ export class App {
     host.onkeydown = (e) => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault(); e.stopPropagation(); const i = (this.viewIdx + d + this.views.length) % this.views.length; this.setView(i); (host.children[i] as HTMLElement).focus(); };
   }
   fmt(v: number) { return money(v, country(this.prefs.country!), localeOf()); }
+  /** The look buttons depend only on the country, so they are drawn before the catalogue arrives (no layout shift). */
+  renderPresets() {
+    $('#presets').innerHTML = this.presetKeys().map(k => `<button type="button" class="chip ${STYLES.includes(k as Style) ? 'gen' : ''}" data-k="${k}" aria-pressed="${k === this.preset}">${esc(tt('preset.' + k))}</button>`).join('');
+  }
   renderList() {
+    this.renderPresets();
     if (!this.ix) return;
     const C = country(this.prefs.country!), ls = lines(this.project, this.sel, this.ix, today()), sum = total(ls), iss = fitIssues(this.project, this.sel, this.ix, this.layout || undefined);
-    $('#presets').innerHTML = this.presetKeys().map(k => `<button type="button" class="chip ${STYLES.includes(k as Style) ? 'gen' : ''}" data-k="${k}" aria-pressed="${k === this.preset}">${esc(tt('preset.' + k))}</button>`).join('');
+    this.renderPresets();
     const stores = [...new Set(ls.filter(l => l.units && l.product && l.product.store !== 'est').map(l => this.storeName(l.product!.store)))];
     const promos = ls.filter(l => l.promo).length, expired = ls.filter(l => l.expired && l.units).length;
     const eur = C.eurRate ? `<span class="muted">${t('sum.approx', { v: money(Math.round(sum / C.eurRate), country('de'), localeOf()) })}</span>` : '';

@@ -86,10 +86,14 @@ export class Materials {
     this.cache.set(key, m); return m;
   }
 
+  /** Floor material sized to a room; cached, so rebuilding the scene (every drag and swap) does not pile up textures. */
   floor(kind: 'oak' | 'marble' | 'tile' | 'bathTile', w: number, d: number) {
+    const key = `floor|${kind}|${w.toFixed(2)}|${d.toFixed(2)}`, hit = this.cache.get(key);
+    if (hit) return hit as THREE.MeshStandardMaterial;
     const size = { oak: [1.2, 0.8], marble: [0.6, 0.6], tile: [0.45, 0.45], bathTile: [0.3, 0.3] }[kind];
     const t = this.t(kind).clone(); t.needsUpdate = true; t.repeat.set(w / size[0], d / size[1]);
-    return new THREE.MeshStandardMaterial({ map: t, roughness: kind === 'marble' ? 0.22 : kind === 'oak' ? 0.5 : 0.45 });
+    const m = new THREE.MeshStandardMaterial({ map: t, roughness: kind === 'marble' ? 0.22 : kind === 'oak' ? 0.5 : 0.45 });
+    this.cache.set(key, m); return m;
   }
 
   dispose() { this.cache.forEach(m => m.dispose()); this.cache.clear(); }

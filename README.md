@@ -7,13 +7,15 @@
 
 ![FlatFit: dragging the sofa (red while it hits the coffee table, green by the wall), undo, switching to Germany, stepping into the living room](docs/demo.gif)
 
+**[Read the case study](docs/case-study.md)** for the problems behind it: GPU driver resets, honest price data, testing with personas, performance.
+
 I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue.
 
 ## What it does
 
-- **Any apartment.** Draw rooms on a grid (drag, resize, keyboard), add doors and windows, mark open-plan connections. Walls, floors and camera views are derived from the plan. A real two-room flat (44.6 m²) ships as the demo.
+- **Any apartment.** Draw rooms on a grid (drag, resize, keyboard), add doors and windows, radiators and the TV socket, mark open-plan connections. Only have a picture of the plan? Load it, click the two ends of a wall whose length you know, and trace the rooms over it. Walls, floors and camera views are derived from the plan. A real two-room flat (44.6 m²) ships as the demo.
 - **Real products, by country.** Serbia (Forma Ideale, JYSK, IKEA, XXXLesnina, mömax, Emmezeta, Gigatron — 145 products), Germany and Austria (IKEA, ~110 each). Every 3D piece is built from the chosen product's width, depth, height and colour, and links to the store page.
-- **Automatic layout.** A rule-based planner finds free wall stretches (doors and their swing, windows for tall items), puts the sofa opposite the TV, the bed against the best wall with bedside tables, the wardrobe where it does not block the bed, the kitchen run with the fridge in the niche, the table where people can sit.
+- **Automatic layout.** A rule-based planner finds free wall stretches (doors and their swing, windows and radiators for tall items), puts the TV by its socket and the sofa opposite it, the bed against the best wall with bedside tables, the wardrobe where it does not block the bed, the kitchen run with the fridge in the niche, the table where people can sit.
 - **Move things yourself.** Select a piece and drag it in the 3D view: it snaps to a 5 cm grid, turns its back to a wall when you bring it close, and its frame turns red while it would hit another piece, a wall or a door's swing. `T` turns it, Shift + arrows nudge it, and every change can be undone (Ctrl+Z / Ctrl+Y).
 - **Fit checks with numbers.** “Kitchen and fridge need 245 cm, the wall has 248 cm”, “only 38 cm between wardrobe and bed”. Overruns up to 10 cm are “measure first”, more is “does not fit”.
 - **Quantities and totals that match a real shopping trip.** Curtains per window (pairs count as one pack), worktop pieces to cover the kitchen length, two narrow slatted bases for a 160 cm bed, chairs only if the table set has none. Expired promotions fall back to the regular price.
@@ -78,7 +80,7 @@ Adding a country: a catalogue JSON in `src/data/catalogs/`, an entry in `src/dat
 
 | Layer | Tool | What |
 |---|---|---|
-| Unit (69) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 3 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls and doors), share links, catalogue schema and price dates, translation key parity |
+| Unit (74) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 3 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema and price dates, translation key parity |
 | End to end | Playwright | persona journeys, see below |
 | Accessibility | axe-core | WCAG 2 A/AA, no serious or critical violations |
 
@@ -88,6 +90,7 @@ Personas (`tests/e2e/personas.spec.ts`):
 - **Jonas** in Berlin, desktop, German: switches to Germany, verifies every link goes to IKEA Germany, swaps the sofa, shares the link and opens it in a new tab with the same total.
 - **Mira**, keyboard and screen reader only: skip link, view shortcuts, help dialog, language cycling, axe scan.
 - **Luka**, a landlord: draws a studio from a template, adds a bedroom with the keyboard, saves, reloads, exports JSON, deletes.
+- **Nina**, only a picture of her plan: loads it, sets the scale from the 8 m dimension line, draws the living room to it, saves; the picture never goes into share links.
 - **Sara**, rearranging: selects the sofa, drags it with the mouse into the coffee table, sees the warning, turns it with `T`, undoes everything with the button and Ctrl+Z, redoes with Ctrl+Y.
 - **Petra**, old laptop: starts a photoreal render, cancels it mid-way, the page stays usable.
 
@@ -111,5 +114,7 @@ npm run build && npx playwright test
 - Room shapes are rectangles (L-shapes are built from several rooms with open connections).
 - The planner is rule-based; it proposes, you drag things where you want them. Fit checks use the plan, not a laser measure.
 - Catalogue prices are a snapshot; the date is shown in the app and the weekly job keeps DE/AT fresh.
+
+Tried it on your flat? [Send feedback](https://github.com/aco993/flatfit/issues/new?template=feedback.yml) — what was unclear or missing helps most.
 
 MIT licensed. Third-party assets: see [THIRD_PARTY.md](THIRD_PARTY.md).

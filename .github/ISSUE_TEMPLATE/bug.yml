@@ -1,0 +1,23 @@
+name: Something is broken
+description: A wrong price, a piece that does not fit although it should, a render that fails, …
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to get there
+      placeholder: 1. Open the demo  2. Switch to Germany  3. …
+  - type: input
+    id: browser
+    attributes:
+      label: Browser, device and graphics card (if you know it)
+  - type: input
+    id: link
+    attributes:
+      label: Share link (optional)
