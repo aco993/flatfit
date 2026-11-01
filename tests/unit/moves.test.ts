@@ -55,10 +55,14 @@ describe('moving furniture', () => {
 describe('snapping', () => {
   it('turns a sofa dragged near a wall to stand flush against it', () => {
     // living room is x 0–4, z 0–3.9; drag the sofa close to the west wall
-    const s = snapPose(DEMO, 'sofa', 0.3, 2.03, 0, D);
+    const s = snapPose(DEMO, 'sofa', 0.28, 2.03, 0, D);
     expect(s.x).toBeCloseTo(0.06);
     expect(s.rot).toBeCloseTo(Math.PI / 2);
     expect(Math.round(s.z * 100) % 5).toBe(0);
+  });
+  it('lets go of the wall once the piece is dragged well into the room', () => {
+    const s = snapPose(DEMO, 'sofa', 0.9, 2.03, Math.PI / 2, D);
+    expect(s.x).toBeCloseTo(0.9);
   });
   it('leaves free-standing pieces on the 5 cm grid where they are dropped', () => {
     const s = snapPose(DEMO, 'coffee', 2.02, 2.11, 0.3, D);

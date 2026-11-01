@@ -133,7 +133,7 @@ export function snapPose(p: Project, slot: SlotId, x: number, z: number, rot: nu
       if (!s.wall) continue;
       const e = edgeOf(r, s.side), [nx, nz] = inward(s.side), face = e.c + (e.axis === 'x' ? nz : nx) * HALF;
       const dist = Math.abs((e.axis === 'x' ? z : x) - face);
-      if (dist < Math.max(0.45, d * 0.75) && (!best || dist < best.dist)) best = { side: s.side, dist };
+      if (dist < Math.max(0.25, Math.min(0.45, d * 0.4)) && (!best || dist < best.dist)) best = { side: s.side, dist };
     }
     if (best) {
       const e = edgeOf(r, best.side), [nx, nz] = inward(best.side), face = e.c + (e.axis === 'x' ? nz : nx) * HALF;

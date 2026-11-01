@@ -5,7 +5,7 @@
 [![CI](https://github.com/aco993/flatfit/actions/workflows/ci.yml/badge.svg)](https://github.com/aco993/flatfit/actions/workflows/ci.yml)
 · **[Live demo](https://aco993.github.io/flatfit/)** · English · Deutsch · Srpski
 
-![FlatFit: the demo flat furnished with real products](docs/screenshot-desktop.jpg)
+![FlatFit: dragging the sofa (red while it hits the coffee table, green by the wall), undo, switching to Germany, stepping into the living room](docs/demo.gif)
 
 I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue.
 
@@ -22,9 +22,9 @@ I built FlatFit while furnishing a small flat I rent out: I wanted to see what a
 - **Share and export.** A link restores the country, language, flat, every chosen product and where you moved things; custom floor plans travel inside the link. Shopping list as CSV; print view.
 - **Accessible and responsive.** Keyboard shortcuts for everything, skip link, live regions, focus management in dialogs, reduced-motion support, light/dark theme, phone/tablet/desktop layouts.
 
-| Phone | Floor-plan editor | Photoreal render |
-|---|---|---|
-| ![](docs/screenshot-phone.jpg) | ![](docs/screenshot-editor.jpg) | ![](docs/screenshot-render.jpg) |
+| Desktop | Phone | Floor-plan editor | Photoreal render |
+|---|---|---|---|
+| ![](docs/screenshot-desktop.jpg) | ![](docs/screenshot-phone.jpg) | ![](docs/screenshot-editor.jpg) | ![](docs/screenshot-render.jpg) |
 
 ## Path tracing that does not crash laptops
 
@@ -78,7 +78,7 @@ Adding a country: a catalogue JSON in `src/data/catalogs/`, an entry in `src/dat
 
 | Layer | Tool | What |
 |---|---|---|
-| Unit (68) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 3 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls and doors), share links, catalogue schema and price dates, translation key parity |
+| Unit (69) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 3 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls and doors), share links, catalogue schema and price dates, translation key parity |
 | End to end | Playwright | persona journeys, see below |
 | Accessibility | axe-core | WCAG 2 A/AA, no serious or critical violations |
 

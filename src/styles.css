@@ -68,6 +68,9 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
 .toolbar { position: absolute; right: 12px; top: 12px; display: flex; gap: 8px; }
 .icon-btn { min-width: 40px; justify-content: center; font-size: 18px; padding-inline: 8px; }
 .btn:disabled { opacity: .45; cursor: default; }
+/* while a piece is dragged the card and toolbar step aside so the whole view is usable */
+.viewer .card, .viewer .toolbar { transition: opacity .15s; }
+.viewer.dragging .card, .viewer.dragging .toolbar { opacity: .12; pointer-events: none; }
 .card .move { margin: 10px 0 4px; padding-top: 10px; border-top: 1px solid var(--line); }
 .card .move .row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .nav-pad { position: absolute; left: 12px; bottom: 12px; display: none; gap: 6px; }

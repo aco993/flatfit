@@ -140,7 +140,7 @@ export class Viewer {
       if (Math.abs(dx) + Math.abs(dy) > 4) down.moved = true;
       if (grab && down.moved) {
         const f = this.floorPoint(e); if (!f || !this.drag) return;
-        if (!grab.started) { grab.started = true; this.dragging = true; el.style.cursor = 'grabbing'; }
+        if (!grab.started) { grab.started = true; this.dragging = true; el.style.cursor = 'grabbing'; this.host.classList.add('dragging'); }
         const r = this.drag.move(grab.key, grab.from.x + f.x - grab.floor0.x, grab.from.z + f.z - grab.floor0.z, grab.from.rot);
         grab.to = r.pose; this.applyPose(grab.objs, grab.from, r.pose); this.selOk = r.ok; this.updateSelBox(); this.dirty = true;
         return;
@@ -149,7 +149,7 @@ export class Viewer {
     });
     el.addEventListener('pointerup', e => {
       const g = grab; grab = null;
-      if (g?.started) { this.dragging = false; el.style.cursor = ''; this.selOk = true; this.controls.enabled = !this.interior; this.drag?.drop(g.key, g.to); down = null; return; }
+      if (g?.started) { this.dragging = false; el.style.cursor = ''; this.host.classList.remove('dragging'); this.selOk = true; this.controls.enabled = !this.interior; this.drag?.drop(g.key, g.to); down = null; return; }
       if (g) this.controls.enabled = !this.interior;
       if (down && !down.moved) this.pick(e);
       down = null;
@@ -157,7 +157,7 @@ export class Viewer {
     el.addEventListener('pointercancel', () => {
       if (grab?.started) { this.applyPose(grab.objs, grab.from, grab.from); this.dragging = false; this.selOk = true; this.updateSelBox(); this.dirty = true; }
       if (grab) this.controls.enabled = !this.interior;
-      grab = null; down = null; el.style.cursor = '';
+      grab = null; down = null; el.style.cursor = ''; this.host.classList.remove('dragging');
     });
     el.addEventListener('wheel', e => { if (!this.interior) return; e.preventDefault(); this.zoom(e.deltaY > 0 ? 1.06 : 1 / 1.06); }, { passive: false });
   }
@@ -198,13 +198,22 @@ export class Viewer {
   private selSlot: SlotId | null = null;
   private selOk = true;
   highlight(slot: SlotId | null) { this.selSlot = slot; this.updateSelBox(); this.dirty = true; }
+  private foot: THREE.Mesh | null = null;
   private updateSelBox() {
     if (this.sel) { this.scene.remove(this.sel); this.sel = null; }
+    if (this.foot) { this.scene.remove(this.foot); this.foot.geometry.dispose(); (this.foot.material as THREE.Material).dispose(); this.foot = null; }
     if (!this.selSlot || !this.root) return;
     const box = new THREE.Box3(); let any = false;
     this.root.traverse(o => { if ((o as THREE.Mesh).isMesh && o.userData.slot === this.selSlot) { box.expandByObject(o); any = true; } });
     if (!any) return;
-    this.sel = new THREE.Box3Helper(box.expandByScalar(0.03), new THREE.Color(this.dragging ? (this.selOk ? '#2f9e5b' : '#d92d20') : '#e0662e')); this.scene.add(this.sel);
+    const col = new THREE.Color(this.dragging ? (this.selOk ? '#12b76a' : '#f00f2c') : '#e0662e');
+    this.sel = new THREE.Box3Helper(box.expandByScalar(0.03), col); (this.sel.material as THREE.LineBasicMaterial).toneMapped = false; this.scene.add(this.sel);
+    if (this.dragging) {
+      // a coloured footprint on the floor says at a glance whether the piece fits where it is
+      const sz = box.getSize(new THREE.Vector3()), c = box.getCenter(new THREE.Vector3());
+      this.foot = new THREE.Mesh(new THREE.PlaneGeometry(sz.x, sz.z), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.55, depthWrite: false, toneMapped: false }));
+      this.foot.rotation.x = -Math.PI / 2; this.foot.position.set(c.x, 0.02, c.z); this.foot.renderOrder = 2; this.scene.add(this.foot);
+    }
   }
   /** Centre of all meshes of a slot, to turn the camera toward it. */
   slotCenter(slot: SlotId) {
