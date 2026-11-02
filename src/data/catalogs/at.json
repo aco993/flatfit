@@ -10,8 +10,8 @@
   },
   {
    "id": "est",
-   "name": "idealo (Schätzung)",
-   "web": "https://www.idealo.at/"
+   "name": "estimate",
+   "web": ""
   }
  ],
  "products": [
@@ -31,14 +31,14 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-19581112",
+   "id": "at-ik-79581114",
    "slot": "kitchen",
    "store": "ikea",
-   "name": "KNOXHULT Küche, weiß, 180x61x220 cm",
-   "url": "https://www.ikea.com/at/de/p/knoxhult-kueche-weiss-s19581112/",
-   "price": 213,
-   "color": "weiß",
-   "hex": "#ffffff",
+   "name": "KNOXHULT Küche, dunkelgrau, 180x61x220 cm",
+   "url": "https://www.ikea.com/at/de/p/knoxhult-kueche-dunkelgrau-s79581114/",
+   "price": 225,
+   "color": "grau",
+   "hex": "#949494",
    "w": 180,
    "d": 61,
    "h": 220,
@@ -89,16 +89,16 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-69337028",
+   "id": "at-ik-59337024",
    "slot": "sink",
    "store": "ikea",
-   "name": "KILSVIKEN Einbauspüle, 1 Becken, schwarz/Quarzkomposit, 36x46 cm",
-   "url": "https://www.ikea.com/at/de/p/kilsviken-einbauspuele-1-becken-schwarz-quarzkomposit-s69337028/",
-   "price": 194,
+   "name": "KILSVIKEN Einbauspüle, 1 Becken, schwarz Quarzkomposit, 56x46 cm",
+   "url": "https://www.ikea.com/at/de/p/kilsviken-einbauspuele-1-becken-schwarz-quarzkomposit-s59337024/",
+   "price": 229,
    "color": "schwarz",
    "hex": "#000000",
-   "w": 36,
-   "d": 36,
+   "w": 56,
+   "d": 56,
    "checked": "2026-11-02"
   },
   {
@@ -127,17 +127,6 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-80602304",
-   "slot": "faucet",
-   "store": "ikea",
-   "name": "TAKSJÖN Küchenmischbatterie Seitenhebel, stahlfarben",
-   "url": "https://www.ikea.com/at/de/p/taksjoen-kuechenmischbatterie-seitenhebel-stahlfarben-80602304/",
-   "price": 99,
-   "color": "stahlfarben",
-   "h": 29.5,
-   "checked": "2026-11-02"
-  },
-  {
    "id": "at-ik-00602303",
    "slot": "faucet",
    "store": "ikea",
@@ -146,6 +135,17 @@
    "price": 99,
    "color": "stahlfarben",
    "h": 27.4,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-80602304",
+   "slot": "faucet",
+   "store": "ikea",
+   "name": "TAKSJÖN Küchenmischbatterie Seitenhebel, stahlfarben",
+   "url": "https://www.ikea.com/at/de/p/taksjoen-kuechenmischbatterie-seitenhebel-stahlfarben-80602304/",
+   "price": 99,
+   "color": "stahlfarben",
+   "h": 29.5,
    "checked": "2026-11-02"
   },
   {
@@ -191,20 +191,6 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-50621709",
-   "slot": "oven",
-   "store": "ikea",
-   "name": "FRILLESBO Heißluftofen, Zusatzfunktion Dampfgaren Backfunktion/schwarz IKEA 500",
-   "url": "https://www.ikea.com/at/de/p/frillesbo-heissluftofen-zusatzfunktion-dampfgaren-backfunktion-schwarz-ikea-500-50621709/",
-   "price": 399,
-   "color": "schwarz",
-   "hex": "#000000",
-   "w": 59.4,
-   "d": 54.7,
-   "h": 58.9,
-   "checked": "2026-11-02"
-  },
-  {
    "id": "at-ik-60600056",
    "slot": "oven",
    "store": "ikea",
@@ -216,6 +202,20 @@
    "w": 59.4,
    "d": 56.7,
    "h": 59.5,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-50621709",
+   "slot": "oven",
+   "store": "ikea",
+   "name": "FRILLESBO Heißluftofen, Zusatzfunktion Dampfgaren Backfunktion/schwarz IKEA 500",
+   "url": "https://www.ikea.com/at/de/p/frillesbo-heissluftofen-zusatzfunktion-dampfgaren-backfunktion-schwarz-ikea-500-50621709/",
+   "price": 399,
+   "color": "schwarz",
+   "hex": "#000000",
+   "w": 59.4,
+   "d": 54.7,
+   "h": 58.9,
    "checked": "2026-11-02"
   },
   {
@@ -289,6 +289,19 @@
    "checked": "2026-11-02"
   },
   {
+   "id": "at-ik-60584631",
+   "slot": "fridge",
+   "store": "ikea",
+   "name": "SPELNÄS Flaschenkühler, IKEA 500",
+   "url": "https://www.ikea.com/at/de/p/spelnaes-flaschenkuehler-ikea-500-60584631/",
+   "price": 399,
+   "color": "IKEA 500",
+   "w": 29.5,
+   "d": 59.5,
+   "h": 87.5,
+   "checked": "2026-11-02"
+  },
+  {
    "id": "at-ik-30578801",
    "slot": "fridge",
    "store": "ikea",
@@ -300,19 +313,6 @@
    "w": 55,
    "d": 57,
    "h": 83.2,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-60584631",
-   "slot": "fridge",
-   "store": "ikea",
-   "name": "SPELNÄS Flaschenkühler, IKEA 500",
-   "url": "https://www.ikea.com/at/de/p/spelnaes-flaschenkuehler-ikea-500-60584631/",
-   "price": 399,
-   "color": "IKEA 500",
-   "w": 29.5,
-   "d": 59.5,
-   "h": 87.5,
    "checked": "2026-11-02"
   },
   {
@@ -446,17 +446,17 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-80569998",
+   "id": "at-ik-30635123",
    "slot": "chairs",
    "store": "ikea",
-   "name": "ROSENTORP Stuhl, weiß",
-   "url": "https://www.ikea.com/at/de/p/rosentorp-stuhl-weiss-80569998/",
-   "price": 59.99,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 44,
-   "d": 53,
-   "h": 91,
+   "name": "TOBIAS Stuhl, schwarz/grau/schwarz",
+   "url": "https://www.ikea.com/at/de/p/tobias-stuhl-schwarz-grau-schwarz-30635123/",
+   "price": 89.99,
+   "color": "grau / schwarz",
+   "hex": "#949494",
+   "w": 55,
+   "d": 56,
+   "h": 82,
    "qty": 1,
    "checked": "2026-11-02"
   },
@@ -515,6 +515,19 @@
    "checked": "2026-11-02"
   },
   {
+   "id": "at-ik-30583384",
+   "slot": "sofa",
+   "store": "ikea",
+   "name": "GRUNNARP 3er-Bettsofa, Gunnared beige",
+   "url": "https://www.ikea.com/at/de/p/grunnarp-3er-bettsofa-gunnared-beige-30583384/",
+   "price": 599,
+   "color": "Gunnared beige",
+   "w": 232,
+   "d": 89,
+   "h": 80,
+   "checked": "2026-11-02"
+  },
+  {
    "id": "at-ik-39270326",
    "slot": "sofa",
    "store": "ikea",
@@ -526,19 +539,6 @@
    "w": 204,
    "d": 89,
    "h": 78,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-30583384",
-   "slot": "sofa",
-   "store": "ikea",
-   "name": "GRUNNARP 3er-Bettsofa, Gunnared beige",
-   "url": "https://www.ikea.com/at/de/p/grunnarp-3er-bettsofa-gunnared-beige-30583384/",
-   "price": 599,
-   "color": "Gunnared beige",
-   "w": 232,
-   "d": 89,
-   "h": 80,
    "checked": "2026-11-02"
   },
   {
@@ -698,20 +698,6 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-40586508",
-   "slot": "tvunit",
-   "store": "ikea",
-   "name": "STOCKHOLM 2025 TV-Bank+Schiebetüren, Eichenfurnier, 179x42x56 cm",
-   "url": "https://www.ikea.com/at/de/p/stockholm-2025-tv-bank-schiebetueren-eichenfurnier-40586508/",
-   "price": 349,
-   "color": "beige",
-   "hex": "#f4f3d7",
-   "w": 178.8,
-   "d": 42,
-   "h": 56.2,
-   "checked": "2026-11-02"
-  },
-  {
    "id": "at-ik-00625521",
    "slot": "tvunit",
    "store": "ikea",
@@ -736,6 +722,20 @@
    "w": 176.4,
    "d": 48.2,
    "h": 66.1,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-40586508",
+   "slot": "tvunit",
+   "store": "ikea",
+   "name": "STOCKHOLM 2025 TV-Bank+Schiebetüren, Eichenfurnier, 179x42x56 cm",
+   "url": "https://www.ikea.com/at/de/p/stockholm-2025-tv-bank-schiebetueren-eichenfurnier-40586508/",
+   "price": 349,
+   "color": "beige",
+   "hex": "#f4f3d7",
+   "w": 178.8,
+   "d": 42,
+   "h": 56.2,
    "checked": "2026-11-02"
   },
   {
@@ -831,6 +831,119 @@
    "checked": "2026-11-02"
   },
   {
+   "id": "at-ik-40571248",
+   "slot": "bed",
+   "store": "ikea",
+   "name": "SLATTUM Bettgestell, gepolstert, Vissle dunkelgrau, 160x200 cm",
+   "url": "https://www.ikea.com/at/de/p/slattum-bettgestell-gepolstert-vissle-dunkelgrau-40571248/",
+   "price": 169,
+   "color": "grau",
+   "hex": "#949494",
+   "w": 164,
+   "d": 206,
+   "needsBase": true,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-69929233",
+   "slot": "bed",
+   "store": "ikea",
+   "name": "TARVA Bettgestell, Kiefer, 160x200 cm",
+   "url": "https://www.ikea.com/at/de/p/tarva-bettgestell-kiefer-s69929233/",
+   "price": 169,
+   "color": "beige",
+   "hex": "#f4f3d7",
+   "w": 168,
+   "d": 209,
+   "needsBase": true,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-79627268",
+   "slot": "bed",
+   "store": "ikea",
+   "name": "RAMNEFJÄLL Bettgestell, gepolstert, Idekulla beige/Lindbåden, 160x200 cm",
+   "url": "https://www.ikea.com/at/de/p/ramnefjaell-bettgestell-gepolstert-idekulla-beige-lindbaden-s79627268/",
+   "price": 299,
+   "color": "beige",
+   "hex": "#f4f3d7",
+   "w": 174,
+   "d": 210,
+   "needsBase": false,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-90608126",
+   "slot": "bed",
+   "store": "ikea",
+   "name": "GULLABERG Bettgestell + Mittelbalken, weiß, 160x200 cm",
+   "url": "https://www.ikea.com/at/de/p/gullaberg-bettgestell-mittelbalken-weiss-90608126/",
+   "price": 299,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 171,
+   "d": 208,
+   "h": 113,
+   "needsBase": true,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-09929373",
+   "slot": "bed",
+   "store": "ikea",
+   "name": "MALM Bettgestell hoch, weiß, 160x200 cm",
+   "url": "https://www.ikea.com/at/de/p/malm-bettgestell-hoch-weiss-s09929373/",
+   "price": 249,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 176,
+   "d": 209,
+   "h": 100,
+   "needsBase": true,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-20404806",
+   "slot": "bed",
+   "store": "ikea",
+   "name": "MALM Bettgestell mit Aufbewahrung, weiß, 160x200 cm",
+   "url": "https://www.ikea.com/at/de/p/malm-bettgestell-mit-aufbewahrung-weiss-20404806/",
+   "price": 549,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 175,
+   "d": 210,
+   "needsBase": true,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-09481354",
+   "slot": "base",
+   "store": "ikea",
+   "name": "LURÖY Lattenrost, 140x200 cm",
+   "url": "https://www.ikea.com/at/de/p/luroey-lattenrost-s09481354/",
+   "price": 40,
+   "color": "beige",
+   "hex": "#f4f3d7",
+   "w": 140,
+   "d": 200,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-90160211",
+   "slot": "base",
+   "store": "ikea",
+   "name": "LURÖY Lattenrost, 90x200 cm",
+   "url": "https://www.ikea.com/at/de/p/luroey-lattenrost-90160211/",
+   "price": 25,
+   "color": "beige",
+   "hex": "#f4f3d7",
+   "w": 90,
+   "d": 200,
+   "h": 4,
+   "checked": "2026-11-02"
+  },
+  {
    "id": "at-ik-40450680",
    "slot": "mattress",
    "store": "ikea",
@@ -840,10 +953,10 @@
    "color": "blau / weiß",
    "hex": "#0058a3",
    "regular": 349,
+   "until": "2027-02-21",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-02",
-   "until": "2027-02-21"
+   "checked": "2026-11-02"
   },
   {
    "id": "at-ik-40450623",
@@ -886,14 +999,14 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-50451293",
+   "id": "at-ik-70481473",
    "slot": "mattress",
    "store": "ikea",
-   "name": "VESTMARKA Federkernmatratze, mittelfest/hellblau, 160x200 cm",
-   "url": "https://www.ikea.com/at/de/p/vestmarka-federkernmatratze-mittelfest-hellblau-50451293/",
-   "price": 229,
-   "color": "blau / weiß",
-   "hex": "#0058a3",
+   "name": "ÅBYGDA Schaummatratze, mittelfest/weiß, 160x200 cm",
+   "url": "https://www.ikea.com/at/de/p/abygda-schaummatratze-mittelfest-weiss-70481473/",
+   "price": 299,
+   "color": "weiß",
+   "hex": "#ffffff",
    "w": 160,
    "d": 200,
    "checked": "2026-11-02"
@@ -1012,20 +1125,6 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-00381764",
-   "slot": "night",
-   "store": "ikea",
-   "name": "VIKHAMMER Ablagetisch, weiß, 40x39 cm",
-   "url": "https://www.ikea.com/at/de/p/vikhammer-ablagetisch-weiss-00381764/",
-   "price": 59.99,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 40,
-   "d": 39,
-   "h": 65,
-   "checked": "2026-11-02"
-  },
-  {
    "id": "at-ik-40627684",
    "slot": "night",
    "store": "ikea",
@@ -1037,6 +1136,20 @@
    "w": 42,
    "d": 41,
    "h": 56,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "at-ik-00381764",
+   "slot": "night",
+   "store": "ikea",
+   "name": "VIKHAMMER Ablagetisch, weiß, 40x39 cm",
+   "url": "https://www.ikea.com/at/de/p/vikhammer-ablagetisch-weiss-00381764/",
+   "price": 59.99,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 40,
+   "d": 39,
+   "h": 65,
    "checked": "2026-11-02"
   },
   {
@@ -1215,11 +1328,11 @@
    "color": "weiß",
    "hex": "#ffffff",
    "regular": 5.99,
+   "until": "2027-02-21",
    "w": 36.5,
    "d": 6.8,
    "h": 13,
-   "checked": "2026-11-02",
-   "until": "2027-02-21"
+   "checked": "2026-11-02"
   },
   {
    "id": "at-ik-89615533",
@@ -1317,26 +1430,26 @@
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-20489693",
+   "id": "at-ik-80489690",
    "slot": "rods",
    "store": "ikea",
-   "name": "BEKRÄFTA Gardinenstangen-Set, vernickelt, 120-210 cm 28 mm",
-   "url": "https://www.ikea.com/at/de/p/bekraefta-gardinenstangen-set-vernickelt-20489693/",
-   "price": 24.99,
-   "color": "grau",
-   "hex": "#949494",
+   "name": "BEKRÄFTA Gardinenstangen-Set, weiß, 120-210 cm 28 mm",
+   "url": "https://www.ikea.com/at/de/p/bekraefta-gardinenstangen-set-weiss-80489690/",
+   "price": 19.99,
+   "color": "weiß",
+   "hex": "#ffffff",
    "w": 210,
    "checked": "2026-11-02"
   },
   {
-   "id": "at-ik-10489537",
+   "id": "at-ik-30489536",
    "slot": "rods",
    "store": "ikea",
-   "name": "BEKRÄFTA Gardinenstangen-Set, schwarz, 120-210 cm 19 mm",
-   "url": "https://www.ikea.com/at/de/p/bekraefta-gardinenstangen-set-schwarz-10489537/",
+   "name": "BEKRÄFTA Gardinenstangen-Set, weiß, 120-210 cm 19 mm",
+   "url": "https://www.ikea.com/at/de/p/bekraefta-gardinenstangen-set-weiss-30489536/",
    "price": 12.99,
-   "color": "schwarz",
-   "hex": "#000000",
+   "color": "weiß",
+   "hex": "#ffffff",
    "w": 210,
    "checked": "2026-11-02"
   },
@@ -1400,119 +1513,6 @@
    "w": 180,
    "d": 180,
    "h": 21,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-40571248",
-   "slot": "bed",
-   "store": "ikea",
-   "name": "SLATTUM Bettgestell, gepolstert, Vissle dunkelgrau, 160x200 cm",
-   "url": "https://www.ikea.com/at/de/p/slattum-bettgestell-gepolstert-vissle-dunkelgrau-40571248/",
-   "price": 169,
-   "color": "grau",
-   "hex": "#949494",
-   "w": 164,
-   "d": 206,
-   "needsBase": true,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-69929233",
-   "slot": "bed",
-   "store": "ikea",
-   "name": "TARVA Bettgestell, Kiefer, 160x200 cm",
-   "url": "https://www.ikea.com/at/de/p/tarva-bettgestell-kiefer-s69929233/",
-   "price": 169,
-   "color": "beige",
-   "hex": "#f4f3d7",
-   "w": 168,
-   "d": 209,
-   "needsBase": true,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-79627268",
-   "slot": "bed",
-   "store": "ikea",
-   "name": "RAMNEFJÄLL Bettgestell, gepolstert, Idekulla beige/Lindbåden, 160x200 cm",
-   "url": "https://www.ikea.com/at/de/p/ramnefjaell-bettgestell-gepolstert-idekulla-beige-lindbaden-s79627268/",
-   "price": 299,
-   "color": "beige",
-   "hex": "#f4f3d7",
-   "w": 174,
-   "d": 210,
-   "needsBase": false,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-09929373",
-   "slot": "bed",
-   "store": "ikea",
-   "name": "MALM Bettgestell hoch, weiß, 160x200 cm",
-   "url": "https://www.ikea.com/at/de/p/malm-bettgestell-hoch-weiss-s09929373/",
-   "price": 249,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 176,
-   "d": 209,
-   "h": 100,
-   "needsBase": true,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-90608126",
-   "slot": "bed",
-   "store": "ikea",
-   "name": "GULLABERG Bettgestell + Mittelbalken, weiß, 160x200 cm",
-   "url": "https://www.ikea.com/at/de/p/gullaberg-bettgestell-mittelbalken-weiss-90608126/",
-   "price": 299,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 171,
-   "d": 208,
-   "h": 113,
-   "needsBase": true,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-20404806",
-   "slot": "bed",
-   "store": "ikea",
-   "name": "MALM Bettgestell mit Aufbewahrung, weiß, 160x200 cm",
-   "url": "https://www.ikea.com/at/de/p/malm-bettgestell-mit-aufbewahrung-weiss-20404806/",
-   "price": 549,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 175,
-   "d": 210,
-   "needsBase": true,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-09481354",
-   "slot": "base",
-   "store": "ikea",
-   "name": "LURÖY Lattenrost, 140x200 cm",
-   "url": "https://www.ikea.com/at/de/p/luroey-lattenrost-s09481354/",
-   "price": 40,
-   "color": "beige",
-   "hex": "#f4f3d7",
-   "w": 140,
-   "d": 200,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "at-ik-90160211",
-   "slot": "base",
-   "store": "ikea",
-   "name": "LURÖY Lattenrost, 90x200 cm",
-   "url": "https://www.ikea.com/at/de/p/luroey-lattenrost-90160211/",
-   "price": 25,
-   "color": "beige",
-   "hex": "#f4f3d7",
-   "w": 90,
-   "d": 200,
-   "h": 4,
    "checked": "2026-11-02"
   },
   {
