@@ -49,6 +49,8 @@ for (const c of CASES) {
       expect(amount).toBeGreaterThan(0);
       if (c.country) await expect(page.locator('#country')).toHaveValue(c.country);
       await c.extra?.(page);
+      // without WebGL (headless Firefox on CI) the page must still work, with the fallback notice instead of the 3D view
+      if (!(await page.locator('#nogl').isHidden())) await expect(page.locator('#nogl')).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
       expect(errors).toEqual([]);
     });

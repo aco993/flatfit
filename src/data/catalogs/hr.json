@@ -289,6 +289,78 @@
    "checked": "2026-11-02"
   },
   {
+   "id": "hr-ik-39578509",
+   "slot": "table",
+   "store": "ikea",
+   "name": "VIHALS Stol, bijela/bijela, 125x74 cm",
+   "url": "https://www.ikea.com/hr/hr/p/vihals-stol-bijela-bijela-s39578509/",
+   "price": 59.99,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "w": 125,
+   "d": 74,
+   "h": 75,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "hr-ik-40416498",
+   "slot": "table",
+   "store": "ikea",
+   "name": "LISABO Stol, jasenov furnir, 105 cm",
+   "url": "https://www.ikea.com/hr/hr/p/lisabo-stol-jasenov-furnir-40416498/",
+   "price": 199,
+   "color": "bež",
+   "hex": "#f4f3d7",
+   "w": 105,
+   "d": 105,
+   "h": 74,
+   "round": true,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "hr-ik-70492645",
+   "slot": "table",
+   "store": "ikea",
+   "name": "MARIEDAMM Stol, crna efekt mramora, 105 cm",
+   "url": "https://www.ikea.com/hr/hr/p/mariedamm-stol-crna-efekt-mramora-70492645/",
+   "price": 179,
+   "color": "crna",
+   "hex": "#000000",
+   "w": 105,
+   "d": 105,
+   "h": 75,
+   "round": true,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "hr-ik-70581359",
+   "slot": "table",
+   "store": "ikea",
+   "name": "TARSELE Produljivi stol, hrastov furnir/crna, 150/200x80 cm",
+   "url": "https://www.ikea.com/hr/hr/p/tarsele-produljivi-stol-hrastov-furnir-crna-70581359/",
+   "price": 549,
+   "color": "smeđa / crna",
+   "hex": "#814820",
+   "w": 150,
+   "d": 80,
+   "h": 77,
+   "checked": "2026-11-02"
+  },
+  {
+   "id": "hr-ik-00587492",
+   "slot": "table",
+   "store": "ikea",
+   "name": "NÄSINGE Produljivi stol, bijela, 130/190x80 cm",
+   "url": "https://www.ikea.com/hr/hr/p/naesinge-produljivi-stol-bijela-00587492/",
+   "price": 199,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "w": 130,
+   "d": 80,
+   "h": 75,
+   "checked": "2026-11-02"
+  },
+  {
    "id": "hr-ik-30605423",
    "slot": "chairs",
    "store": "ikea",
@@ -455,11 +527,11 @@
    "price": 179,
    "color": "Tibbleby žuta",
    "regular": 219,
+   "until": "2026-11-30",
    "w": 82,
    "d": 96,
    "h": 101,
-   "checked": "2026-11-02",
-   "until": "2026-11-30"
+   "checked": "2026-11-02"
   },
   {
    "id": "hr-ik-69240823",
@@ -572,12 +644,12 @@
    "color": "bijela",
    "hex": "#ffffff",
    "regular": 149,
+   "until": "2026-11-30",
    "w": 88,
    "d": 88,
    "h": 35,
    "round": true,
-   "checked": "2026-11-02",
-   "until": "2026-11-30"
+   "checked": "2026-11-02"
   },
   {
    "id": "hr-ik-89330691",
@@ -726,10 +798,10 @@
    "color": "bež",
    "hex": "#f4f3d7",
    "regular": 29.99,
+   "until": "2026-11-30",
    "w": 40,
    "h": 140,
-   "checked": "2026-11-02",
-   "until": "2026-11-30"
+   "checked": "2026-11-02"
   },
   {
    "id": "hr-ik-80608532",
@@ -1222,11 +1294,11 @@
    "color": "bijela",
    "hex": "#ffffff",
    "regular": 12.99,
+   "until": "2026-11-30",
    "w": 19,
    "d": 7,
    "h": 78,
-   "checked": "2026-11-02",
-   "until": "2026-11-30"
+   "checked": "2026-11-02"
   },
   {
    "id": "hr-ik-10415594",
@@ -1313,12 +1385,12 @@
    "color": "bijela",
    "hex": "#ffffff",
    "regular": 19.99,
+   "until": "2026-11-30",
    "w": 145,
    "d": 2,
    "h": 300,
    "pack": 2,
-   "checked": "2026-11-02",
-   "until": "2026-11-30"
+   "checked": "2026-11-02"
   },
   {
    "id": "hr-ik-10070262",
@@ -1413,78 +1485,6 @@
    "hex": "#f4f3d7",
    "w": 50,
    "h": 54,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "hr-ik-39578509",
-   "slot": "table",
-   "store": "ikea",
-   "name": "VIHALS Stol, bijela/bijela, 125x74 cm",
-   "url": "https://www.ikea.com/hr/hr/p/vihals-stol-bijela-bijela-s39578509/",
-   "price": 59.99,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 125,
-   "d": 74,
-   "h": 75,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "hr-ik-40416498",
-   "slot": "table",
-   "store": "ikea",
-   "name": "LISABO Stol, jasenov furnir, 105 cm",
-   "url": "https://www.ikea.com/hr/hr/p/lisabo-stol-jasenov-furnir-40416498/",
-   "price": 199,
-   "color": "bež",
-   "hex": "#f4f3d7",
-   "w": 105,
-   "d": 105,
-   "h": 74,
-   "round": true,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "hr-ik-70492645",
-   "slot": "table",
-   "store": "ikea",
-   "name": "MARIEDAMM Stol, crna efekt mramora, 105 cm",
-   "url": "https://www.ikea.com/hr/hr/p/mariedamm-stol-crna-efekt-mramora-70492645/",
-   "price": 179,
-   "color": "crna",
-   "hex": "#000000",
-   "w": 105,
-   "d": 105,
-   "h": 75,
-   "round": true,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "hr-ik-70581359",
-   "slot": "table",
-   "store": "ikea",
-   "name": "TARSELE Produljivi stol, hrastov furnir/crna, 150/200x80 cm",
-   "url": "https://www.ikea.com/hr/hr/p/tarsele-produljivi-stol-hrastov-furnir-crna-70581359/",
-   "price": 549,
-   "color": "smeđa / crna",
-   "hex": "#814820",
-   "w": 150,
-   "d": 80,
-   "h": 77,
-   "checked": "2026-11-02"
-  },
-  {
-   "id": "hr-ik-00587492",
-   "slot": "table",
-   "store": "ikea",
-   "name": "NÄSINGE Produljivi stol, bijela, 130/190x80 cm",
-   "url": "https://www.ikea.com/hr/hr/p/naesinge-produljivi-stol-bijela-00587492/",
-   "price": 199,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 130,
-   "d": 80,
-   "h": 75,
    "checked": "2026-11-02"
   }
  ]

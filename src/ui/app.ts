@@ -54,7 +54,8 @@ export class App {
     if (this.hashMoves) { this.project.moves = this.hashMoves; this.hashMoves = null; }
     this.prefs.country ||= this.project.country;
     try { this.viewer = new Viewer($('#viewer'), $('#labels')); this.viewer.onPick = s => this.select(s, false); this.viewer.drag = this.dragHandler(); }
-    catch (e) { console.error(e); $('#nogl').hidden = false; $('#render-btn').hidden = true; }
+    // no WebGL (old GPU, blocked, headless browser): the list and prices still work without the 3D view
+    catch (e) { console.warn('3D view unavailable:', e); $('#nogl').hidden = false; $('#render-btn').hidden = true; }
     this.bindChrome();
     this.applyLang();
     await this.loadCountry(this.prefs.country!, this.hashSel);

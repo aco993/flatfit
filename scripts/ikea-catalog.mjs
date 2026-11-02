@@ -179,8 +179,9 @@ async function slotProducts(slot, cfg) {
 }
 
 const prevPath = path.join(ROOT, 'src/data/catalogs', country + '.json');
-let extra = [];
-try { const prev = JSON.parse(await readFile(prevPath, 'utf8')); extra = prev.products.filter(p => p.store !== 'ikea'); } catch {}
+let extra = [], extraStores = [];
+// products and stores that are not IKEA's (estimates and their source) are kept as they are
+try { const prev = JSON.parse(await readFile(prevPath, 'utf8')); extra = prev.products.filter(p => p.store !== 'ikea'); extraStores = prev.stores.filter(s => s.id !== 'ikea'); } catch {}
 // optional: node scripts/ikea-catalog.mjs de base,bed  -> refresh only these slots
 const only = process.argv[3] ? new Set(process.argv[3].split(',')) : null;
 let kept = [];
@@ -194,7 +195,7 @@ for (const [slot, cfg] of Object.entries(Q)) {
 const today = new Date().toISOString().slice(0, 10);
 const cat = {
   country, currency: 'EUR', checked: today,
-  stores: [{ id: 'ikea', name: 'IKEA', web: `https://www.ikea.com/${loc}/` }, ...(extra.length ? [{ id: 'est', name: 'estimate', web: '' }] : [])],
+  stores: [{ id: 'ikea', name: 'IKEA', web: `https://www.ikea.com/${loc}/` }, ...extraStores.filter(st => extra.some(p => p.store === st.id))],
   products: [...products, ...extra],
 };
 await writeFile(prevPath, JSON.stringify(cat, null, 1) + '\n');
