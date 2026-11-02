@@ -134,6 +134,7 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
 .dlg h2 { margin: 0; font-size: 18px; }
 .dlg.wide { width: min(1180px, calc(100vw - 24px)); }
 .dlg.full { width: calc(100vw - 24px); height: calc(100vh - 24px); max-width: 1500px; }
+#pt-canvas.waiting { opacity: .55; filter: saturate(.7); }
 .render-body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; margin-top: 12px; }
 .render-img { background: #11151a; border-radius: 10px; min-height: 240px; display: grid; place-items: center; overflow: hidden; }
 .render-img canvas, .render-img img { max-width: 100%; height: auto; display: block; }
@@ -146,7 +147,7 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .row.end { justify-content: flex-end; }
 .keys { display: grid; gap: 8px; margin: 14px 0; }
-.keys div { display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: center; }
+.keys div { display: grid; grid-template-columns: 170px 1fr; gap: 10px; align-items: center; }
 .keys dt, .keys dd { margin: 0; }
 .plist { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 8px; }
 .plist li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; }
@@ -154,7 +155,7 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
 .note { background: var(--accent-soft); padding: 8px 10px; border-radius: 8px; font-size: 13px; }
 
 /* editor */
-.ed { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; height: calc(100% - 44px); margin-top: 10px; }
+.ed { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 16px; height: calc(100% - 44px); margin-top: 10px; }
 .ed-canvas { min-height: 0; display: flex; flex-direction: column; gap: 6px; }
 .ed-canvas svg { flex: 1; width: 100%; min-height: 280px; background: var(--surface-2); border-radius: 10px; touch-action: none; }
 .ed-side { overflow: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px; }
@@ -165,7 +166,7 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
 .grid4 input { width: 100%; }
 .check { display: flex; gap: 6px; align-items: center; font-size: 14px; color: var(--ink); }
 .ops { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
-.ops li { display: grid; grid-template-columns: 1.3fr 1fr .8fr .8fr auto; gap: 4px; align-items: center; }
+.ops li { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr) 64px 64px auto; gap: 4px; align-items: center; }
 .ops input, .ops select { width: 100%; min-height: 32px; padding: 4px 6px; font-size: 13px; }
 .tpl { display: flex !important; flex-wrap: wrap; gap: 6px; }
 #ed-svg .g1 { stroke: var(--line); stroke-width: .02; } #ed-svg .g2 { stroke: var(--line); stroke-width: .008; }
@@ -202,6 +203,7 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
   .top { position: static; }
 }
 @media (max-width: 600px) {
+  .room-label { font-size: 10px; padding: 2px 6px; font-weight: 500; }
   .top { padding: 8px 16px; }
   .tagline { display: none; }
   .controls { width: 100%; display: grid; grid-template-columns: 1fr 1fr auto auto; }

@@ -100,7 +100,9 @@ export class Viewer {
     try {
       P._setSize(256); const rt = P._allocateTargets(), prev = r.getRenderTarget(), cam = new THREE.PerspectiveCamera(90, 1, 0.1, 100);
       const shaders = new THREE.Scene();
-      for (const m of [P._blurMaterial, P._ggxMaterial]) if (m) shaders.add(new THREE.Mesh(new THREE.BufferGeometry(), m));
+      // PMREM's own plane geometry: an empty one would compile a different variant (no position attribute)
+      const geo = P._lodMeshes?.[1]?.geometry || new THREE.PlaneGeometry();
+      for (const m of [P._blurMaterial, P._ggxMaterial]) if (m) shaders.add(new THREE.Mesh(geo, m));
       r.setRenderTarget(rt); const ready = Promise.all([r.compileAsync(shaders, cam), r.compileAsync(room, cam)]); r.setRenderTarget(prev); rt.dispose();
       await ready;
     } catch { /* private API changed: fall back to baking right away */ }
@@ -113,6 +115,8 @@ export class Viewer {
     this.interior = v.interior;
     this.controls.enabled = !v.interior;
     const to = new THREE.Vector3(...v.pos), tt = new THREE.Vector3(...v.target);
+    // overview cameras are framed for a wide screen; on a tall phone screen step back so the whole flat fits
+    if (!v.interior && this.camera.aspect < 1.05) to.sub(tt).multiplyScalar(Math.min(1.8, 1.05 / this.camera.aspect)).add(tt);
     if (v.interior) {
       const d = tt.clone().sub(to);
       this.look.yaw = Math.atan2(d.x, d.z); this.look.pitch = Math.atan2(d.y, Math.hypot(d.x, d.z));
@@ -275,6 +279,14 @@ export class Viewer {
     this.renderer.setSize(r.width, r.height, false); this.camera.aspect = r.width / r.height; this.camera.updateProjectionMatrix(); this.dirty = true;
   }
   requestRender() { this.dirty = true; }
+  /** Copy of the current view into a 2D canvas (drawn and copied in the same task, so no preserved buffer is needed). */
+  snapshot(target: HTMLCanvasElement) {
+    const src = this.renderer.domElement; if (!src.width) return;
+    if (this.sel) this.sel.visible = false;
+    this.renderer.render(this.scene, this.camera);
+    target.width = src.width; target.height = src.height; target.getContext('2d')!.drawImage(src, 0, 0);
+    if (this.sel) this.sel.visible = true; this.dirty = true;
+  }
 
   private tick() {
     if (this.anim) {

@@ -68,7 +68,12 @@ Fixes so far:
 - floor materials cached, which stops a texture leak on every drag;
 - accessibility, best practices and SEO all at 100.
 
-Still open: a CPU profile pins the remaining 3 s stall on a cold cache to the GGX prefilter shader that three's PMREM compiles while baking the environment light. The next step is to compile that variant in advance or bake the environment map ahead of time.
+The last freeze, 3 seconds on a cold cache, came from three's PMREM baking the environment light. Its GGX prefilter shader compiled synchronously. I pre-compiled it with `compileAsync`, but the profile still showed two variants: my warm-up mesh had an empty geometry, which flips the `hasPositionAttribute` flag in the program cache key. With PMREM's own plane geometry the variants match, and the longest task dropped from 3.2 s to 0.33 s.
+
+Final Lighthouse numbers on the same laptop:
+- performance 75 on desktop and 66 on mobile;
+- total blocking time 370 ms on desktop;
+- layout shift 0.09.
 
 ## What I would do next
 

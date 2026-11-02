@@ -38,6 +38,20 @@ The first version froze or showed a black image on an Intel UHD laptop. The caus
 4. **Always in control.** *Finish now* denoises what is done; *Cancel* or **Esc** stops at any phase. First-time shader compilation (1–3 min on Windows/ANGLE) shows a live timer instead of looking frozen.
 5. **Few samples, clean image.** Intel OIDN with albedo and normal guide buffers (rendered by the raster pipeline from the same camera) makes 16–40 passes look clean; without WebGPU a bilateral filter with outlier removal is used.
 
+## Performance
+
+Lighthouse on a laptop with Intel UHD graphics (real GPU, fresh browser profile, production build):
+
+| | Before | After |
+|---|---|---|
+| Performance, desktop | 32 | **75** |
+| Performance, mobile (4× CPU throttling) | 15 | **66** |
+| Total blocking time, desktop | 2,440 ms | **370 ms** |
+| Layout shift (CLS), desktop | 0.89 | **0.09** |
+| Accessibility · best practices · SEO | 100 · 100 · 91 | **100 · 100 · 100** |
+
+What moved the numbers: space reserved for UI that fills in late, one scene build at startup instead of three, a geometry cache shared between builds, and above all **compiling shaders in parallel** (`KHR_parallel_shader_compile`) before the first frame. A CPU profile found the last 3-second freeze on a cold Windows shader cache: three's PMREM environment baking compiled its GGX filter twice, because the warm-up mesh had no position attribute and so compiled a different shader variant. Details in the [case study](docs/case-study.md).
+
 ## Architecture
 
 ```mermaid

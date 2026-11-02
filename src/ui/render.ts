@@ -40,6 +40,8 @@ export class RenderDialog {
   private reset() {
     $('#pt-status').textContent = ''; ($('#pt-fill') as HTMLElement).style.width = '0%';
     $('#pt-img').hidden = true; $('#pt-canvas').hidden = false; $('#pt-save').hidden = true;
+    // until tracing starts, show the view that will be rendered instead of an empty black box
+    const c = $('#pt-canvas') as HTMLCanvasElement; this.app.viewer?.snapshot(c); c.classList.add('waiting');
     this.buttons(false);
   }
   private buttons(running: boolean) {
@@ -54,7 +56,7 @@ export class RenderDialog {
 
   async run() {
     const app = this.app, v = app.viewer!; if (this.running) return;
-    this.running = true; this.stopNow = false; this.cancelled = false; this.reset(); this.buttons(true);
+    this.running = true; this.stopNow = false; this.cancelled = false; this.reset(); this.buttons(true); $('#pt-canvas').classList.remove('waiting');
     const q = this.quality(), view = app.views[app.viewIdx], interior = !!view?.interior;
     const r = $('#viewer').getBoundingClientRect(), { w, h } = outputSize(r.width, r.height, q);
     const canvas = $('#pt-canvas') as HTMLCanvasElement;
