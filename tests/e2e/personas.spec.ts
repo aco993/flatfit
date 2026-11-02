@@ -177,7 +177,14 @@ test.describe('Sara · rearranges the living room with the mouse', () => {
     await page.waitForTimeout(900);
     const at = (x: number, y: number, z: number) => page.evaluate(([x, y, z]) => (window as any).flatfit.viewer.toScreen(x, y, z), [x, y, z]);
     const centre = await page.evaluate(() => { const c = (window as any).flatfit.viewer.slotCenter('sofa'); return [c.x, c.z]; });
-    const s = await at(centre[0], 0.35, centre[1]);
+    // wait until the camera has stopped moving (software GL on CI animates slowly)
+    let s = await at(centre[0], 0.35, centre[1]);
+    for (let i = 0; i < 30; i++) {
+      await page.waitForTimeout(150);
+      const n = await at(centre[0], 0.35, centre[1]);
+      const still = Math.hypot(n.x - s.x, n.y - s.y) < 0.5; s = n;
+      if (still) break;
+    }
     // first click selects, then the selected piece can be dragged
     await page.mouse.click(s.x, s.y);
     await expect(page.locator('#card h3')).toHaveText('Sofa');
