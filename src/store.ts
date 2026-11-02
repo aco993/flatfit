@@ -1,16 +1,20 @@
 import type { Lang, Project } from './types';
 import type { Quality } from './three/pathtrace';
 import { DEMO } from './data/demo';
+import type { Updates } from './data/refresh';
 
 /** Everything the viewer keeps between visits. Storage can be missing (private mode), so every access is guarded. */
 export interface Prefs { lang?: Lang; country?: string; project?: string; theme?: 'light' | 'dark' | 'auto'; quality?: Quality }
 
-const KEY_PREFS = 'flatfit.prefs', KEY_PROJECTS = 'flatfit.projects', KEY_DEMO = 'flatfit.demo-choices';
+const KEY_PREFS = 'flatfit.prefs', KEY_PROJECTS = 'flatfit.projects', KEY_DEMO = 'flatfit.demo-choices', KEY_PRICES = 'flatfit.prices.';
 
 function read<T>(k: string, def: T): T { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) as T : def; } catch { return def; } }
 function write(k: string, v: unknown) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* storage full or blocked */ } }
 
 export const loadPrefs = () => read<Prefs>(KEY_PREFS, {});
+/** prices refreshed in this browser, per country (see data/refresh.ts) */
+export const loadPriceUpdates = (country: string) => read<Updates>(KEY_PRICES + country, {});
+export const savePriceUpdates = (country: string, u: Updates) => write(KEY_PRICES + country, u);
 export const savePrefs = (p: Prefs) => write(KEY_PREFS, p);
 
 /** The demo flat is built in; only the furniture choices for it are stored. */

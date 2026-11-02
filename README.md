@@ -3,18 +3,33 @@
 **Furnish a flat in 3D with real furniture from local stores — prices by country, fit checks, and photoreal path-traced renders, all in the browser.**
 
 [![CI](https://github.com/aco993/flatfit/actions/workflows/ci.yml/badge.svg)](https://github.com/aco993/flatfit/actions/workflows/ci.yml)
-· **[Live demo](https://aco993.github.io/flatfit/)** · English · Deutsch · Srpski
+[![Prices](https://github.com/aco993/flatfit/actions/workflows/catalog.yml/badge.svg)](https://github.com/aco993/flatfit/actions/workflows/catalog.yml)
+[![CodeQL](https://github.com/aco993/flatfit/actions/workflows/codeql.yml/badge.svg)](https://github.com/aco993/flatfit/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+**[Live demo](https://aco993.github.io/flatfit/)** · English · Deutsch · Srpski · 🇷🇸 🇧🇦 🇭🇷 🇩🇪 🇦🇹
 
 ![FlatFit: dragging the sofa (red while it hits the coffee table, green by the wall), undo, switching to Germany, stepping into the living room](docs/demo.gif)
 
-**[Read the case study](docs/case-study.md)** for the problems behind it: GPU driver resets, honest price data, testing with personas, performance.
+**[Read the case study](docs/case-study.md)** for the problems behind it: GPU driver resets, honest price data, testing with personas, performance. The main design decisions are written up as [architecture decision records](docs/adr/README.md).
+
+### At a glance
+
+| | |
+|---|---|
+| **Stack** | TypeScript (strict), three.js, three-gpu-pathtracer, Intel OIDN on WebGPU, Vite, Vitest, Playwright + axe-core, GitHub Actions, GitHub Pages |
+| **Size** | ~3,400 lines of TypeScript, no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
+| **Data** | 5 markets, ~570 real products; every price re-checked daily by a GitHub Action and committed to git ([why](docs/adr/0002-static-site-git-scraped-prices.md)); IKEA prices checked live from the browser on request |
+| **Quality** | 106 unit tests, 40 end-to-end runs (8 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 75 / mobile 66, CodeQL, Dependabot |
+| **Hard parts** | GPU driver resets during path tracing, a cold-cache shader stall found with a CPU profile, collision checks on every pointer move, honest labelling of prices that cannot be checked automatically |
 
 I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue.
 
 ## What it does
 
 - **Any apartment.** Draw rooms on a grid (drag, resize, keyboard), add doors and windows, radiators and the TV socket, mark open-plan connections. Only have a picture of the plan? Load it, click the two ends of a wall whose length you know, and trace the rooms over it. Walls, floors and camera views are derived from the plan. A real two-room flat (44.6 m²) ships as the demo.
-- **Real products, by country.** Serbia (Forma Ideale, JYSK, IKEA, XXXLesnina, mömax, Emmezeta, Gigatron — 145 products), Germany and Austria (IKEA, ~110 each). Every 3D piece is built from the chosen product's width, depth, height and colour, and links to the store page.
+- **Real products, by country.** Serbia (Forma Ideale, JYSK, IKEA, XXXLesnina, mömax, Emmezeta, Gigatron — 145 products), Bosnia and Herzegovina (JYSK, Technoshop, prices in KM — 97), Croatia, Germany and Austria (IKEA, ~110 each). Every 3D piece is built from the chosen product's width, depth, height and colour, and links to the store page.
+- **Prices that keep up with sales.** *Refresh prices* checks every IKEA price live from your browser, including when a sale ends, and takes the other stores from the daily check that a GitHub Action commits to this repository. Where no local store sells online with sizes (kitchen units in Bosnia), the price is an estimate from a neighbouring market and labelled as one.
 - **Automatic layout.** A rule-based planner finds free wall stretches (doors and their swing, windows and radiators for tall items), puts the TV by its socket and the sofa opposite it, the bed against the best wall with bedside tables, the wardrobe where it does not block the bed, the kitchen run with the fridge in the niche, the table where people can sit.
 - **Move things yourself.** Select a piece and drag it in the 3D view: it snaps to a 5 cm grid, turns its back to a wall when you bring it close, and its frame turns red while it would hit another piece, a wall or a door's swing. `T` turns it, Shift + arrows nudge it, and every change can be undone (Ctrl+Z / Ctrl+Y).
 - **Fit checks with numbers.** “Kitchen and fridge need 245 cm, the wall has 248 cm”, “only 38 cm between wardrobe and bed”. Overruns up to 10 cm are “measure first”, more is “does not fit”.
@@ -58,7 +73,8 @@ What moved the numbers: space reserved for UI that fills in late, one scene buil
 flowchart LR
   subgraph data [Data]
     P[Project JSON<br/>rooms · openings · open plan] 
-    C[Catalogue per country<br/>rs.json · de.json · at.json]
+    C[Catalogue per country<br/>rs · ba · hr · de · at .json]
+    R[refresh.ts<br/>IKEA live · daily check from git]
   end
   subgraph domain [Domain · pure TypeScript, unit-tested]
     G[geometry.ts<br/>rooms → walls with openings]
@@ -75,6 +91,7 @@ flowchart LR
   end
   P --> G --> L --> MV --> S
   C --> S
+  R --> C
   L --> B --> V --> PT
   S --> A
   E --> P
@@ -86,16 +103,22 @@ flowchart LR
 
 ## Catalogue pipeline
 
-`scripts/ikea-catalog.mjs de|at [slots]` rebuilds a market from IKEA's public search endpoint and product pages: price, previous price, measurements tab (W/D/H, diameter, length), colour, and flags such as *bed frame without slatted base* or *curtains sold in pairs*. A weekly GitHub Action runs it, runs the unit tests against the new data (schema, links, sizes, presets) and opens a pull request. The Serbian catalogue was assembled by hand; `scripts/rs-prices.mjs` re-checks every price on the store's own page each week (IKEA's search endpoint, schema.org offers and shop data for JYSK, Forma Ideale, Gigatron, Emmezeta) and records the date each price was confirmed. Stores that answer with a bot challenge are skipped rather than worked around, and the app labels their prices as checked by hand with the date.
+| Script | What it does | When |
+|---|---|---|
+| `scripts/prices.mjs rs\|ba\|hr\|de\|at` | Re-checks every price on the store's own page: IKEA's search endpoint (current price, previous price, when the sale ends), schema.org offers (JYSK, Gigatron), shop data (Forma Ideale, Technoshop, Emmezeta). Prices only, so product ids and saved choices stay valid. | Daily, GitHub Action |
+| `scripts/ikea-catalog.mjs de\|at\|hr [slots]` | Rebuilds an IKEA market: price, measurements tab (W/D/H, diameter, length), colour, flags such as *bed frame without slatted base* or *curtains sold in pairs*. Search phrases and measurement names per language. | Mondays |
+| `scripts/ba-catalog.mjs` | Builds Bosnia and Herzegovina from JYSK BiH category pages (schema.org item lists), Technoshop product pages, and IKEA Croatia estimates converted to KM. | By hand |
 
-Adding a country: a catalogue JSON in `src/data/catalogs/`, an entry in `src/data/countries.ts`, a name in `src/i18n.ts`.
+The Action runs the unit tests on the new data (schema, sizes, sale dates, links, presets) and commits it to `main` only if they pass, then redeploys. Stores that answer with a bot challenge (XXXLesnina, mömax) are skipped rather than worked around, and the app labels their prices as checked by hand with the date.
+
+Adding a country: a catalogue JSON in `src/data/catalogs/`, an entry in `src/data/countries.ts`, a name in `src/i18n.ts`, and a line in `.github/workflows/catalog.yml`.
 
 ## Tests
 
 | Layer | Tool | What |
 |---|---|---|
-| Unit (74) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 3 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema and price dates, translation key parity |
-| End to end | Playwright | persona journeys, see below |
+| Unit (106) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 5 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema, sale dates and estimates, live price refresh (stubbed network), translation key parity |
+| End to end | Playwright | persona journeys and a URL matrix, see below |
 | Accessibility | axe-core | WCAG 2 A/AA, no serious or critical violations |
 
 Personas (`tests/e2e/personas.spec.ts`):
@@ -108,7 +131,9 @@ Personas (`tests/e2e/personas.spec.ts`):
 - **Sara**, rearranging: selects the sofa, drags it with the mouse into the coffee table, sees the warning, turns it with `T`, undoes everything with the button and Ctrl+Z, redoes with Ctrl+Y.
 - **Petra**, old laptop: starts a photoreal render, cancels it mid-way, the page stays usable.
 
-CI (`.github/workflows/ci.yml`): typecheck → unit tests → build → Playwright on Chromium → deploy to GitHub Pages on `main`.
+URL matrix (`tests/e2e/matrix.spec.ts`), in Chromium, Firefox and WebKit: every market and language, Bosnia on a phone, Croatia in dark mode, a link with moved furniture, a link carrying a whole floor plan, and a deliberately broken link. Each must load without console errors, show the total in the right currency and never scroll sideways. A separate test stubs IKEA's endpoint and checks that *Refresh prices* applies a new sale and remembers it after a reload.
+
+CI (`.github/workflows/ci.yml`): typecheck → unit tests → build → Playwright (Chromium, Firefox, WebKit) → deploy to GitHub Pages on `main`. CodeQL scans the code weekly and on every pull request; Dependabot proposes dependency updates monthly.
 
 ## Run it
 
@@ -127,7 +152,8 @@ npm run build && npx playwright test
 
 - Room shapes are rectangles (L-shapes are built from several rooms with open connections).
 - The planner is rule-based; it proposes, you drag things where you want them. Fit checks use the plan, not a laser measure.
-- Catalogue prices are a snapshot; the date is shown in the app and the weekly job keeps DE/AT fresh.
+- Prices are at most a day old (IKEA: live on *Refresh prices*); stores behind a bot challenge are checked by hand, and the app shows the date.
+- The interface is in English, German and Serbian (ekavian); Bosnian and Croatian visitors get the Serbian text.
 
 Tried it on your flat? [Send feedback](https://github.com/aco993/flatfit/issues/new?template=feedback.yml) — what was unclear or missing helps most.
 

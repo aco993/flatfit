@@ -13,5 +13,8 @@ export default defineConfig({
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 860 } } },
     { name: 'phone', use: { ...devices['Pixel 7'] }, grep: /@phone/ },
+    // the URL matrix also runs in Firefox and Safari's engine
+    { name: 'firefox', use: { ...devices['Desktop Firefox'], viewport: { width: 1366, height: 860 } }, grep: /URL matrix/ },
+    { name: 'webkit', use: { ...devices['Desktop Safari'], viewport: { width: 1366, height: 860 } }, grep: /URL matrix/ },
   ],
 });

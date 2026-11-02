@@ -37,7 +37,13 @@ Few samples look noisy, so the image is denoised by Intel OIDN running as a neur
 
 Germany and Austria are rebuilt every week from IKEA's public search endpoint. The Serbian catalogue was assembled by hand from several stores, so a second script re-checks each product on its own page (search API, schema.org offers, shop data) and stamps the date the price was confirmed. Two stores answer automated requests with a Cloudflare challenge; the script skips them rather than working around it, and the app labels those prices “checked by hand” with their date. The first run changed 70 of 114 prices because a big promotion had just ended, which the tests caught as a contrast failure on the newly visible “sale ended” labels before any user did.
 
-### 3. Testing like users, not like functions
+### 3. Five markets, and prices that keep up with sales
+
+Croatia came almost for free: the IKEA script only needed Croatian search phrases and measurement names ("Širina", "Dubina"), so it now takes a language table instead of German strings. Bosnia and Herzegovina had no IKEA online shop, so its catalogue comes from JYSK BiH (each category page publishes a schema.org item list, each product page an offer with the sale's end date) and Technoshop for appliances; kitchen units are estimates from IKEA Croatia converted to KM at the fixed rate and labelled as estimates.
+
+Sales were the other problem: a weekly snapshot misses most of them. Every price is now re-checked daily by a GitHub Action that commits the result to `main` after the unit tests pass, and the app has a *Refresh prices* button. IKEA's search endpoint answers cross-origin requests, so the button checks every IKEA price live from the visitor's browser, including when a sale ends; the other stores come from the newest committed catalogue. Writing the Bosnian reader exposed a bug in the existing Serbian one: for products sold in several colours it read the offer of the last colour on the page instead of the product's own, so a curtain rod showed 600 instead of 750 dinars. Offers are now matched by URL.
+
+### 4. Testing like users, not like functions
 
 Unit tests (Vitest) cover the geometry, planner, quantities, promotions, moves, snapping, collisions and catalogue schema, plus parity of the three translations. End-to-end tests (Playwright) each play one person:
 
@@ -51,9 +57,11 @@ Unit tests (Vitest) cover the geometry, planner, quantities, promotions, moves, 
 | Sara, rearranging | drags the sofa with a real mouse, sees the collision, turns it, undoes and redoes |
 | Petra, old laptop | starts a render and cancels it; the page stays usable |
 
+A second spec runs ten URL and device combinations (every market and language, a phone, dark mode, links with moved furniture or a whole floor plan, a broken link) in Chromium, Firefox and WebKit. It found that a link with moved furniture but no flat id dropped the moves.
+
 CI runs typecheck, unit tests, build, and the personas on every push, and deploys to GitHub Pages only when all of them pass.
 
-### 4. Performance
+### 5. Performance
 
 Lighthouse on a laptop with Intel UHD graphics at first measured performance 32 (desktop) and 15 (mobile), with a layout shift of 0.89. Profiling showed that JavaScript was not the problem (under about 1 s at startup). The real problems were:
 

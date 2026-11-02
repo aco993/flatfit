@@ -11,7 +11,7 @@ export const DEMO: Project = {
   rooms: [
     { id: 'living', type: 'living', x: 0, z: 0, w: 4, d: 3.9 },
     { id: 'dining', type: 'dining', x: 0, z: 3.9, w: 4, d: 2.3 },
-    { id: 'kitchen', type: 'kitchen', x: 1.2, z: 6.2, w: 2.6, d: 0.6 },
+    { id: 'kitchen', type: 'kitchen', x: 0, z: 6.2, w: 2.6, d: 0.6 },
     { id: 'bedroom', type: 'bedroom', x: 4, z: 0, w: 3, d: 3.2 },
     { id: 'bath', type: 'bathroom', x: 4, z: 3.2, w: 2.6, d: 1.55 },
     { id: 'terrace', type: 'terrace', x: 3, z: -1.53, w: 3, d: 1.53 },
@@ -23,7 +23,8 @@ export const DEMO: Project = {
     { id: 'w2', kind: 'window', room: 'bedroom', side: 'n', at: 0.7, width: 0.8, sill: 0.9, head: 2.2 },
     { id: 'd1', kind: 'door', room: 'bedroom', side: 'w', at: 2.35, width: 0.75 },
     { id: 'd2', kind: 'door', room: 'bath', side: 'w', at: 0.1, width: 0.7 },
-    { id: 'e1', kind: 'entry', room: 'dining', side: 's', at: 0.15, width: 0.85 },
+    // the entrance is in the corner between the kitchen niche and the bathroom wall (photo: door left of the niche)
+    { id: 'e1', kind: 'entry', room: 'dining', side: 's', at: 3.05, width: 0.85 },
   ],
 };
 

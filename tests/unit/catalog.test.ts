@@ -2,12 +2,14 @@ import { describe, expect, it } from 'vitest';
 import rs from '../../src/data/catalogs/rs.json';
 import de from '../../src/data/catalogs/de.json';
 import at from '../../src/data/catalogs/at.json';
+import ba from '../../src/data/catalogs/ba.json';
+import hr from '../../src/data/catalogs/hr.json';
 import type { Catalog } from '../../src/types';
 import { SLOTS } from '../../src/domain/slots';
 import { COUNTRIES } from '../../src/data/countries';
 import { RS_PRESETS } from '../../src/data/demo';
 
-const CATS: Record<string, Catalog> = { rs: rs as Catalog, de: de as Catalog, at: at as Catalog };
+const CATS: Record<string, Catalog> = { rs: rs as Catalog, ba: ba as Catalog, hr: hr as Catalog, de: de as Catalog, at: at as Catalog };
 const slotIds = new Set(SLOTS.map(s => s.id));
 
 describe.each(Object.entries(CATS))('catalogue %s', (id, cat) => {
@@ -40,15 +42,31 @@ describe.each(Object.entries(CATS))('catalogue %s', (id, cat) => {
   });
 });
 
-describe('price check dates (Serbia)', () => {
+describe.each(['rs', 'ba'])('price check dates (%s)', id => {
   it('every product says when its price was confirmed, never after the catalogue date', () => {
-    for (const p of CATS.rs.products) {
+    for (const p of CATS[id].products) {
       expect(p.checked, p.id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(p.checked! <= CATS.rs.checked, p.id).toBe(true);
+      expect(p.checked! <= CATS[id].checked, p.id).toBe(true);
     }
   });
-  it('a promotion found by the price check comes with its regular price', () => {
-    for (const p of CATS.rs.products) if (p.until && p.checked === CATS.rs.checked) expect(p.regular, p.id).toBeGreaterThan(p.price);
+});
+
+describe.each(Object.keys(CATS))('promotions (%s)', id => {
+  it('a sale found by the price check comes with its regular price, and every sale ends within a few months', () => {
+    for (const p of CATS[id].products) if (p.until) {
+      // hand-checked offers (stores behind a bot challenge) may only say until when the price holds
+      if (p.checked === CATS[id].checked) expect(p.regular, p.id).toBeGreaterThan(p.price);
+      expect((Date.parse(p.until) - Date.parse(CATS[id].checked)) / 864e5, p.id).toBeLessThanOrEqual(130);
+    }
+  });
+});
+
+describe('Bosnia and Herzegovina', () => {
+  it('labels every price that is not from a local store as an estimate', () => {
+    for (const p of CATS.ba.products) if (p.store === 'est') { expect(p.estimate, p.id).toBe(true); expect(p.note, p.id).toBeTruthy(); }
+  });
+  it('slatted bases are as long as the bed and narrower or as wide', () => {
+    for (const p of CATS.ba.products.filter(p => p.slot === 'base' || p.slot === 'mattress')) { expect(p.d, p.id).toBe(200); expect(p.w!, p.id).toBeLessThanOrEqual(160); }
   });
 });
 

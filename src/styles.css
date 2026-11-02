@@ -97,11 +97,14 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
 .chip.gen { border-style: dashed; }
 .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); border-style: solid; font-weight: 600; }
 .summary { margin: 14px 0; padding: 12px; border-radius: 10px; background: var(--surface-2); }
-.summary { min-height: 156px; }
+.summary { min-height: 180px; }
 .total { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 2px 10px; }
 .total b { font-size: 26px; letter-spacing: -.02em; }
 .total > .muted { grid-column: 1 / -1; text-align: right; }
 .summary p { margin: 6px 0 0; }
+.summary .refresh { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.link { background: none; border: 0; padding: 0; color: var(--ink); font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.link:disabled { opacity: .6; cursor: progress; }
 .issues { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; font-size: 13px; }
 .issues li { padding-left: 18px; position: relative; }
 .issues li::before { content: ""; position: absolute; left: 3px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--warn); }

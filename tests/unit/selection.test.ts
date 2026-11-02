@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import rs from '../../src/data/catalogs/rs.json';
 import de from '../../src/data/catalogs/de.json';
 import at from '../../src/data/catalogs/at.json';
+import ba from '../../src/data/catalogs/ba.json';
+import hr from '../../src/data/catalogs/hr.json';
 import type { Catalog, Project } from '../../src/types';
 import { DEMO, RS_PRESETS } from '../../src/data/demo';
 import { fromTemplate } from '../../src/data/templates';
@@ -12,6 +14,7 @@ import {
 } from '../../src/domain/selection';
 
 const ixRS = indexCatalog(rs as Catalog), ixDE = indexCatalog(de as Catalog), ixAT = indexCatalog(at as Catalog);
+const ixBA = indexCatalog(ba as Catalog), ixHR = indexCatalog(hr as Catalog);
 const TODAY = '2026-10-30';
 
 describe('units needed', () => {
@@ -79,7 +82,7 @@ describe('fit checks', () => {
 
 describe('generated proposals', () => {
   const projects: Project[] = [DEMO, fromTemplate('studio', 's', 'de'), fromTemplate('tworoom', 't', 'de')];
-  for (const [name, ix] of [['rs', ixRS], ['de', ixDE], ['at', ixAT]] as const) {
+  for (const [name, ix] of [['rs', ixRS], ['ba', ixBA], ['hr', ixHR], ['de', ixDE], ['at', ixAT]] as const) {
     for (const p of projects) {
       it(`${name} / ${p.rooms.length} rooms: "cheap" fills every required slot and nothing is a hard misfit`, () => {
         const sel = generate('cheap', p, ix, TODAY);

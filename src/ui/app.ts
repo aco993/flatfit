@@ -12,7 +12,8 @@ import {
   decodeSelection, dimsOf, effectivePrice, encodeSelection, fitIssues, fixDeps, generate, indexCatalog, lines, total,
   type Index, type Issue, type Selection, type Style,
 } from '../domain/selection';
-import { deleteProject, isProject, loadPrefs, loadProjects, savePrefs, saveProject, type Prefs } from '../store';
+import { deleteProject, isProject, loadPrefs, loadPriceUpdates, loadProjects, savePrefs, savePriceUpdates, saveProject, type Prefs } from '../store';
+import { applyUpdates, refreshPrices } from '../data/refresh';
 import { Viewer } from '../three/viewer';
 import { Materials } from '../three/materials';
 import { Models } from '../three/models';
@@ -50,6 +51,7 @@ export class App {
     setLang(this.prefs.lang || detectLang());
     this.readHash();
     this.project ||= this.projects.find(p => p.id === this.prefs.project) || this.projects[0];
+    if (this.hashMoves) { this.project.moves = this.hashMoves; this.hashMoves = null; }
     this.prefs.country ||= this.project.country;
     try { this.viewer = new Viewer($('#viewer'), $('#labels')); this.viewer.onPick = s => this.select(s, false); this.viewer.drag = this.dragHandler(); }
     catch (e) { console.error(e); $('#nogl').hidden = false; $('#render-btn').hidden = true; }
@@ -66,6 +68,7 @@ export class App {
 
   // ---------- URL: #c=de&p=demo&s=<selection>[&plan=<project>] ----------
   private hashSel: string | null = null;
+  private hashMoves: Moves | null = null;
   private readHash() {
     const h = new URLSearchParams(location.hash.slice(1));
     if (h.get('c') && COUNTRIES.some(c => c.id === h.get('c'))) this.prefs.country = h.get('c')!;
@@ -73,8 +76,9 @@ export class App {
     const plan = h.get('plan');
     if (plan) { try { const p = JSON.parse(LZString.decompressFromEncodedURIComponent(plan) || ''); if (isProject(p)) { p.demo = false; const ex = this.projects.find(x => x.id === p.id); if (!ex) { this.projects.push(p); saveProject(p); } this.project = this.projects.find(x => x.id === p.id)!; } } catch { /* ignore broken link */ } }
     else if (h.get('p')) this.project = this.projects.find(x => x.id === h.get('p'))!;
+    // moved furniture applies to whichever flat the link resolves to (the demo when it names none)
     const m = h.get('m');
-    if (m && this.project) { try { const mv = JSON.parse(LZString.decompressFromEncodedURIComponent(m) || '{}'); if (mv && typeof mv === 'object') this.project.moves = cleanMoves(mv); } catch { /* ignore broken link */ } }
+    if (m) { try { const mv = JSON.parse(LZString.decompressFromEncodedURIComponent(m) || '{}'); if (mv && typeof mv === 'object') this.hashMoves = cleanMoves(mv); } catch { /* ignore broken link */ } }
     this.hashSel = h.get('s');
   }
   shareUrl() {
@@ -87,13 +91,13 @@ export class App {
   // ---------- data ----------
   async loadCountry(id: string, fromHash?: string | null) {
     this.prefs.country = id; savePrefs(this.prefs);
-    try { this.ix = indexCatalog(await loadCatalog(id)); }
+    try { this.ix = indexCatalog(applyUpdates(await loadCatalog(id), loadPriceUpdates(id))); }
     catch { $('#summary').textContent = t('misc.catalogFail'); return; }
     const saved = this.project.choices?.[id];
     if (fromHash) { const s = decodeSelection(fromHash, this.ix); if (Object.keys(s).length) { this.sel = fixDeps(s, this.ix); this.preset = 'custom'; } else this.applyPreset(this.defaultPreset(), false); }
     else if (saved && Object.keys(saved.sel).length) { this.sel = fixDeps(saved.sel as Selection, this.ix); this.preset = saved.preset; }
     else this.applyPreset(this.defaultPreset(), false);
-    this.hashSel = null; this.history = { undo: [], redo: [] };
+    this.hashSel = null; this.history = { undo: [], redo: [] }; this.refreshNote = '';
     this.afterChange(true);
   }
   defaultPreset() { return this.prefs.country === 'rs' && this.project.demo ? 'scandi' : 'light'; }
@@ -131,6 +135,30 @@ export class App {
     this.renderList();
     clearTimeout(this.rebuildTimer); this.rebuildTimer = window.setTimeout(() => { if (newViews) this.setView(this.viewIdx, true, true); else this.rebuild(); document.body.dataset.ready = '1'; }, 20);
     this.renderHistory();
+  }
+
+  // ---------- live prices ----------
+  private refreshing: AbortController | null = null;
+  private refreshNote = '';
+  /** Re-checks the current country's prices (IKEA live, other stores from the daily check) and keeps them in this browser. */
+  async refreshPrices() {
+    if (!this.ix || this.refreshing) return;
+    const id = this.prefs.country!, ctl = new AbortController();
+    this.refreshing = ctl; this.refreshNote = t('refresh.busy', { done: 0, total: '…' }); this.renderList();
+    const note = (s: string) => { this.refreshNote = s; const el = document.getElementById('refresh-note'); if (el) el.textContent = s; };
+    try {
+      const { updates, report } = await refreshPrices(this.ix.cat, today(), { signal: ctl.signal, onProgress: (done, total) => note(t('refresh.busy', { done, total })) });
+      if (this.prefs.country !== id || !this.ix) return;
+      savePriceUpdates(id, { ...loadPriceUpdates(id), ...updates });
+      this.ix = indexCatalog(applyUpdates(this.ix.cat, updates));
+      // a piece the store stopped selling is swapped for the cheapest one in its place
+      const sel = { ...this.sel };
+      for (const [slot, pid] of Object.entries(sel) as [SlotId, string][]) if (pid && !this.ix.byId.has(pid)) { const alt = (this.ix.bySlot.get(slot) || []).slice().sort((a, b) => a.price - b.price)[0]; if (alt) sel[slot] = alt.id; else delete sel[slot]; }
+      this.sel = fixDeps(sel, this.ix);
+      const msg = !report.live && report.failed ? t('refresh.fail') : report.changed ? t('refresh.done', { changed: report.changed, sales: report.newSales }) : t('refresh.none');
+      this.refreshNote = msg; toast(msg);
+    } catch { this.refreshNote = t('refresh.fail'); }
+    finally { if (this.refreshing === ctl) this.refreshing = null; this.afterChange(); }
   }
 
   // ---------- undo / redo ----------
@@ -264,6 +292,7 @@ export class App {
     const eur = C.eurRate ? `<span class="muted">${t('sum.approx', { v: money(Math.round(sum / C.eurRate), country('de'), localeOf()) })}</span>` : '';
     $('#summary').innerHTML = `<div class="total"><span>${t('sum.total')} <span class="muted">${this.preset !== 'custom' ? esc(t('sum.for', { name: tt('preset.' + this.preset) })) : esc(t('preset.custom'))}</span></span><b data-testid="total">${this.fmt(sum)}</b>${eur}</div>
       <p class="muted small">${esc(t('sum.stores', { list: stores.join(', ') }))}${promos ? ' · ' + esc(t('sum.promos', { n: promos })) : ''}</p>
+      <p class="refresh small"><button type="button" class="link" data-refresh ${this.refreshing ? 'disabled' : ''} title="${esc(t('refresh.how', { date: '' }))}">↻ ${esc(t('act.refresh'))}</button> <span class="muted" id="refresh-note">${esc(this.refreshNote)}</span></p>
       ${expired ? `<p class="warn small">${esc(t('sum.expired', { n: expired }))}</p>` : ''}
       <ul class="issues" data-testid="issues">${iss.length ? iss.map(i => `<li class="${i.hard ? 'hard' : 'soft'}"><a href="#slot-${i.slot}" data-goto="${i.slot}">${esc(t(('slot.' + i.slot) as Key))}</a>: ${esc(this.issueText(i))}</li>`).join('') : `<li class="ok">${esc(t('sum.fits'))}</li>`}</ul>`;
     const bySlot = new Map(ls.map(l => [l.slot, l]));
@@ -327,7 +356,7 @@ export class App {
     $('#presets').addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLElement>('button[data-k]'); if (b) this.applyPreset(b.dataset.k!); });
     $('#slots').addEventListener('change', e => { const s = e.target as HTMLSelectElement; if (s.dataset.slot) this.setSlot(s.dataset.slot as SlotId, s.value); });
     $('#slots').addEventListener('click', e => { const el = e.target as HTMLElement; if (el.closest('a,select')) return; const sl = el.closest<HTMLElement>('.slot'); if (sl) this.select(sl.dataset.slot as SlotId, true); });
-    $('#summary').addEventListener('click', e => { const a = (e.target as HTMLElement).closest<HTMLElement>('[data-goto]'); if (!a) return; e.preventDefault(); const s = a.dataset.goto as SlotId; document.getElementById('sel-' + s)?.focus(); this.select(s, true); });
+    $('#summary').addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-refresh]')) { this.refreshPrices(); return; } const a = (e.target as HTMLElement).closest<HTMLElement>('[data-goto]'); if (!a) return; e.preventDefault(); const s = a.dataset.goto as SlotId; document.getElementById('sel-' + s)?.focus(); this.select(s, true); });
     $('#card').addEventListener('click', e => { const el = e.target as HTMLElement; if (el.closest('[data-close]')) this.select(null, false); const alt = el.closest<HTMLElement>('[data-alt]'); if (alt && this.selected) this.setSlot(this.selected, alt.dataset.alt!);
       if (el.closest('[data-turn-piece]')) this.nudge(0, 0, true);
       const key = this.selected && moveKey(this.selected); if (el.closest('[data-reset-piece]') && key) this.movePiece(key, null); });

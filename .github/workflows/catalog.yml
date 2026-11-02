@@ -1,16 +1,28 @@
 name: Refresh catalogues
 
-# Prices change: once a week the IKEA catalogues for Germany and Austria are rebuilt from the live pages,
-# and every price in the hand-made Serbian catalogue is re-checked on its store page.
-# The unit tests validate the new data before a pull request is opened for review.
+# Prices change, sales start and end. Every morning each price in every catalogue is re-checked on the
+# store's own page (prices only, so product ids and saved choices stay valid). On Mondays the IKEA
+# catalogues (DE, AT, HR) are rebuilt from the live pages as well, which brings in new products.
+# The unit tests validate the new data; if they pass, the data is committed straight to main ("git scraping":
+# the history of every price stays in the repository) and the site is redeployed. The app's "Refresh prices"
+# button also reads these files from main, so an open page can pick up today's prices without a reload.
 on:
   schedule:
-    - cron: '0 5 * * 1'
+    - cron: '0 5 * * *'
   workflow_dispatch:
+    inputs:
+      rebuild:
+        description: 'Also rebuild the IKEA catalogues (new products)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
-  pull-requests: write
+  actions: write
+
+concurrency:
+  group: catalog
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -22,13 +34,26 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: node scripts/ikea-catalog.mjs de
-      - run: node scripts/ikea-catalog.mjs at
-      - run: node scripts/rs-prices.mjs
+      - name: Rebuild IKEA catalogues (Mondays, or when asked)
+        run: |
+          if [ "$(date -u +%u)" = "1" ] || [ "${{ inputs.rebuild }}" = "true" ]; then
+            node scripts/ikea-catalog.mjs de
+            node scripts/ikea-catalog.mjs at
+            node scripts/ikea-catalog.mjs hr
+          fi
+      - name: Re-check every price
+        run: |
+          for c in rs ba hr de at; do node scripts/prices.mjs $c; done
       - run: npm test
-      - uses: peter-evans/create-pull-request@v7
-        with:
-          branch: catalog-refresh
-          title: 'Refresh catalogues (DE, AT, RS prices)'
-          commit-message: 'data: refresh catalogues'
-          body: 'Automated weekly refresh: IKEA prices, sizes and colours for DE/AT, and re-checked prices for the Serbian catalogue. Unit tests passed on the new data.'
+      - name: Commit changed prices and redeploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git diff --quiet -- src/data/catalogs && { echo 'no price changes'; exit 0; }
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/data/catalogs
+          git commit -m "data: prices $(date -u +%F)"
+          git push
+          # pushes made with the workflow token do not start other workflows, so ask for the deploy explicitly
+          gh workflow run ci.yml --ref main
