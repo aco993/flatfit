@@ -98,14 +98,26 @@ export class Viewer {
   private async makeEnv() {
     const r = this.renderer, pm = new THREE.PMREMGenerator(r), P = pm as unknown as Record<string, any>, room = new RoomEnvironment();
     try {
-      P._setSize(256); const rt = P._allocateTargets(), prev = r.getRenderTarget(), cam = new THREE.PerspectiveCamera(90, 1, 0.1, 100);
-      const shaders = new THREE.Scene();
-      // PMREM's own plane geometry: an empty one would compile a different variant (no position attribute)
-      const geo = P._lodMeshes?.[1]?.geometry || new THREE.PlaneGeometry();
-      for (const m of [P._blurMaterial, P._ggxMaterial]) if (m) shaders.add(new THREE.Mesh(geo, m));
+      const prev = r.getRenderTarget(), cam = new THREE.PerspectiveCamera(90, 1, 0.1, 100), shaders = new THREE.Scene();
+      let rt: THREE.WebGLRenderTarget;
+      P._setSize(256);
+      if (P._allocateTargets) {
+        // three r186 and older: planar targets, filter materials made in the constructor.
+        // PMREM's own plane geometry: an empty one would compile a different variant (no position attribute)
+        rt = P._allocateTargets();
+        const geo = P._lodMeshes?.[1]?.geometry || new THREE.PlaneGeometry();
+        for (const m of [P._blurMaterial, P._ggxMaterial]) if (m) shaders.add(new THREE.Mesh(geo, m));
+      } else {
+        // r187+: cube targets, materials made on first use; run the passes with drawing switched off to create them
+        rt = P._allocateTarget();
+        const draw = P._renderCube; P._renderCube = () => undefined;
+        try { P._getSourceTarget(); P._applyPMREM(rt); P._blur(rt, 0.04); } finally { P._renderCube = draw; }
+        for (const m of [P._blurMaterial, P._ggxMaterial, P._integrationMaterial]) if (m) shaders.add(new THREE.Mesh(P._boxMesh.geometry, m));
+      }
+      if (!shaders.children.length) throw new Error('PMREM internals changed');
       r.setRenderTarget(rt); const ready = Promise.all([r.compileAsync(shaders, cam), r.compileAsync(room, cam)]); r.setRenderTarget(prev); rt.dispose();
       await ready;
-    } catch { /* private API changed: fall back to baking right away */ }
+    } catch (e) { if (import.meta.env.DEV) console.warn('PMREM warm-up skipped:', e); /* bake right away */ }
     this.scene.environment = pm.fromScene(room, 0.04).texture; pm.dispose(); this.recompile();
   }
   /** Prepare the shaders of objects that will be added later (decorative models), without drawing them. */
