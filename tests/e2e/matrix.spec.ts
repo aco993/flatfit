@@ -3,7 +3,7 @@ import LZString from 'lz-string';
 import { fromTemplate } from '../../src/data/templates';
 
 /**
- * The ten URL / device combinations that matter most: every market, every language, phone and dark mode,
+ * The ten URL / device combinations that matter most: every market, all five languages, phone and dark mode,
  * a link with moved furniture, a link that carries a whole floor plan, and a link that is broken on purpose.
  * Each one must load without errors, show a total in the right currency and never scroll sideways.
  */
@@ -21,9 +21,9 @@ const studio = (() => { const p = fromTemplate('studio', 'Linked studio', 'de');
 interface Case { name: string; hash: string; lang: string; currency: RegExp; country: string; phone?: boolean; dark?: boolean; extra?: (page: Page) => Promise<void> }
 const CASES: Case[] = [
   { name: 'Serbia · Serbian', hash: 'c=rs&l=sr', lang: 'sr-Latn', currency: /RSD/, country: 'rs' },
-  { name: 'Bosnia and Herzegovina · Serbian', hash: 'c=ba&l=sr', lang: 'sr-Latn', currency: /KM/, country: 'ba',
+  { name: 'Bosnia and Herzegovina · Bosnian', hash: 'c=ba&l=bs', lang: 'bs', currency: /\d\.\d{3},\d{2}\sKM/, country: 'ba',
     extra: async page => { await expect(page.locator('#slots .flag.est').first()).toBeVisible(); await expect(page.locator('#summary')).toContainText(/JYSK/); } },
-  { name: 'Croatia · English', hash: 'c=hr&l=en', lang: 'en', currency: /€/, country: 'hr', extra: async page => { await expect(page.locator('#summary')).toContainText('IKEA'); } },
+  { name: 'Croatia · Croatian', hash: 'c=hr&l=hr', lang: 'hr', currency: /€/, country: 'hr', extra: async page => { await expect(page.locator('#summary')).toContainText('Trgovine: IKEA'); await expect(page.locator('#sel-fridge')).toBeAttached(); await expect(page.locator('#slot-fridge label')).toContainText('Hladnjak'); } },
   { name: 'Germany · German', hash: 'c=de&l=de', lang: 'de', currency: /€/, country: 'de' },
   { name: 'Austria · English', hash: 'c=at&l=en', lang: 'en', currency: /€/, country: 'at' },
   { name: 'Bosnia and Herzegovina on a phone', hash: 'c=ba&l=en', lang: 'en', currency: /KM|BAM/, country: 'ba', phone: true },

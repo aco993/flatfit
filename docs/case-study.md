@@ -83,11 +83,16 @@ Final Lighthouse numbers on the same laptop:
 - total blocking time 370 ms on desktop;
 - layout shift 0.09.
 
+A second round, on the throttled mobile profile, took total blocking time from 9.2 s to 1.6 s and desktop to 94–96. The profile pointed at work that a small scene does not need: three.js tested every mesh's bounding sphere against the camera on every frame (the flat is always on screen, so culling is off), the shadow map was redrawn on every camera frame although only a rebuild or a drag changes it, the room labels read the canvas size from the DOM on every frame and so forced a layout after each list update, and 5 MB of decorative models (plants, a vase, the terrace set) were downloaded and parsed before anyone looked. They now load on the first interaction or when the page is idle, with textures at 512 px. The last layout shift came from the scrollbar appearing once the list rendered; reserving its gutter fixed it.
+
+### 6. A budget as a knapsack
+
+"Furnish this for 9,000 KM" is a multiple-choice knapsack: every slot picks one product (optional slots may stay empty), a pick costs what it adds to the shopping list including its dependents (a bed frame with its slatted base), and its value is the slot's typical price × log(cost), so the money goes where it shows and each extra mark on a slot is worth a little less. Dynamic programming over the budget in 600 steps solves it in milliseconds. Pieces chosen one by one can still clash (a wide fridge next to a long kitchen), so the result is run through the fit checks and any piece that breaks the plan falls back to the cheapest one that fits; if quantities push the real total over the budget, it solves again a little lower.
+
 ## What I would do next
 
 - L-shaped rooms as one room instead of two connected rectangles.
-- A budget goal (“furnish this for 3,000 €”) solved as a small knapsack over the catalogue.
-- Delivery and assembly costs per store, which change the real total by more than most product swaps.
+- Assembly costs per store, and delivery prices read from the stores that only show them in the basket.
 - Real user sessions: the feedback form in the app goes to GitHub issues.
 
 ## How it was built

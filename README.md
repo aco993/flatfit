@@ -7,7 +7,7 @@
 [![CodeQL](https://github.com/aco993/flatfit/actions/workflows/codeql.yml/badge.svg)](https://github.com/aco993/flatfit/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**[Live demo](https://aco993.github.io/flatfit/)** · English · Deutsch · Srpski · 🇷🇸 🇧🇦 🇭🇷 🇩🇪 🇦🇹
+**[Live demo](https://aco993.github.io/flatfit/)** · English · Deutsch · Srpski · Bosanski · Hrvatski · 🇷🇸 🇧🇦 🇭🇷 🇩🇪 🇦🇹
 
 ![FlatFit: dragging the sofa (red while it hits the coffee table, green by the wall), undo, switching to Germany, stepping into the living room](docs/demo.gif)
 
@@ -18,10 +18,10 @@
 | | |
 |---|---|
 | **Stack** | TypeScript (strict), three.js, three-gpu-pathtracer, Intel OIDN on WebGPU, Vite, Vitest, Playwright + axe-core, GitHub Actions, GitHub Pages |
-| **Size** | ~3,400 lines of TypeScript, no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
+| **Size** | ~3,900 lines of TypeScript, no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
 | **Data** | 5 markets, ~570 real products; every price re-checked daily by a GitHub Action and committed to git ([why](docs/adr/0002-static-site-git-scraped-prices.md)); IKEA prices checked live from the browser on request |
-| **Quality** | 106 unit tests, 40 end-to-end runs (8 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 75 / mobile 66, CodeQL, Dependabot |
-| **Hard parts** | GPU driver resets during path tracing, a cold-cache shader stall found with a CPU profile, collision checks on every pointer move, honest labelling of prices that cannot be checked automatically |
+| **Quality** | 141 unit tests, 41 end-to-end runs (9 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 94–96 / mobile 68–70, CodeQL, Dependabot |
+| **Hard parts** | GPU driver resets during path tracing, a cold-cache shader stall found with a CPU profile, collision checks on every pointer move, a budget solved as a multiple-choice knapsack, honest labelling of prices that cannot be checked automatically |
 
 I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue.
 
@@ -36,6 +36,9 @@ I built FlatFit while furnishing a small flat I rent out: I wanted to see what a
 - **Quantities and totals that match a real shopping trip.** Curtains per window (pairs count as one pack), worktop pieces to cover the kitchen length, two narrow slatted bases for a 160 cm bed, chairs only if the table set has none. Expired promotions fall back to the regular price.
 - **Looks and proposals.** Hand-picked looks for Serbia plus generated ones for every market (*cheapest that fits*, *best value light / warm / dark / colourful*), scored by price, colour family and fit.
 - **Photoreal render.** One click path-traces the current view on the GPU (three-gpu-pathtracer) and denoises it with Intel Open Image Denoise running as a neural network on WebGPU. Built to survive weak hardware (below).
+- **A budget.** Type an amount and the planner spends it where it shows: a multiple-choice knapsack over the catalogue (dynamic programming, value = typical price × log of what a slot costs), then the real total and the fit checks are recomputed. 9,000 KM for the demo flat adds a TV, an armchair, lamps and a bed with storage, and stays under the amount.
+- **Delivery, store by store.** Each store's published home-delivery terms (tiers by order value, free-delivery thresholds, per-appliance fees) give the total with delivery; stores that only show the price in the basket are named instead of guessed.
+- **A measuring sheet.** No exact measurements yet? Print the floor plan with every wall, door, window, radiator and socket numbered, and a table with the value in the plan and an empty column for what you measure.
 - **Share and export.** A link restores the country, language, flat, every chosen product and where you moved things; custom floor plans travel inside the link. Shopping list as CSV; print view.
 - **Accessible and responsive.** Keyboard shortcuts for everything, skip link, live regions, focus management in dialogs, reduced-motion support, light/dark theme, phone/tablet/desktop layouts.
 
@@ -59,13 +62,13 @@ Lighthouse on a laptop with Intel UHD graphics (real GPU, fresh browser profile,
 
 | | Before | After |
 |---|---|---|
-| Performance, desktop | 32 | **75** |
-| Performance, mobile (4× CPU throttling) | 15 | **66** |
-| Total blocking time, desktop | 2,440 ms | **370 ms** |
-| Layout shift (CLS), desktop | 0.89 | **0.09** |
+| Performance, desktop | 32 | **94–96** |
+| Performance, mobile (4× CPU throttling) | 15 | **68–70** |
+| Total blocking time, desktop · mobile | 2,440 ms · 9,160 ms | **160 ms · 1,600 ms** |
+| Layout shift (CLS), desktop | 0.89 | **0.05** |
 | Accessibility · best practices · SEO | 100 · 100 · 91 | **100 · 100 · 100** |
 
-What moved the numbers: space reserved for UI that fills in late, one scene build at startup instead of three, a geometry cache shared between builds, and above all **compiling shaders in parallel** (`KHR_parallel_shader_compile`) before the first frame. A CPU profile found the last 3-second freeze on a cold Windows shader cache: three's PMREM environment baking compiled its GGX filter twice, because the warm-up mesh had no position attribute and so compiled a different shader variant. Details in the [case study](docs/case-study.md).
+What moved the numbers: space reserved for UI that fills in late, one scene build at startup instead of three, a geometry cache shared between builds, and above all **compiling shaders in parallel** (`KHR_parallel_shader_compile`) before the first frame. A CPU profile found the last 3-second freeze on a cold Windows shader cache: three's PMREM environment baking compiled its GGX filter twice, because the warm-up mesh had no position attribute and so compiled a different shader variant. A second round on the throttled mobile profile took blocking time from 9.2 s to 1.6 s: the flat is drawn without per-frame frustum culling (it tested every mesh's bounding sphere on every frame), the shadow map is redrawn only when furniture changes, room labels use the size kept by a ResizeObserver instead of forcing a layout every frame, and the 3 MB of decorative models load on the first interaction or when the page is idle, with textures at 512 px. Reserving the scrollbar gutter removed the last layout shift. Details in the [case study](docs/case-study.md).
 
 ## Architecture
 
@@ -117,7 +120,7 @@ Adding a country: a catalogue JSON in `src/data/catalogs/`, an entry in `src/dat
 
 | Layer | Tool | What |
 |---|---|---|
-| Unit (106) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 5 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema, sale dates and estimates, live price refresh (stubbed network), translation key parity |
+| Unit (141) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 5 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema, sale dates and estimates, live price refresh (stubbed network), budget solver, delivery rules, measuring sheet, translation key parity and an ijekavian check for Bosnian and Croatian |
 | End to end | Playwright | persona journeys and a URL matrix, see below |
 | Accessibility | axe-core | WCAG 2 A/AA, no serious or critical violations |
 
@@ -130,8 +133,9 @@ Personas (`tests/e2e/personas.spec.ts`):
 - **Nina**, only a picture of her plan: loads it, sets the scale from the 8 m dimension line, draws the living room to it, saves; the picture never goes into share links.
 - **Sara**, rearranging: selects the sofa, drags it with the mouse into the coffee table, sees the warning, turns it with `T`, undoes everything with the button and Ctrl+Z, redoes with Ctrl+Y.
 - **Petra**, old laptop: starts a photoreal render, cancels it mid-way, the page stays usable.
+- **Emir** in Sarajevo, in Bosnian, 9,000 KM to spend: sets the budget, checks the total stays under it with nothing that does not fit, sees delivery store by store, and opens the measuring sheet.
 
-URL matrix (`tests/e2e/matrix.spec.ts`), in Chromium, Firefox and WebKit: every market and language, Bosnia on a phone, Croatia in dark mode, a link with moved furniture, a link carrying a whole floor plan, and a deliberately broken link. Each must load without console errors, show the total in the right currency and never scroll sideways. A separate test stubs IKEA's endpoint and checks that *Refresh prices* applies a new sale and remembers it after a reload.
+URL matrix (`tests/e2e/matrix.spec.ts`), in Chromium, Firefox and WebKit: every market and all five languages, Bosnia on a phone, Croatia in dark mode, a link with moved furniture, a link carrying a whole floor plan, and a deliberately broken link. Each must load without console errors, show the total in the right currency and never scroll sideways. A separate test stubs IKEA's endpoint and checks that *Refresh prices* applies a new sale and remembers it after a reload.
 
 CI (`.github/workflows/ci.yml`): typecheck → unit tests → build → Playwright (Chromium, Firefox, WebKit) → deploy to GitHub Pages on `main`. CodeQL scans the code weekly and on every pull request; Dependabot proposes dependency updates monthly.
 
@@ -153,7 +157,7 @@ npm run build && npx playwright test
 - Room shapes are rectangles (L-shapes are built from several rooms with open connections).
 - The planner is rule-based; it proposes, you drag things where you want them. Fit checks use the plan, not a laser measure.
 - Prices are at most a day old (IKEA: live on *Refresh prices*); stores behind a bot challenge are checked by hand, and the app shows the date.
-- The interface is in English, German and Serbian (ekavian); Bosnian and Croatian visitors get the Serbian text.
+- The interface is in English, German, Serbian, Bosnian and Croatian. Croatian is a layer over Bosnian with only the words that differ (hladnjak, kupaonica, tlocrt), and a unit test fails if an ekavian word slips into either.
 
 Tried it on your flat? [Send feedback](https://github.com/aco993/flatfit/issues/new?template=feedback.yml) — what was unclear or missing helps most.
 

@@ -82,11 +82,11 @@ test.describe('Mira · uses only the keyboard and a screen reader', () => {
     await expect(help).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(help).toBeHidden();
-    await page.locator('body').press('l');
-    await expect(page.locator('html')).toHaveAttribute('lang', 'de');
-    await page.locator('body').press('l');
-    await page.locator('body').press('l');
-    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    // L cycles the five languages
+    for (const lang of ['de', 'sr-Latn', 'bs', 'hr', 'en']) {
+      await page.locator('body').press('l');
+      await expect(page.locator('html')).toHaveAttribute('lang', lang);
+    }
     const scan = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).exclude('#viewer canvas').analyze();
     const serious = scan.violations.filter(v => v.impact === 'serious' || v.impact === 'critical');
     expect(serious.map(v => `${v.id}: ${v.nodes.map(n => n.target.join(' ')).slice(0, 3).join(' | ')}`)).toEqual([]);
@@ -246,5 +246,29 @@ test.describe('Nina · has only a picture of her floor plan', () => {
     // the picture stays with the flat but never goes into a share link
     const shared = await page.evaluate(() => (window as any).flatfit.shareUrl());
     expect(shared.length).toBeLessThan(4000);
+  });
+});
+
+test.describe('Emir · Sarajevo, 9,000 KM to spend, no measurements yet', () => {
+  test.use({ locale: 'bs-BA' });
+  test('sets a budget, sees delivery, and opens a measuring sheet to take to the flat', async ({ page, context }) => {
+    await page.goto('./#c=ba&l=bs');
+    await ready(page);
+    const start = num(await total(page));
+    await page.getByLabel('Budžet').fill('9000');
+    await page.getByRole('button', { name: 'Opremi za ovoliko' }).click();
+    await expect(page.locator('#summary')).toContainText('do 9.000');
+    const spent = num(await total(page));
+    expect(spent).toBeLessThanOrEqual(9000); expect(spent).toBeGreaterThan(start);
+    await expect(page.getByTestId('issues').locator('li.hard')).toHaveCount(0);
+    // delivery is shown store by store (JYSK free above 600 KM, Technoshop 10 KM)
+    await expect(page.locator('.delivery')).toContainText('besplatna dostava: JYSK');
+    // the measuring sheet opens in a new tab with a row for the entrance
+    await page.getByRole('button', { name: 'Uredi osnovu stana' }).click();
+    const [sheet] = await Promise.all([context.waitForEvent('page'), page.getByRole('button', { name: /List za mjerenje/ }).click()]);
+    await sheet.waitForLoadState();
+    await expect(sheet.locator('h1')).toContainText('List za mjerenje');
+    await expect(sheet.locator('td', { hasText: 'Ulazna vrata · zid dolje · širina' })).toBeVisible();
+    await expect(sheet.locator('svg rect.room')).toHaveCount(6);
   });
 });

@@ -1,6 +1,9 @@
 import type { Lang } from './types';
 
 const en = {
+  'del.line': 'Delivery ≈ {v}', 'del.from': 'Delivery from {v}', 'del.free': 'free delivery: {stores}', 'del.unknown': '{stores}: delivery price in the basket', 'del.total': 'with delivery ≈ {v}',
+  'budget.label': 'Budget', 'budget.go': 'Furnish for this', 'preset.budget': 'within {v}', 'budget.done': 'Best setup for {b}: {v}.', 'budget.min': 'The cheapest setup that fits costs {v}; showing that instead.',
+  'ms.btn': 'Measuring sheet', 'ms.title': 'Measuring sheet · {name}', 'ms.intro': 'Measure each room wall to wall at floor level, above the skirting board. Write what you measure next to the value in the plan, then type it into the floor-plan editor: every fit check uses these numbers.', 'ms.what': 'What to measure', 'ms.plan': 'In the plan', 'ms.real': 'Measured', 'ms.flat': 'Whole flat', 'ms.width': 'Width (left to right)', 'ms.depth': 'Depth (top to bottom)', 'ms.ceiling': 'Ceiling height', 'ms.wall': '{side} wall', 'ms.fromLeft': 'distance from the left corner', 'ms.fromTop': 'distance from the top corner', 'ms.size': 'width', 'ms.sill': 'sill height from the floor', 'ms.print': 'Print', 'ms.tip': 'Tip: measure every wall twice, at the floor and at hip height; walls are rarely perfectly straight, and the smaller number is the one that counts.',
   'app.tagline': 'Furnish a flat in 3D with real furniture from local stores',
   'skip': 'Skip to the shopping list', 'list.label': 'Shopping list',
   'nav.project': 'Apartment', 'nav.country': 'Country', 'nav.lang': 'Language', 'nav.theme': 'Switch light or dark theme', 'nav.help': 'Keyboard shortcuts and help',
@@ -66,6 +69,9 @@ const en = {
 export type Key = keyof typeof en;
 
 const de: Record<Key, string> = {
+  'del.line': 'Lieferung ≈ {v}', 'del.from': 'Lieferung ab {v}', 'del.free': 'Lieferung gratis: {stores}', 'del.unknown': '{stores}: Lieferpreis im Warenkorb', 'del.total': 'mit Lieferung ≈ {v}',
+  'budget.label': 'Budget', 'budget.go': 'Dafür einrichten', 'preset.budget': 'bis {v}', 'budget.done': 'Beste Einrichtung für {b}: {v}.', 'budget.min': 'Die günstigste passende Einrichtung kostet {v}; sie wird stattdessen gezeigt.',
+  'ms.btn': 'Aufmaßblatt', 'ms.title': 'Aufmaßblatt · {name}', 'ms.intro': 'Jeden Raum von Wand zu Wand in Bodenhöhe über der Fußleiste messen. Den gemessenen Wert neben den Wert im Plan schreiben und dann im Grundriss-Editor eintragen: Alle Passprüfungen rechnen mit diesen Zahlen.', 'ms.what': 'Was messen', 'ms.plan': 'Im Plan', 'ms.real': 'Gemessen', 'ms.flat': 'Ganze Wohnung', 'ms.width': 'Breite (links nach rechts)', 'ms.depth': 'Tiefe (oben nach unten)', 'ms.ceiling': 'Deckenhöhe', 'ms.wall': 'Wand {side}', 'ms.fromLeft': 'Abstand von der linken Ecke', 'ms.fromTop': 'Abstand von der oberen Ecke', 'ms.size': 'Breite', 'ms.sill': 'Brüstungshöhe vom Boden', 'ms.print': 'Drucken', 'ms.tip': 'Tipp: Jede Wand zweimal messen, am Boden und in Hüfthöhe; Wände sind selten ganz gerade, und es zählt der kleinere Wert.',
   'app.tagline': 'Wohnung in 3D einrichten – mit echten Möbeln aus Läden vor Ort',
   'skip': 'Zur Einkaufsliste springen', 'list.label': 'Einkaufsliste',
   'nav.project': 'Wohnung', 'nav.country': 'Land', 'nav.lang': 'Sprache', 'nav.theme': 'Helles oder dunkles Design', 'nav.help': 'Tastenkürzel und Hilfe',
@@ -130,6 +136,9 @@ const de: Record<Key, string> = {
 };
 
 const sr: Record<Key, string> = {
+  'del.line': 'Dostava ≈ {v}', 'del.from': 'Dostava od {v}', 'del.free': 'besplatna dostava: {stores}', 'del.unknown': '{stores}: cena dostave u korpi', 'del.total': 'sa dostavom ≈ {v}',
+  'budget.label': 'Budžet', 'budget.go': 'Opremi za ovoliko', 'preset.budget': 'do {v}', 'budget.done': 'Najbolje opremanje za {b}: {v}.', 'budget.min': 'Najjeftinije opremanje koje staje košta {v}; prikazujem njega.',
+  'ms.btn': 'List za merenje', 'ms.title': 'List za merenje · {name}', 'ms.intro': 'Izmeri svaku prostoriju od zida do zida, pri podu iznad lajsne. Upiši izmereno pored vrednosti iz plana, pa to unesi u uređivač osnove: sve provere da li nameštaj staje koriste ove brojeve.', 'ms.what': 'Šta meriti', 'ms.plan': 'U planu', 'ms.real': 'Izmereno', 'ms.flat': 'Ceo stan', 'ms.width': 'Širina (levo–desno)', 'ms.depth': 'Dubina (gore–dole)', 'ms.ceiling': 'Visina plafona', 'ms.wall': 'zid {side}', 'ms.fromLeft': 'udaljenost od levog ugla', 'ms.fromTop': 'udaljenost od gornjeg ugla', 'ms.size': 'širina', 'ms.sill': 'visina parapeta od poda', 'ms.print': 'Štampaj', 'ms.tip': 'Savet: svaki zid izmeri dva puta, pri podu i u visini kukova; zidovi retko budu potpuno ravni, a važi manji broj.',
   'app.tagline': 'Opremi stan u 3D-u pravim nameštajem iz lokalnih radnji',
   'skip': 'Preskoči na spisak za kupovinu', 'list.label': 'Spisak za kupovinu',
   'nav.project': 'Stan', 'nav.country': 'Država', 'nav.lang': 'Jezik', 'nav.theme': 'Svetla ili tamna tema', 'nav.help': 'Prečice i pomoć',
@@ -193,9 +202,120 @@ const sr: Record<Key, string> = {
   'misc.footer': 'Otvoreni kod. Cene nameštaja su onakve kakve su radnje objavile na dan provere; nije povezano ni sa jednom radnjom.',
 };
 
-export const DICT: Record<Lang, Record<Key, string>> = { en, de, sr };
+/** Bosnian (ijekavian, Latin script). Croatian below only changes the words that differ. */
+const bs: Record<Key, string> = {
+  'del.line': 'Dostava ≈ {v}', 'del.from': 'Dostava od {v}', 'del.free': 'besplatna dostava: {stores}', 'del.unknown': '{stores}: cijena dostave u korpi', 'del.total': 'sa dostavom ≈ {v}',
+  'budget.label': 'Budžet', 'budget.go': 'Opremi za ovoliko', 'preset.budget': 'do {v}', 'budget.done': 'Najbolje opremanje za {b}: {v}.', 'budget.min': 'Najjeftinije opremanje koje staje košta {v}; prikazujem njega.',
+  'ms.btn': 'List za mjerenje', 'ms.title': 'List za mjerenje · {name}', 'ms.intro': 'Izmjeri svaku prostoriju od zida do zida, pri podu iznad lajsne. Upiši izmjereno pored vrijednosti iz plana, pa to unesi u uređivač osnove: sve provjere da li namještaj staje koriste ove brojeve.', 'ms.what': 'Šta mjeriti', 'ms.plan': 'U planu', 'ms.real': 'Izmjereno', 'ms.flat': 'Cijeli stan', 'ms.width': 'Širina (lijevo–desno)', 'ms.depth': 'Dubina (gore–dolje)', 'ms.ceiling': 'Visina plafona', 'ms.wall': 'zid {side}', 'ms.fromLeft': 'udaljenost od lijevog ugla', 'ms.fromTop': 'udaljenost od gornjeg ugla', 'ms.size': 'širina', 'ms.sill': 'visina parapeta od poda', 'ms.print': 'Štampaj', 'ms.tip': 'Savjet: svaki zid izmjeri dva puta, pri podu i u visini kukova; zidovi rijetko budu potpuno ravni, a važi manji broj.',
+  'app.tagline': 'Opremi stan u 3D-u pravim namještajem iz lokalnih radnji',
+  'skip': 'Preskoči na spisak za kupovinu', 'list.label': 'Spisak za kupovinu',
+  'nav.project': 'Stan', 'nav.country': 'Država', 'nav.lang': 'Jezik', 'nav.theme': 'Svijetla ili tamna tema', 'nav.help': 'Prečice i pomoć',
+  'nav.new': 'Novi stan…', 'nav.edit': 'Uredi osnovu stana', 'nav.projects': 'Moji stanovi',
+  'country.rs': 'Srbija', 'country.ba': 'Bosna i Hercegovina', 'country.hr': 'Hrvatska', 'country.de': 'Njemačka', 'country.at': 'Austrija',
+  'room.living': 'Dnevna soba', 'room.kitchen': 'Kuhinja', 'room.dining': 'Trpezarija i ulaz', 'room.bedroom': 'Spavaća soba', 'room.bathroom': 'Kupatilo', 'room.hall': 'Hodnik', 'room.terrace': 'Terasa',
+  'group.kitchen': 'Kuhinja', 'group.dining': 'Trpezarija', 'group.living': 'Dnevna soba', 'group.bedroom': 'Spavaća soba', 'group.bathroom': 'Kupatilo', 'group.hall': 'Ulaz', 'group.terrace': 'Terasa', 'group.textiles': 'Zavjese i rasvjeta',
+  'slot.kitchen': 'Kuhinjski elementi', 'slot.worktop': 'Radna ploča', 'slot.sink': 'Sudopera', 'slot.faucet': 'Slavina za sudoperu', 'slot.hob': 'Ploča za kuhanje', 'slot.oven': 'Rerna', 'slot.hood': 'Aspirator', 'slot.fridge': 'Frižider',
+  'slot.table': 'Trpezarijski stol', 'slot.chairs': 'Stolice', 'slot.sofa': 'Sofa', 'slot.armchair': 'Fotelja', 'slot.coffee': 'Klub stolić', 'slot.tvunit': 'TV komoda', 'slot.tv': 'Televizor', 'slot.rug': 'Tepih', 'slot.floorlamp': 'Podna lampa',
+  'slot.bed': 'Krevet', 'slot.base': 'Podnica', 'slot.mattress': 'Madrac', 'slot.wardrobe': 'Ormar', 'slot.night': 'Noćni ormarići', 'slot.lamps': 'Stolne lampe',
+  'slot.washer': 'Veš mašina', 'slot.hall': 'Cipelar', 'slot.hooks': 'Čiviluk', 'slot.terrace': 'Set za terasu', 'slot.curtains': 'Zavjese', 'slot.rods': 'Karnišne', 'slot.pendant': 'Lusteri',
+  'view.overview': 'Cijeli stan', 'view.label': 'Pogled kamere',
+  'preset.label': 'Gotovi stilovi', 'preset.scandi': 'Svijetli skandi', 'preset.japandi': 'Topli japandi', 'preset.urban': 'Urbani kontrast', 'preset.sand': 'Sivi hrast i pijesak', 'preset.blue': 'Plavi akcenat',
+  'preset.cheap': 'Najjeftinije što staje', 'preset.light': 'Najpovoljnije · svijetlo', 'preset.warm': 'Najpovoljnije · toplo', 'preset.dark': 'Najpovoljnije · tamno', 'preset.color': 'Najpovoljnije · u boji', 'preset.custom': 'Tvoj izbor',
+  'sum.total': 'Ukupno', 'sum.for': 'za „{name}“', 'sum.approx': '≈ {v}', 'sum.stores': 'Radnje: {list}', 'sum.promos': '{n} stavki na akciji', 'sum.expired': '{n} akcija je isteklo, računata je redovna cijena', 'sum.fits': 'Sve staje u osnovu stana.', 'sum.checked': 'Cijene provjerene {date}',
+  'issue.kitchenRun': 'Kuhinji i frižideru treba {need} cm, a zid ima {have} cm.',
+  'issue.wall': 'Treba {need} cm zida, a slobodno je {have} cm.',
+  'issue.noWall': 'U ovoj prostoriji nema slobodnog zida za to.',
+  'issue.passage': 'Između ormara i kreveta ostaje samo {have} cm prolaza (udobno je 60 cm).',
+  'issue.bedGroup': 'Krevetu i dva noćna ormarića treba {need} cm, a zid ima {have} cm.',
+  'issue.bedFoot': 'Od zida uz uzglavlje do suprotnog zida je samo {have} cm; krevetu i prolazu treba {need} cm.',
+  'issue.livingDepth': 'Sofi, klub stoliću i TV komodi treba {need} cm dubine sobe, a ima {have} cm.',
+  'issue.tableZone': 'Stol je {over} cm predugačak za prostor oko njega.',
+  'issue.terrace': 'Set za terasu je {over} cm prevelik.',
+  'issue.needsWorktop': 'Ova kuhinja se prodaje bez radne ploče; izaberi ploču.', 'issue.needsBase': 'Ovaj krevet se prodaje bez podnice; izaberi podnicu.', 'issue.needsChairs': 'Stol se prodaje bez stolica; izaberi stolice.',
+  'issue.mattressSize': 'Širina madraca ({mattress} cm) ne odgovara krevetu ({bed} cm).',
+  'issue.soft': 'Na granici, izmjeri: ', 'issue.hard': 'Ne staje: ',
+  'issue.outside': 'Stoji van stana ili u zidu.', 'issue.overlap': 'Zalazi {over} cm u: {other}.', 'issue.door': 'Zaklanja vrata.',
+  'fixture.wc': 'WC šolja', 'fixture.vanity': 'lavabo', 'fixture.shower': 'tuš',
+  'item.moveHint': 'Prevuci ga u 3D prikazu da ga pomjeriš. T ga okreće, Shift + strelice ga pomjeraju.', 'item.turn': 'Okreni za 90°', 'item.priceFrom': 'cijena od {date}', 'item.checkedHand': 'Ova radnja blokira automatske provjere; cijena je provjerena ručno.', 'sum.handChecked': '({stores}: provjereno ručno, {date})', 'item.resetPos': 'Vrati na predloženo mjesto',
+  'act.undo': 'Poništi', 'act.redo': 'Vrati', 'act.undone': 'Poništeno', 'act.redone': 'Vraćeno',
+  'act.refresh': 'Osvježi cijene', 'refresh.busy': 'Provjeravam cijene… {done} od {total}', 'refresh.done': 'Promijenjeno cijena: {changed}, novih akcija: {sales}.', 'refresh.none': 'Sve cijene su ažurne.', 'refresh.fail': 'Radnje trenutno nisu dostupne. Pokušaj kasnije.', 'refresh.how': 'IKEA se provjerava uživo u pregledniku; ostale radnje iz dnevne provjere{date}.', 'refresh.live': 'provjereno uživo {date}', 'help.move': 'Okreni / pomjeri izabrani komad', 'help.undo': 'Poništi / vrati',
+  'item.open': 'Otvori u radnji', 'item.none': '— bez —', 'item.units': '{n} ×', 'item.until': 'akcija do {date}', 'item.ended': 'akcija istekla {date}', 'item.estimate': 'procjena', 'item.storeOnly': 'samo u prodavnici', 'item.alt': 'Druge mogućnosti za ovo mjesto', 'item.close': 'Zatvori', 'item.pick': 'Klikni na namještaj u 3D-u ili na red u spisku.', 'item.choose': 'Izaberi: {slot}',
+  'act.share': 'Kopiraj link do ovog izbora', 'act.copied': 'Link kopiran', 'act.csv': 'Preuzmi spisak za kupovinu (CSV)', 'act.print': 'Štampaj',
+  'render.btn': 'Fotorealistična slika', 'render.title': 'Fotorealistična slika', 'render.quality': 'Kvalitet',
+  'render.q.fast': 'Brzo', 'render.q.balanced': 'Uravnoteženo', 'render.q.high': 'Visoko',
+  'render.q.fast.d': 'manja slika, oko 1 min na laptopu', 'render.q.balanced.d': 'dobro za većinu računara', 'render.q.high.d': 'velika i čista, za jake grafičke kartice',
+  'render.start': 'Pokreni', 'render.finish': 'Završi sada', 'render.cancel': 'Otkaži', 'render.save': 'Sačuvaj sliku', 'render.again': 'Ponovo', 'render.close': 'Zatvori',
+  'render.scene': 'Pripremam scenu…', 'render.compile': 'Pripremam grafičku karticu ({s} s). Prvi put traje 1–3 minute; stranica radi normalno.',
+  'render.samples': 'Računam svjetlo: {n} / {t} prolaza{eta}. Već od 10 prolaza slika je upotrebljiva.', 'render.eta': ' · još oko {s} s',
+  'render.recover': 'Grafička kartica se resetovala, pokrećem ponovo u manjim dijelovima ({a}/2)…', 'render.denoise': 'Uklanjam šum…',
+  'render.done': 'Gotovo: {n} prolaza za {s} s, šum uklonjen pomoću {how}.', 'render.how.oidn': 'Intel Open Image Denoise', 'render.how.filter': 'jednostavnog filtera (nema WebGPU)',
+  'render.fail': 'Slika nije završena na ovom uređaju: {e}', 'render.cancelled': 'Otkazano.', 'render.tooEarly': 'Zaustavljeno prije prvog prolaza; sačekaj da se pojavi „Računam svjetlo“.',
+  'render.note': 'Svjetlo se računa zrak po zrak na tvojoj grafičkoj kartici (path tracing). Esc otkazuje u bilo kom trenutku.',
+  'editor.title': 'Osnova stana', 'editor.add': 'Dodaj prostoriju', 'editor.delete': 'Obriši prostoriju', 'editor.type': 'Vrsta prostorije', 'editor.name': 'Naziv (nije obavezno)',
+  'editor.x': 'X (m)', 'editor.z': 'Y (m)', 'editor.w': 'Širina (m)', 'editor.d': 'Dubina (m)', 'editor.area': 'Površina', 'editor.total': 'Ukupna površina: {a} m²',
+  'editor.openings': 'Vrata i prozori', 'editor.addOpening': 'Dodaj', 'editor.kind': 'Vrsta', 'editor.side': 'Zid', 'editor.at': 'Od ugla (m)', 'editor.width': 'Širina (m)', 'editor.removeOpening': 'Ukloni',
+  'kind.door': 'Vrata', 'kind.entry': 'Ulazna vrata', 'kind.window': 'Prozor', 'kind.balcony': 'Balkonska vrata',
+  'editor.wallItems': 'Radijatori i TV utičnica', 'editor.addWallItem': 'Dodaj radijator ili utičnicu', 'editor.wiHint': 'Planer ne stavlja ormare ni kuhinju ispred radijatora, a TV stavlja kod utičnice.', 'bd.title': 'Slika osnove za precrtavanje', 'bd.load': 'Učitaj sliku (PNG, JPG)', 'bd.hint': 'Učitaj fotografiju ili snimak ekrana osnove, podesi razmjeru, pa preko nje nacrtaj prostorije. Za PDF napravi snimak ekrana.', 'bd.opacity': 'Vidljivost', 'bd.width': 'Širina slike (m)', 'bd.move': 'Pomjeri sliku', 'bd.measure': 'Podesi razmjeru', 'bd.remove': 'Ukloni sliku', 'bd.calHint': 'Klikni dvije tačke na slici čiju stvarnu udaljenost znaš, na primjer krajeve zida čija je dužina upisana na planu.', 'bd.calDist': 'Stvarna udaljenost (m)', 'bd.apply': 'Primijeni razmjeru', 'bd.done': 'Razmjera podešena: slika je široka {w} m.', 'bd.fail': 'Ova slika se ne može pročitati.', 'wi.radiator': 'Radijator', 'wi.tv': 'TV / internet utičnica', 'issue.radiator': 'Stoji ispred radijatora.',
+  'side.n': 'Gore', 'side.s': 'Dolje', 'side.w': 'Lijevo', 'side.e': 'Desno',
+  'editor.open': 'Bez zida prema', 'editor.save': 'Sačuvaj i prikaži u 3D-u', 'editor.cancel': 'Otkaži', 'editor.wallH': 'Visina plafona (m)', 'editor.projectName': 'Naziv stana',
+  'editor.hint': 'Prevuci prostoriju da je pomjeriš, prevuci ugao da promijeniš veličinu. Strelice pomjeraju za 5 cm, Shift+strelice mijenjaju veličinu.',
+  'editor.overlap': 'Prostorije se preklapaju: {a} i {b}.', 'editor.noWall': 'Otvor nije na zidu: {id}.', 'editor.noRooms': 'Dodaj barem jednu prostoriju.',
+  'tpl.title': 'Počni od', 'tpl.empty': 'Prazna osnova', 'tpl.studio': 'Garsonjera, 28 m²', 'tpl.tworoom': 'Dvosoban stan, 56 m²', 'tpl.demo': 'Kopija demo stana',
+  'proj.demo': 'Demo · dvosoban stan · 44,6 m²', 'proj.untitled': 'Moj stan', 'proj.rename': 'Preimenuj', 'proj.duplicate': 'Napravi kopiju', 'proj.delete': 'Obriši', 'proj.export': 'Izvezi (JSON)', 'proj.import': 'Uvezi (JSON)',
+  'proj.confirmDelete': 'Obrisati „{name}“? Ovo se ne može vratiti.', 'proj.demoCopy': 'Demo ostaje isti; tvoje izmjene se čuvaju kao kopija.', 'proj.imported': 'Stan je uvezen', 'proj.importFail': 'Ovaj fajl nije FlatFit stan.',
+  'help.title': 'Prečice na tastaturi', 'help.views': 'Promijeni pogled kamere', 'help.look': 'Razgledanje / okretanje', 'help.zoom': 'Zum', 'help.render': 'Fotorealistična slika', 'help.edit': 'Uredi osnovu stana', 'help.lang': 'Sljedeći jezik', 'help.esc': 'Zatvori, otkaži, poništi izbor', 'help.help': 'Ova pomoć',
+  'help.about': 'Cijene i mjere su sa stranica radnji. Klikni na namještaj u 3D-u da vidiš šta je i da ga zamijeniš. Provjera da li staje koristi osnovu stana, zato izmjeri prije kupovine.',
+  'misc.loading': 'Učitavam…', 'misc.catalogFail': 'Katalog proizvoda se nije mogao učitati.', 'misc.noWebgl': 'Ovaj preglednik ne može prikazati 3D (WebGL je isključen).', 'misc.area': '{a} m²',
+  'misc.feedback': 'Pošalji utisak', 'misc.source': 'Izvorni kod',
+  'misc.footer': 'Otvoreni kod. Cijene namještaja su onakve kakve su radnje objavile na dan provjere; nije povezano ni sa jednom radnjom.',
+};
+
+/** Croatian: Bosnian with the Croatian words for the same things (hladnjak, kupaonica, tlocrt, …). */
+const hr: Record<Key, string> = {
+  ...bs,
+  'del.unknown': '{stores}: cijena dostave u košarici', 'del.total': 's dostavom ≈ {v}',
+  'budget.min': 'Najjeftinije opremanje koje stane košta {v}; prikazujem njega.',
+  'ms.intro': 'Izmjeri svaku prostoriju od zida do zida, pri podu iznad lajsne. Upiši izmjereno pored vrijednosti iz plana, pa to unesi u uređivač tlocrta: sve provjere stane li namještaj koriste ove brojeve.', 'ms.what': 'Što mjeriti', 'ms.ceiling': 'Visina stropa', 'ms.fromLeft': 'udaljenost od lijevog kuta', 'ms.fromTop': 'udaljenost od gornjeg kuta', 'ms.print': 'Ispiši', 'ms.tip': 'Savjet: svaki zid izmjeri dvaput, pri podu i u visini bokova; zidovi rijetko budu potpuno ravni, a vrijedi manji broj.',
+  'app.tagline': 'Opremi stan u 3D-u pravim namještajem iz lokalnih trgovina',
+  'skip': 'Preskoči na popis za kupnju', 'list.label': 'Popis za kupnju', 'nav.help': 'Prečaci i pomoć', 'nav.edit': 'Uredi tlocrt',
+  'room.living': 'Dnevni boravak', 'room.dining': 'Blagovaonica i ulaz', 'room.bathroom': 'Kupaonica',
+  'group.dining': 'Blagovaonica', 'group.living': 'Dnevni boravak', 'group.bathroom': 'Kupaonica',
+  'slot.sink': 'Sudoper', 'slot.faucet': 'Slavina za sudoper', 'slot.oven': 'Pećnica', 'slot.hood': 'Napa', 'slot.fridge': 'Hladnjak',
+  'slot.table': 'Blagovaonski stol', 'slot.coffee': 'Stolić za kavu', 'slot.tvunit': 'TV element', 'slot.washer': 'Perilica rublja', 'slot.hall': 'Ormarić za cipele', 'slot.hooks': 'Vješalica', 'slot.pendant': 'Stropna rasvjeta',
+  'preset.blue': 'Plavi naglasak', 'preset.custom': 'Tvoj odabir',
+  'sum.stores': 'Trgovine: {list}', 'sum.fits': 'Sve stane u tlocrt.',
+  'issue.kitchenRun': 'Kuhinji i hladnjaku treba {need} cm, a zid ima {have} cm.',
+  'issue.livingDepth': 'Sofi, stoliću za kavu i TV elementu treba {need} cm dubine sobe, a ima {have} cm.',
+  'issue.needsWorktop': 'Ova kuhinja se prodaje bez radne ploče; odaberi ploču.', 'issue.needsBase': 'Ovaj krevet se prodaje bez podnice; odaberi podnicu.', 'issue.needsChairs': 'Stol se prodaje bez stolica; odaberi stolice.',
+  'issue.hard': 'Ne stane: ', 'issue.outside': 'Stoji izvan stana ili u zidu.',
+  'fixture.wc': 'WC školjka', 'fixture.vanity': 'umivaonik',
+  'item.checkedHand': 'Ova trgovina blokira automatske provjere; cijena je provjerena ručno.',
+  'refresh.fail': 'Trgovine trenutno nisu dostupne. Pokušaj kasnije.', 'refresh.how': 'IKEA se provjerava uživo u pregledniku; ostale trgovine iz dnevne provjere{date}.', 'help.move': 'Okreni / pomakni odabrani komad',
+  'item.moveHint': 'Povuci ga u 3D prikazu da ga pomakneš. T ga okreće, Shift + strelice ga pomiču.',
+  'item.open': 'Otvori u trgovini', 'item.storeOnly': 'samo u trgovini', 'item.pick': 'Klikni na namještaj u 3D-u ili na redak u popisu.', 'item.choose': 'Odaberi: {slot}',
+  'act.share': 'Kopiraj poveznicu na ovaj odabir', 'act.copied': 'Poveznica kopirana', 'act.csv': 'Preuzmi popis za kupnju (CSV)', 'act.print': 'Ispiši',
+  'render.quality': 'Kvaliteta', 'render.q.balanced.d': 'dobro za većinu računala', 'render.save': 'Spremi sliku', 'render.cancel': 'Odustani',
+  'render.recover': 'Grafička kartica se resetirala, pokrećem ponovno u manjim dijelovima ({a}/2)…', 'render.again': 'Ponovno',
+  'render.note': 'Svjetlo se računa zraku po zraku na tvojoj grafičkoj kartici (path tracing). Esc prekida u bilo kojem trenutku.',
+  'editor.title': 'Tlocrt', 'editor.delete': 'Izbriši prostoriju', 'editor.at': 'Od kuta (m)', 'editor.save': 'Spremi i prikaži u 3D-u', 'editor.cancel': 'Odustani', 'editor.wallH': 'Visina stropa (m)',
+  'editor.wiHint': 'Planer ne stavlja ormare ni kuhinju ispred radijatora, a TV stavlja kod utičnice.',
+  'editor.hint': 'Povuci prostoriju da je pomakneš, povuci kut da promijeniš veličinu. Strelice pomiču za 5 cm, Shift+strelice mijenjaju veličinu.',
+  'bd.title': 'Slika tlocrta za precrtavanje', 'bd.hint': 'Učitaj fotografiju ili snimku zaslona tlocrta, podesi mjerilo, pa preko nje nacrtaj prostorije. Za PDF napravi snimku zaslona.',
+  'bd.move': 'Pomakni sliku', 'bd.measure': 'Podesi mjerilo', 'bd.calHint': 'Klikni dvije točke na slici čiju stvarnu udaljenost znaš, na primjer krajeve zida čija je duljina upisana na planu.', 'bd.apply': 'Primijeni mjerilo', 'bd.done': 'Mjerilo podešeno: slika je široka {w} m.',
+  'tpl.empty': 'Prazan tlocrt', 'tpl.studio': 'Garsonijera, 28 m²', 'tpl.tworoom': 'Dvosobni stan, 56 m²',
+  'proj.demo': 'Demo · dvosobni stan · 44,6 m²', 'proj.delete': 'Izbriši', 'proj.confirmDelete': 'Izbrisati „{name}“? Ovo se ne može poništiti.', 'proj.demoCopy': 'Demo ostaje isti; tvoje izmjene se spremaju kao kopija.', 'proj.importFail': 'Ova datoteka nije FlatFit stan.',
+  'help.title': 'Prečaci na tipkovnici', 'help.edit': 'Uredi tlocrt', 'help.esc': 'Zatvori, odustani, poništi odabir',
+  'help.about': 'Cijene i mjere su sa stranica trgovina. Klikni na namještaj u 3D-u da vidiš što je i da ga zamijeniš. Provjera stane li koristi tlocrt, zato izmjeri prije kupnje.',
+  'misc.feedback': 'Pošalji dojam',
+  'misc.footer': 'Otvoreni kod. Cijene namještaja su onakve kakve su trgovine objavile na dan provjere; nije povezano ni s jednom trgovinom.',
+};
+
+export const DICT: Record<Lang, Record<Key, string>> = { en, de, sr, bs, hr };
 export const LANGS: { id: Lang; label: string; locale: string }[] = [
   { id: 'en', label: 'English', locale: 'en-GB' }, { id: 'de', label: 'Deutsch', locale: 'de-DE' }, { id: 'sr', label: 'Srpski', locale: 'sr-Latn-RS' },
+  // Chrome ships without Bosnian number/date data (it prints 'BAM 8,087.85'); Serbian Latin for Bosnia formats
+  // amounts and month names the way Bosnian does ('8.087,85 KM', 'novembar'). The page language stays 'bs'.
+  { id: 'bs', label: 'Bosanski', locale: 'sr-Latn-BA' }, { id: 'hr', label: 'Hrvatski', locale: 'hr-HR' },
 ];
 
 let current: Lang = 'en';
@@ -208,6 +328,6 @@ export function t(k: Key, v: Record<string, string | number> = {}): string {
 export const tt = (k: string, v?: Record<string, string | number>) => t(k as Key, v);
 export function detectLang(): Lang {
   const l = (navigator.languages || [navigator.language]).map(x => x.toLowerCase());
-  for (const x of l) { if (x.startsWith('de')) return 'de'; if (/^(sr|hr|bs|sh|me)/.test(x)) return 'sr'; if (x.startsWith('en')) return 'en'; }
+  for (const x of l) { if (x.startsWith('de')) return 'de'; if (x.startsWith('bs')) return 'bs'; if (x.startsWith('hr')) return 'hr'; if (/^(sr|sh|me|cnr)/.test(x)) return 'sr'; if (x.startsWith('en')) return 'en'; }
   return 'en';
 }

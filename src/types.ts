@@ -1,4 +1,4 @@
-export type Lang = 'en' | 'de' | 'sr';
+export type Lang = 'en' | 'de' | 'sr' | 'bs' | 'hr';
 
 export type RoomType = 'living' | 'kitchen' | 'dining' | 'bedroom' | 'bathroom' | 'hall' | 'terrace';
 
@@ -50,7 +50,7 @@ export interface Project {
   backdrop?: Backdrop;
   demo?: boolean;
   /** chosen product ids per country: { rs: { preset: 'scandi', sel: { sofa: 'fi-vegas', … } } } */
-  choices?: Record<string, { preset: string; sel: Partial<Record<SlotId, string>> }>;
+  choices?: Record<string, { preset: string; sel: Partial<Record<SlotId, string>>; budget?: number }>;
   /** furniture moved by hand: where the anchor of each movable piece ends up */
   moves?: Moves;
   updatedAt?: number;

@@ -46,6 +46,8 @@ export class Viewer {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lowEnd ? 1.5 : 2));
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.0;
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    // the sun and the furniture only change on a rebuild or a drag: redraw the shadow map then, not on every camera frame
+    this.renderer.shadowMap.autoUpdate = false;
     this.renderer.domElement.setAttribute('aria-hidden', 'true');
     // status queries after each shader compile are synchronous GPU round trips; only useful while developing
     this.renderer.debug.checkShaderErrors = !!import.meta.env.DEV;
@@ -77,6 +79,9 @@ export class Viewer {
   setRoot(root: THREE.Object3D, bounds?: THREE.Box3) {
     if (this.root) { this.scene.remove(this.root); this.root.traverse(o => { const m = o as THREE.Mesh; if (m.geometry && !m.geometry.userData.shared) m.geometry.dispose(); }); }
     this.root = root; this.scene.add(root);
+    // a flat is small enough to draw whole; culling tested every mesh's bounding sphere on every frame (~0.8 s of a slow phone's startup)
+    root.traverse(o => { o.frustumCulled = false; });
+    this.renderer.shadowMap.needsUpdate = true;
     if (bounds) this.bounds.copy(bounds).expandByScalar(1.5);
     this.updateSelBox(); this.recompile();
   }
@@ -216,6 +221,7 @@ export class Viewer {
       o.quaternion.copy(qr).multiply(q);
     }
     this.root?.updateMatrixWorld(true);
+    this.renderer.shadowMap.needsUpdate = true;
   }
   private floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   private floorPoint(e: { clientX: number; clientY: number }) {
@@ -277,17 +283,20 @@ export class Viewer {
     for (const l of list) { const el = document.createElement('span'); el.className = 'room-label'; el.textContent = l.text; this.labelHost.appendChild(el); this.labelEls.push({ el, p: new THREE.Vector3(l.x, 0.3, l.z) }); }
     this.dirty = true;
   }
+  /** Room labels follow the camera. Uses the size kept by resize(): reading layout here forced a reflow every frame. */
   private placeLabels() {
-    const r = this.renderer.domElement.getBoundingClientRect();
+    const { w, h } = this.size;
     for (const { el, p } of this.labelEls) {
-      if (this.interior) { el.hidden = true; continue; }
-      const v = p.clone().project(this.camera); el.hidden = v.z > 1;
-      el.style.transform = `translate(-50%,-50%) translate(${((v.x + 1) / 2) * r.width}px, ${((1 - v.y) / 2) * r.height}px)`;
+      const v = p.clone().project(this.camera), hide = this.interior || v.z > 1;
+      if (el.hidden !== hide) el.hidden = hide;
+      if (!hide) el.style.transform = `translate(-50%,-50%) translate(${((v.x + 1) / 2) * w}px, ${((1 - v.y) / 2) * h}px)`;
     }
   }
+  private size = { w: 0, h: 0 };
 
   resize() {
     const r = this.host.getBoundingClientRect(); if (!r.width || !r.height) return;
+    this.size = { w: r.width, h: r.height };
     this.renderer.setSize(r.width, r.height, false); this.camera.aspect = r.width / r.height; this.camera.updateProjectionMatrix(); this.dirty = true;
   }
   requestRender() { this.dirty = true; }

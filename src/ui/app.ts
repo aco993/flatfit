@@ -14,6 +14,9 @@ import {
 } from '../domain/selection';
 import { deleteProject, isProject, loadPrefs, loadPriceUpdates, loadProjects, savePrefs, savePriceUpdates, saveProject, type Prefs } from '../store';
 import { applyUpdates, refreshPrices } from '../data/refresh';
+import { withinBudget } from '../domain/budget';
+import { deliveryFor } from '../domain/delivery';
+import { DELIVERY } from '../data/delivery';
 import { Viewer } from '../three/viewer';
 import { Materials } from '../three/materials';
 import { Models } from '../three/models';
@@ -59,11 +62,18 @@ export class App {
     this.bindChrome();
     this.applyLang();
     await this.loadCountry(this.prefs.country!, this.hashSel);
-    // decorative models (plants, lamp, vase) arrive later; add them when the browser is idle
-    this.models.load(BASE).then(async () => {
-      if (this.viewer) await this.viewer.warm(this.models.sample());
-      const go = () => this.rebuild(); 'requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : setTimeout(go, 200);
-    });
+    // decorative models (plants, lamp, vase, about 3 MB) are not needed to read the list or place furniture:
+    // fetch them on the first interaction, or once the page has been quiet for a few seconds
+    const decorate = () => {
+      for (const ev of ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const) window.removeEventListener(ev, decorate);
+      clearTimeout(quiet);
+      this.models.load(BASE).then(async () => {
+        if (this.viewer) await this.viewer.warm(this.models.sample());
+        const go = () => this.rebuild(); 'requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2000 }) : setTimeout(go, 200);
+      });
+    };
+    for (const ev of ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const) window.addEventListener(ev, decorate, { passive: true });
+    const quiet = window.setTimeout(() => ('requestIdleCallback' in window ? requestIdleCallback(decorate, { timeout: 3000 }) : decorate()), 6000);
     window.addEventListener('keydown', e => this.key(e));
   }
 
@@ -96,7 +106,7 @@ export class App {
     catch { $('#summary').textContent = t('misc.catalogFail'); return; }
     const saved = this.project.choices?.[id];
     if (fromHash) { const s = decodeSelection(fromHash, this.ix); if (Object.keys(s).length) { this.sel = fixDeps(s, this.ix); this.preset = 'custom'; } else this.applyPreset(this.defaultPreset(), false); }
-    else if (saved && Object.keys(saved.sel).length) { this.sel = fixDeps(saved.sel as Selection, this.ix); this.preset = saved.preset; }
+    else if (saved && Object.keys(saved.sel).length) { this.sel = fixDeps(saved.sel as Selection, this.ix); this.preset = saved.preset; this.budget = saved.budget || 0; if (this.preset === 'budget' && !this.budget) this.preset = 'custom'; }
     else this.applyPreset(this.defaultPreset(), false);
     this.hashSel = null; this.history = { undo: [], redo: [] }; this.refreshNote = '';
     this.afterChange(true);
@@ -118,6 +128,31 @@ export class App {
     this.sel = fixDeps(sel, this.ix); this.preset = key;
     if (update) this.afterChange();
   }
+  /** Home delivery store by store, and the total with it (data/delivery.ts has the sources). */
+  deliveryHtml(ls: ReturnType<typeof lines>, sum: number) {
+    const d = deliveryFor(ls, DELIVERY[this.prefs.country!]);
+    if (!d.stores.length) return '';
+    const names = (list: typeof d.stores) => list.map(s => this.storeName(s.store)).join(', ');
+    const parts: string[] = [];
+    if (d.total > 0) parts.push(t(d.from ? 'del.from' : 'del.line', { v: this.fmt(d.total) }));
+    const free = d.stores.filter(s => s.free);
+    if (free.length) parts.push(t('del.free', { stores: names(free) }));
+    if (d.unknown.length) parts.push(t('del.unknown', { stores: names(d.unknown) }));
+    const title = d.stores.map(s => `${this.storeName(s.store)}: ${s.unknown ? '?' : s.free ? '0' : (s.from ? '≥ ' : '') + this.fmt(s.cost)}`).join(' · ');
+    return `<p class="muted small delivery" title="${esc(title)}">${esc(parts.join(' · '))}${d.total > 0 ? ` · <b>${esc(t('del.total', { v: this.fmt(sum + d.total) }))}</b>` : ''}</p>`;
+  }
+  presetName(key: string) { return key === 'budget' ? t('preset.budget', { v: this.fmt(this.budget) }) : tt('preset.' + key); }
+  // ---------- budget ----------
+  budget = 0;
+  /** Best setup that costs at most `amount` (see domain/budget.ts). */
+  applyBudget(amount: number) {
+    if (!this.ix || !(amount > 0)) return;
+    this.remember();
+    const r = withinBudget(amount, this.project, this.ix, today());
+    this.sel = r.sel; this.preset = r.reached ? 'budget' : 'cheap'; this.budget = amount;
+    toast(r.reached ? t('budget.done', { v: this.fmt(r.total), b: this.fmt(amount) }) : t('budget.min', { v: this.fmt(r.minimum) }));
+    this.afterChange();
+  }
   setSlot(slot: SlotId, id: string) {
     if (!this.ix) return;
     this.remember();
@@ -127,7 +162,7 @@ export class App {
   }
   afterChange(newViews = false) {
     if (!this.ix) return;
-    (this.project.choices ||= {})[this.prefs.country!] = { preset: this.preset, sel: this.sel };
+    (this.project.choices ||= {})[this.prefs.country!] = { preset: this.preset, sel: this.sel, ...(this.preset === 'budget' ? { budget: this.budget } : {}) };
     saveProject(this.project);
     const D = (s: SlotId) => dimsOf(this.product(s), s);
     this.baseLayout = autoLayout(this.project, D);
@@ -288,11 +323,15 @@ export class App {
     if (!this.ix) return;
     const C = country(this.prefs.country!), ls = lines(this.project, this.sel, this.ix, today()), sum = total(ls), iss = fitIssues(this.project, this.sel, this.ix, this.layout || undefined);
     this.renderPresets();
+    const bin = $('#budget-in') as HTMLInputElement;
+    if (document.activeElement !== bin) bin.value = String(Math.round(this.preset === 'budget' && this.budget ? this.budget : sum));
+    $('#budget-cur').textContent = C.currency === 'BAM' ? 'KM' : C.currency === 'EUR' ? '€' : C.currency;
     const stores = [...new Set(ls.filter(l => l.units && l.product && l.product.store !== 'est').map(l => this.storeName(l.product!.store)))];
     const promos = ls.filter(l => l.promo).length, expired = ls.filter(l => l.expired && l.units).length;
     const eur = C.eurRate ? `<span class="muted">${t('sum.approx', { v: money(Math.round(sum / C.eurRate), country('de'), localeOf()) })}</span>` : '';
-    $('#summary').innerHTML = `<div class="total"><span>${t('sum.total')} <span class="muted">${this.preset !== 'custom' ? esc(t('sum.for', { name: tt('preset.' + this.preset) })) : esc(t('preset.custom'))}</span></span><b data-testid="total">${this.fmt(sum)}</b>${eur}</div>
+    $('#summary').innerHTML = `<div class="total"><span>${t('sum.total')} <span class="muted">${this.preset !== 'custom' ? esc(t('sum.for', { name: this.presetName(this.preset) })) : esc(t('preset.custom'))}</span></span><b data-testid="total">${this.fmt(sum)}</b>${eur}</div>
       <p class="muted small">${esc(t('sum.stores', { list: stores.join(', ') }))}${promos ? ' · ' + esc(t('sum.promos', { n: promos })) : ''}</p>
+      ${this.deliveryHtml(ls, sum)}
       <p class="refresh small"><button type="button" class="link" data-refresh ${this.refreshing ? 'disabled' : ''} title="${esc(t('refresh.how', { date: '' }))}">↻ ${esc(t('act.refresh'))}</button> <span class="muted" id="refresh-note">${esc(this.refreshNote)}</span></p>
       ${expired ? `<p class="warn small">${esc(t('sum.expired', { n: expired }))}</p>` : ''}
       <ul class="issues" data-testid="issues">${iss.length ? iss.map(i => `<li class="${i.hard ? 'hard' : 'soft'}"><a href="#slot-${i.slot}" data-goto="${i.slot}">${esc(t(('slot.' + i.slot) as Key))}</a>: ${esc(this.issueText(i))}</li>`).join('') : `<li class="ok">${esc(t('sum.fits'))}</li>`}</ul>`;
@@ -361,6 +400,7 @@ export class App {
     $('#card').addEventListener('click', e => { const el = e.target as HTMLElement; if (el.closest('[data-close]')) this.select(null, false); const alt = el.closest<HTMLElement>('[data-alt]'); if (alt && this.selected) this.setSlot(this.selected, alt.dataset.alt!);
       if (el.closest('[data-turn-piece]')) this.nudge(0, 0, true);
       const key = this.selected && moveKey(this.selected); if (el.closest('[data-reset-piece]') && key) this.movePiece(key, null); });
+    $('#budget').addEventListener('submit', e => { e.preventDefault(); this.applyBudget(Number(($('#budget-in') as HTMLInputElement).value)); });
     $('#undo').addEventListener('click', () => this.undo());
     $('#redo').addEventListener('click', () => this.redo());
     $('#country').addEventListener('change', e => { this.loadCountry((e.target as HTMLSelectElement).value); });

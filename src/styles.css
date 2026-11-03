@@ -21,6 +21,8 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { margin: 0; }
+/* keep room for the scrollbar: it appears once the list renders and shifted the right-aligned header by its width */
+html { scrollbar-gutter: stable; }
 body { background: var(--bg); color: var(--ink); font: 15px/1.45 var(--font); -webkit-font-smoothing: antialiased; }
 button, select, input { font: inherit; color: inherit; }
 a { color: var(--accent); }
@@ -40,6 +42,8 @@ kbd { font: 600 11px/1 ui-monospace, monospace; padding: 2px 5px; border: 1px so
 .brand strong { display: block; font-size: 17px; letter-spacing: -.01em; }
 .tagline { display: block; font-size: 12px; color: var(--ink-2); }
 .controls { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }
+/* fixed widths: the selects are filled by script, and growing to their longest option moved the header (layout shift) */
+#project { width: 15em; } #country { width: 16em; } #lang { width: 7.5em; }
 .field { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--ink-2); min-width: 0; }
 .field > span { font-weight: 600; }
 select, input[type=number], input:not([type]), input[type=text] { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; min-height: 36px; max-width: 100%; color: var(--ink); }
@@ -93,6 +97,11 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
 .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-2); margin: 0 0 8px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 #presets { align-content: flex-start; }
+.budget { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 10px; }
+.budget label { font-size: 13px; color: var(--ink-2); }
+.budget-in { display: inline-flex; align-items: center; gap: 4px; }
+.budget input { width: 8.5em; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font: inherit; }
+.budget .btn { padding: 6px 12px; }
 .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 11px; cursor: pointer; font-size: 13px; }
 .chip.gen { border-style: dashed; }
 .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); border-style: solid; font-weight: 600; }
@@ -211,6 +220,7 @@ select, input[type=number], input:not([type]), input[type=text] { background: va
   .tagline { display: none; }
   .controls { width: 100%; display: grid; grid-template-columns: 1fr 1fr auto auto; }
   .controls .field:first-child { grid-column: 1 / -1; }
+  #project, #country, #lang { width: 100%; }
   #edit-plan { grid-column: 1 / -1; order: 9; }
   .viewer { height: 52vh; }
   .toolbar .btn span { display: none; }

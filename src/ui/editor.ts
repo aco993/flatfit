@@ -5,6 +5,7 @@ import { t, type Key } from '../i18n';
 import { $, esc, toast } from './dom';
 import { bounds, deriveWalls, edgeOf, openingProblems, overlaps, roomArea } from '../domain/geometry';
 import { fromTemplate, type TemplateId } from '../data/templates';
+import { openMeasureSheet } from './measure';
 
 const TYPES: RoomType[] = ['living', 'kitchen', 'dining', 'bedroom', 'bathroom', 'hall', 'terrace'];
 const KINDS: OpeningKind[] = ['door', 'entry', 'window', 'balcony'];
@@ -38,7 +39,7 @@ export function openEditor(app: App, src: Project | null) {
         <div class="row"><button type="button" class="btn" id="ed-add">+ ${esc(t('editor.add'))}</button></div>
         <div id="ed-room"></div>
         <ul id="ed-problems" class="issues"></ul>
-        <div class="row end"><button type="button" class="btn ghost" data-close>${esc(t('editor.cancel'))}</button><button type="button" class="btn primary" id="ed-save">${esc(t('editor.save'))}</button></div>
+        <div class="row end"><button type="button" class="btn ghost" id="ed-measure">📏 ${esc(t('ms.btn'))}</button><button type="button" class="btn ghost" data-close>${esc(t('editor.cancel'))}</button><button type="button" class="btn primary" id="ed-save">${esc(t('editor.save'))}</button></div>
       </div>
     </div>`;
   const svg = $('#ed-svg', dlg) as unknown as SVGSVGElement;
@@ -242,6 +243,7 @@ export function openEditor(app: App, src: Project | null) {
       const b = bounds(draft.rooms), id = uid('r', draft.rooms);
       draft.rooms.push({ id, type: 'bedroom', x: draft.rooms.length ? snap(b.x2) : 0, z: draft.rooms.length ? snap(b.z1) : 0, w: 3, d: 3 }); selId = id; draw(); return;
     }
+    if (el.closest('#ed-measure')) { openMeasureSheet(draft); return; }
     if (el.closest('#ed-bd-cal')) { imgMode = imgMode === 'cal' ? 'none' : 'cal'; calPts = []; draw(); return; }
     if (el.closest('#ed-bd-move')) { imgMode = imgMode === 'move' ? 'none' : 'move'; calPts = []; draw(); return; }
     if (el.closest('#ed-bd-del')) { delete draft.backdrop; imgMode = 'none'; calPts = []; draw(); return; }
