@@ -47,20 +47,21 @@ export function measureSheet(p: Project): string {
     const r = p.rooms.find(x => x.id === mr.id)!;
     return `<tbody><tr class="room-h"><th colspan="4">${mr.no}. ${esc(label(r))}</th></tr>${mr.items.map(row).join('')}</tbody>`;
   }).join('');
-  const title = t('ms.title', { name: p.demo ? t('proj.demo') : p.name });
+  // an edited copy of the demo is called 'Demo … *' in the editor; the star means nothing on paper
+  const title = t('ms.title', { name: (p.demo ? t('proj.demo') : p.name).replace(/\s*\*$/, '') });
   return `<!doctype html><html lang="${document.documentElement.lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(title)}</title><style>
   body { font: 14px/1.4 system-ui, sans-serif; color: #1d1f22; margin: 24px; background: #fff; }
   h1 { font-size: 20px; margin: 0 0 4px; } p { margin: 4px 0 12px; color: #4a4e55; max-width: 70ch; }
-  svg { width: 100%; max-height: 52vh; display: block; margin: 8px 0 16px; }
+  svg { width: 100%; height: 62vh; min-height: 340px; display: block; margin: 8px 0 16px; }
   .room { stroke: #1d1f22; stroke-width: .04; } .op { stroke: #c2410c; stroke-width: .12; } .wi { stroke: #2563eb; stroke-width: .12; stroke-dasharray: .12 .06; }
-  text { font-size: .22px; text-anchor: middle; fill: #1d1f22; } .name { font-weight: 700; } .dim { fill: #5d6168; } .code { font-weight: 700; fill: #9a3412; font-size: .2px; }
+  text { font-size: .24px; text-anchor: middle; fill: #1d1f22; } .name { font-weight: 700; } .dim { fill: #5d6168; } .code { font-weight: 700; fill: #9a3412; font-size: .2px; }
   table { border-collapse: collapse; width: 100%; } th, td { border-bottom: 1px solid #ddd; padding: 5px 6px; text-align: left; vertical-align: top; }
   thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #5d6168; } .room-h th { padding-top: 14px; font-size: 15px; border-bottom: 2px solid #1d1f22; }
   .c { font-weight: 700; color: #9a3412; width: 3em; } .n { white-space: nowrap; width: 6em; text-align: right; } .w { width: 8em; border-bottom: 1px solid #1d1f22; }
   .legend span { display: inline-block; margin-right: 16px; } .legend i { display: inline-block; width: 22px; height: 4px; vertical-align: middle; margin-right: 6px; }
   button { font: inherit; padding: 8px 14px; border-radius: 8px; border: 1px solid #1d1f22; background: #fff; cursor: pointer; }
-  @media print { button { display: none; } body { margin: 10mm; } svg { max-height: 120mm; } tbody { break-inside: avoid; } }
+  @media print { button { display: none; } body { margin: 10mm; } svg { height: 120mm; min-height: 0; } tbody { break-inside: avoid; } }
 </style></head><body>
 <button type="button" onclick="print()">${esc(t('ms.print'))}</button>
 <h1>${esc(title)}</h1>

@@ -80,6 +80,16 @@ describe('collisions of moved pieces', () => {
     const iss = moveIssues(DEMO, L, D, has);
     expect(iss.some(i => i.slot === 'sofa' && i.code === 'overlap' && i.other === 'slot.tvunit')).toBe(true);
   });
+  it('a sofa dropped where the dining chairs stand overlaps the table (chairs need floor too)', () => {
+    // found by hand on the live site: the sofa clear of the table top but in the chairs was not reported
+    const t = pl(base, 'table'), top = t.z - D('table').d / 2;
+    // put the sofa's footprint 15 cm short of the table top: clear of the top, inside the chairs
+    const fpAt = (z: number) => footprints(pl(applyMoves(base, { sofa: { x: t.x, z, rot: 0 } }), 'sofa'), D)[0];
+    const z = 3 + (top - 0.15 - fpAt(3).z2);
+    expect(fpAt(z).z2).toBeCloseTo(top - 0.15, 3);
+    const L = applyMoves(base, { sofa: { x: t.x, z, rot: 0 } });
+    expect(moveIssues(DEMO, L, D, has).some(i => i.slot === 'sofa' && i.code === 'overlap' && i.other === 'slot.table')).toBe(true);
+  });
   it('a coffee table outside the flat is reported', () => {
     const L = applyMoves(base, { coffee: { x: -2, z: 2, rot: 0 } });
     expect(moveIssues(DEMO, L, D, has)).toContainEqual({ slot: 'coffee', code: 'outside' });

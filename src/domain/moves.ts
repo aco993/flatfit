@@ -57,12 +57,14 @@ function box(cx: number, cz: number, w: number, d: number, rot: number): Rect {
 const front = (x: number, z: number, rot: number, d: number): [number, number] => [x + Math.sin(rot) * d / 2, z + Math.cos(rot) * d / 2];
 
 /** Floor footprints of a placed piece (several for bedside tables). Rugs lie under things and have none. */
+const CHAIR_ZONE = 0.35;
 export function footprints(p: Placement, D: DimsFn): Rect[] {
   const s = p.slot, d = D(s);
   if (s === 'night') return (p.extra || []).map(e => box(...front(e.x, e.z, e.rot, d.d), d.w, d.d, e.rot));
   if (AGAINST_WALL.has(s)) return [box(...front(p.x, p.z, p.rot, d.d), d.w, d.d, p.rot)];
   if (s === 'floorlamp') return [box(p.x, p.z, 0.3, 0.3, 0)];
-  if (s === 'table') return [box(p.x, p.z, d.w, d.d, p.rot)];
+  // the chairs around the table need floor too: about 45 cm deep, 10 cm of it pushed under the top
+  if (s === 'table') return [box(p.x, p.z, d.w + 2 * CHAIR_ZONE, d.d + 2 * CHAIR_ZONE, p.rot)];
   if (s === 'armchair' || s === 'coffee' || s === 'terrace') return [box(p.x, p.z, d.w, d.d, p.rot)];
   if (s === 'kitchen' && p.extra?.[0]) return [box(...front(p.x, p.z, p.rot, 0.6), p.extra[0].w!, 0.6, p.rot)];
   return [];
