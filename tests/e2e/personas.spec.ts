@@ -199,6 +199,9 @@ test.describe('Sara · rearranges the living room with the mouse', () => {
     // pushed into the middle of the room it runs into the coffee table
     await expect(page.getByTestId('issues')).toContainText(/Sofa: Runs \d+ cm into: Coffee table/);
     await expect(page.locator('#card')).toContainText('Back to suggested place');
+    // the selection frame follows the piece to where it was dropped (it once stayed at 0,0 after the rebuild)
+    const gap = await page.evaluate(() => { const v = (window as any).flatfit.viewer, c = v.slotCenter('sofa'), b = v.sel.box; return Math.hypot((b.min.x + b.max.x) / 2 - c.x, (b.min.z + b.max.z) / 2 - c.z); });
+    expect(gap).toBeLessThan(0.1);
     await page.keyboard.press('t');
     const turned = await page.evaluate(() => (window as any).flatfit.project.moves.sofa.rot);
     expect(Math.abs(turned)).toBeLessThan(0.01 + Math.PI);

@@ -255,6 +255,8 @@ export class Viewer {
     if (this.sel) { this.scene.remove(this.sel); this.sel = null; }
     if (this.foot) { this.scene.remove(this.foot); this.foot.geometry.dispose(); (this.foot.material as THREE.Material).dispose(); this.foot = null; }
     if (!this.selSlot || !this.root) return;
+    // a freshly built root has not been rendered yet: without this its world matrices are identity and the box lands at 0,0
+    this.root.updateMatrixWorld(true);
     const box = new THREE.Box3(); let any = false;
     this.root.traverse(o => { if ((o as THREE.Mesh).isMesh && o.userData.slot === this.selSlot) { box.expandByObject(o); any = true; } });
     if (!any) return;
