@@ -165,6 +165,7 @@ function furnish(root: THREE.Group, b: Builder, proj: Project, f: Furnish, H: nu
   });
   each('armchair', pl => {
     const p = f.product('armchair'); if (!p) return; const D = f.dims('armchair'); const g = b.group(root, pl.x, pl.z, pl.rot); const F = mat(p, '#c6c5c1', 'fabric');
+    if (models.fit(g, 'modern_arm_chair_01', D.w, D.h, D.d, 0, 0, 0, hexOf(p, '#c6c5c1'), 'armchair')) return;
     b.B(g, D.w, 0.26, D.d, 0, 0.16, 0, F); b.B(g, D.w, Math.max(0.25, D.h - 0.4), 0.12, 0, 0.4, -D.d / 2 + 0.06, F);
     b.B(g, 0.08, 0.2, D.d - 0.1, -D.w / 2 + 0.04, 0.42, 0.02, F); b.B(g, 0.08, 0.2, D.d - 0.1, D.w / 2 - 0.04, 0.42, 0.02, F);
     [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => b.C(g, 0.016, 0.012, 0.16, sx * (D.w / 2 - 0.05), 0, sz * (D.d / 2 - 0.05), BLACK, 8));
@@ -172,17 +173,20 @@ function furnish(root: THREE.Group, b: Builder, proj: Project, f: Furnish, H: nu
   each('coffee', pl => {
     const p = f.product('coffee'); if (!p) return; const D = f.dims('coffee'); const g = b.group(root, pl.x, pl.z, pl.rot);
     const top = mat(p, '#b58a5c'), leg = mat(p, '#1d1e20', undefined, true);
-    if (p.round) { b.C(g, D.w / 2, D.w / 2, 0.03, 0, D.h - 0.03, 0, top, 40); b.C(g, 0.03, 0.03, D.h - 0.03, 0, 0, 0, leg, 10); }
+    if (p.round && models.fit(g, 'coffee_table_round_01', D.w, D.h, D.d, 0, 0, 0, hexOf(p, '#b58a5c'), 'coffee')) { /* model */ }
+    else if (p.round) { b.C(g, D.w / 2, D.w / 2, 0.03, 0, D.h - 0.03, 0, top, 40); b.C(g, 0.03, 0.03, D.h - 0.03, 0, 0, 0, leg, 10); }
     else { b.B(g, D.w, 0.035, D.d, 0, D.h - 0.035, 0, top); [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => b.B(g, 0.035, D.h - 0.035, 0.035, sx * (D.w / 2 - 0.04), 0, sz * (D.d / 2 - 0.04), leg)); b.B(g, D.w - 0.06, 0.02, D.d - 0.06, 0, 0.12, 0, leg); }
     b.tag = null; models.place(g, 'ceramic_vase_01', D.w * 0.2, D.h, 0, { h: 0.2 });
   });
   each('rug', pl => { const p = f.product('rug'); if (!p) return; const D = f.dims('rug'); const g = b.group(root, pl.x, pl.z, pl.rot); b.B(g, D.w, 0.012, D.d, 0, 0, 0, mat(p, '#d6c8b0', 'fabric'), { shadow: false }); });
   each('tvunit', pl => {
     const p = f.product('tvunit'); if (!p) return; const D = f.dims('tvunit'); const g = at(pl, D.d);
-    b.B(g, D.w, D.h - 0.06, D.d, 0, 0.06, 0, mat(p, '#f2f1ec'));
-    const fr = mat(p, '#f2f1ec', undefined, true);
-    b.B(g, D.w / 2 - 0.02, D.h - 0.14, 0.012, -D.w / 4, 0.1, D.d / 2 + 0.006, fr); b.B(g, D.w / 2 - 0.02, D.h - 0.14, 0.012, D.w / 4, 0.1, D.d / 2 + 0.006, fr);
-    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => b.B(g, 0.03, 0.06, 0.03, sx * (D.w / 2 - 0.05), 0, sz * (D.d / 2 - 0.04), BLACK));
+    if (!models.fit(g, 'modern_wooden_cabinet', D.w, D.h, D.d, 0, 0, 0, hexOf(p, '#f2f1ec'), 'tvunit')) {
+      b.B(g, D.w, D.h - 0.06, D.d, 0, 0.06, 0, mat(p, '#f2f1ec'));
+      const fr = mat(p, '#f2f1ec', undefined, true);
+      b.B(g, D.w / 2 - 0.02, D.h - 0.14, 0.012, -D.w / 4, 0.1, D.d / 2 + 0.006, fr); b.B(g, D.w / 2 - 0.02, D.h - 0.14, 0.012, D.w / 4, 0.1, D.d / 2 + 0.006, fr);
+      [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => b.B(g, 0.03, 0.06, 0.03, sx * (D.w / 2 - 0.05), 0, sz * (D.d / 2 - 0.04), BLACK));
+    }
     const tv = f.product('tv');
     if (tv) { b.tag = 'tv'; const T = f.dims('tv'); b.B(g, T.w, T.h, 0.04, 0, D.h + 0.3, -D.d / 2 + 0.03, M.get('#151617', 'screen')); }
     b.tag = null; models.place(g, 'potted_plant_02', D.w / 2 + 0.3, 0, 0, { h: 1.0 });
@@ -244,7 +248,8 @@ function furnish(root: THREE.Group, b: Builder, proj: Project, f: Furnish, H: nu
     const seatM = M.get(seatHex, isWood(seatHex) ? 'wood' : 'lacquer'), legM = M.get(legHex, isWood(legHex) ? 'wood' : 'metal');
     const r = (t.round ? D.w / 2 : D.d / 2) + 0.26;
     const seats: [number, number, number][] = (!t.round && D.w >= 1.1) ? [[-D.w / 4, -r, 0], [D.w / 4, -r, 0], [-D.w / 4, r, Math.PI], [D.w / 4, r, Math.PI]] : [[0, -r, 0], [0, r, Math.PI], [-((t.round ? D.w : D.w) / 2 + 0.26), 0, Math.PI / 2], [(D.w / 2 + 0.26), 0, -Math.PI / 2]];
-    for (const [x, z, ry] of seats) chair(b, g, x, z, ry, seatM, legM);
+    const CD = f.dims('chairs');
+    for (const [x, z, ry] of seats) { if (!models.fit(b.group(g, x, z, ry), 'dining_chair_02', CD.w, CD.h, CD.d, 0, 0, 0, seatHex, b.tag)) chair(b, g, x, z, ry, seatM, legM); }
   });
 
   // ---------- bedroom ----------
@@ -262,8 +267,11 @@ function furnish(root: THREE.Group, b: Builder, proj: Project, f: Furnish, H: nu
     const n = f.product('night'); if (!n) return; const D = f.dims('night');
     for (const e of pl.extra || []) {
       const g = b.group(root, e.x + Math.sin(e.rot) * D.d / 2, e.z + Math.cos(e.rot) * D.d / 2, e.rot);
-      b.tag = 'night'; b.B(g, D.w, D.h, D.d, 0, 0, 0, mat(n, '#f2f1ec'));
-      if (n.hex2 && n.hex2 !== n.hex) b.B(g, D.w - 0.04, D.h * 0.35, 0.01, 0, D.h * 0.55, D.d / 2 + 0.005, mat(n, '#f2f1ec', undefined, true));
+      b.tag = 'night';
+      if (!models.fit(g, 'side_table_01', D.w, D.h, D.d, 0, 0, 0, hexOf(n, '#f2f1ec'), 'night')) {
+        b.B(g, D.w, D.h, D.d, 0, 0, 0, mat(n, '#f2f1ec'));
+        if (n.hex2 && n.hex2 !== n.hex) b.B(g, D.w - 0.04, D.h * 0.35, 0.01, 0, D.h * 0.55, D.d / 2 + 0.005, mat(n, '#f2f1ec', undefined, true));
+      }
       const lp = f.product('lamps');
       if (lp) { b.tag = 'lamps'; b.C(g, 0.05, 0.065, 0.06, 0, D.h, 0, M.get('#ece7dd', 'gloss')); b.C(g, 0.012, 0.012, 0.16, 0, D.h + 0.06, 0, M.get('#c9c9c6', 'metal'), 6); b.C(g, 0.08, 0.12, 0.15, 0, D.h + 0.2, 0, mat(lp, '#f3efe6', 'lacquer'), 24); }
     }
