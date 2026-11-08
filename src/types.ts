@@ -32,9 +32,23 @@ export interface Opening {
 
 /** Things on a wall that matter for furnishing: radiators (nothing tall in front) and the TV/antenna socket. */
 export type WallItemKind = 'radiator' | 'tv';
-export interface WallItem { id: string; kind: WallItemKind; room: string; side: Side; at: number; width: number }
+export interface WallItem {
+  id: string;
+  kind: WallItemKind;
+  room: string;
+  side: Side;
+  at: number;
+  width: number;
+}
 
-export interface Backdrop { src: string; x: number; z: number; w: number; ar: number; opacity: number }
+export interface Backdrop {
+  src: string;
+  x: number;
+  z: number;
+  w: number;
+  ar: number;
+  opacity: number;
+}
 
 export interface Project {
   id: string;
@@ -56,7 +70,15 @@ export interface Project {
   updatedAt?: number;
 }
 
-export interface WallOpening { a: number; b: number; lo: number; hi: number; glass: boolean; kind: OpeningKind; /** side of the room that owns it: doors swing into that room */ side?: Side }
+export interface WallOpening {
+  a: number;
+  b: number;
+  lo: number;
+  hi: number;
+  glass: boolean;
+  kind: OpeningKind /** side of the room that owns it: doors swing into that room */;
+  side?: Side;
+}
 
 export interface Wall {
   axis: 'x' | 'z';
@@ -70,10 +92,36 @@ export interface Wall {
 }
 
 export type SlotId =
-  | 'kitchen' | 'worktop' | 'sink' | 'faucet' | 'hob' | 'oven' | 'hood' | 'fridge'
-  | 'table' | 'chairs' | 'sofa' | 'armchair' | 'coffee' | 'tvunit' | 'tv' | 'rug' | 'floorlamp'
-  | 'bed' | 'base' | 'mattress' | 'wardrobe' | 'night' | 'lamps'
-  | 'washer' | 'hall' | 'hooks' | 'terrace' | 'curtains' | 'rods' | 'pendant';
+  | 'kitchen'
+  | 'worktop'
+  | 'sink'
+  | 'faucet'
+  | 'hob'
+  | 'oven'
+  | 'hood'
+  | 'fridge'
+  | 'table'
+  | 'chairs'
+  | 'sofa'
+  | 'armchair'
+  | 'coffee'
+  | 'tvunit'
+  | 'tv'
+  | 'rug'
+  | 'floorlamp'
+  | 'bed'
+  | 'base'
+  | 'mattress'
+  | 'wardrobe'
+  | 'night'
+  | 'lamps'
+  | 'washer'
+  | 'hall'
+  | 'hooks'
+  | 'terrace'
+  | 'curtains'
+  | 'rods'
+  | 'pendant';
 
 export interface Product {
   id: string;
@@ -85,7 +133,9 @@ export interface Product {
   price: number;
   regular?: number;
   until?: string;
-  w?: number; d?: number; h?: number;
+  w?: number;
+  d?: number;
+  h?: number;
   color: string;
   hex?: string;
   /** second colour of two-tone products (legs, fronts) */
@@ -110,7 +160,12 @@ export interface Product {
   unavailable?: boolean;
 }
 
-export interface Store { id: string; name: string; web: string; note?: string }
+export interface Store {
+  id: string;
+  name: string;
+  web: string;
+  note?: string;
+}
 
 export interface Catalog {
   country: string;
@@ -141,4 +196,11 @@ export interface Placement {
 
 export type Moves = Partial<Record<SlotId, { x: number; z: number; rot: number }>>;
 
-export interface View { id: string; label: string; pos: [number, number, number]; target: [number, number, number]; interior: boolean; room?: string }
+export interface View {
+  id: string;
+  label: string;
+  pos: [number, number, number];
+  target: [number, number, number];
+  interior: boolean;
+  room?: string;
+}

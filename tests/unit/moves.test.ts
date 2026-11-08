@@ -25,7 +25,8 @@ describe('moving furniture', () => {
   });
 
   it('moves attached pieces rigidly with their anchor', () => {
-    const b = pl(base, 'bed'), n = pl(base, 'night');
+    const b = pl(base, 'bed'),
+      n = pl(base, 'night');
     const L = applyMoves(base, { bed: { x: b.x + 0.5, z: b.z, rot: b.rot } });
     expect(pl(L, 'bed').x).toBeCloseTo(b.x + 0.5);
     expect(pl(L, 'night').extra![0].x).toBeCloseTo(n.extra![0].x + 0.5);
@@ -46,8 +47,8 @@ describe('moving furniture', () => {
     const t = turnPose('bed', p, D);
     const d = D('bed').d;
     // middle before: (1, 0.06 + d/2); middle after: anchor + (sin, cos)(rot) * d/2
-    expect(t.x + Math.sin(t.rot) * d / 2).toBeCloseTo(1);
-    expect(t.z + Math.cos(t.rot) * d / 2).toBeCloseTo(0.06 + d / 2);
+    expect(t.x + (Math.sin(t.rot) * d) / 2).toBeCloseTo(1);
+    expect(t.z + (Math.cos(t.rot) * d) / 2).toBeCloseTo(0.06 + d / 2);
     expect(Math.abs(t.rot - Math.PI / 2)).toBeLessThan(1e-9);
   });
 });
@@ -82,7 +83,8 @@ describe('collisions of moved pieces', () => {
   });
   it('a sofa dropped where the dining chairs stand overlaps the table (chairs need floor too)', () => {
     // found by hand on the live site: the sofa clear of the table top but in the chairs was not reported
-    const t = pl(base, 'table'), top = t.z - D('table').d / 2;
+    const t = pl(base, 'table'),
+      top = t.z - D('table').d / 2;
     // put the sofa's footprint 15 cm short of the table top: clear of the top, inside the chairs
     const fpAt = (z: number) => footprints(pl(applyMoves(base, { sofa: { x: t.x, z, rot: 0 } }), 'sofa'), D)[0];
     const z = 3 + (top - 0.15 - fpAt(3).z2);
@@ -95,12 +97,21 @@ describe('collisions of moved pieces', () => {
     expect(moveIssues(DEMO, L, D, has)).toContainEqual({ slot: 'coffee', code: 'outside' });
   });
   it('an armchair put in front of the bedroom door is in the way', () => {
-    const door = DEMO.openings.find(o => o.kind === 'door' && DEMO.rooms.find(r => r.id === o.room)?.type === 'bedroom') || DEMO.openings.find(o => o.kind === 'door')!;
+    const door =
+      DEMO.openings.find(o => o.kind === 'door' && DEMO.rooms.find(r => r.id === o.room)?.type === 'bedroom') ||
+      DEMO.openings.find(o => o.kind === 'door')!;
     const r = DEMO.rooms.find(x => x.id === door.room)!;
     // middle of the door's swing square inside its room
     const along = door.side === 'n' || door.side === 's';
     const mid = (along ? r.x : r.z) + door.at + door.width / 2;
-    const inset = door.side === 'n' ? r.z + 0.06 + door.width / 2 : door.side === 's' ? r.z + r.d - 0.06 - door.width / 2 : door.side === 'w' ? r.x + 0.06 + door.width / 2 : r.x + r.w - 0.06 - door.width / 2;
+    const inset =
+      door.side === 'n'
+        ? r.z + 0.06 + door.width / 2
+        : door.side === 's'
+          ? r.z + r.d - 0.06 - door.width / 2
+          : door.side === 'w'
+            ? r.x + 0.06 + door.width / 2
+            : r.x + r.w - 0.06 - door.width / 2;
     const [x, z] = along ? [mid, inset] : [inset, mid];
     const L = applyMoves(base, { armchair: { x, z, rot: 0 } });
     expect(moveIssues(DEMO, L, D, has).some(i => i.slot === 'armchair' && i.code === 'door')).toBe(true);
@@ -113,9 +124,11 @@ describe('collisions of moved pieces', () => {
     expect(iss.some(i => i.slot === 'sofa' && i.code === 'wall')).toBe(false);
   });
   it('every footprint of the planner layout lies inside the flat', () => {
-    for (const p of base.placements) for (const r of footprints(p, D)) {
-      expect(r.x2 - r.x1).toBeGreaterThan(0);
-      expect(r.x1).toBeGreaterThan(-0.2); expect(r.z1).toBeGreaterThan(-1.7);
-    }
+    for (const p of base.placements)
+      for (const r of footprints(p, D)) {
+        expect(r.x2 - r.x1).toBeGreaterThan(0);
+        expect(r.x1).toBeGreaterThan(-0.2);
+        expect(r.z1).toBeGreaterThan(-1.7);
+      }
   });
 });

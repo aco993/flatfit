@@ -8,37 +8,105 @@ import { fromTemplate } from '../../src/data/templates';
  * Each one must load without errors, show a total in the right currency and never scroll sideways.
  */
 
-const ready = async (page: Page) => { await expect(page.locator('body[data-ready="1"]')).toBeAttached({ timeout: 30_000 }); };
+const ready = async (page: Page) => {
+  await expect(page.locator('body[data-ready="1"]')).toBeAttached({ timeout: 30_000 });
+};
 const watchErrors = (page: Page) => {
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/WebGL|GPU|context/i.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => {
+    if (m.type() === 'error' && !/WebGL|GPU|context/i.test(m.text())) errors.push(m.text());
+  });
   return errors;
 };
 const pack = (v: unknown) => LZString.compressToEncodedURIComponent(JSON.stringify(v));
-const studio = (() => { const p = fromTemplate('studio', 'Linked studio', 'de'); p.id = 'p-linked'; return p; })();
+const studio = (() => {
+  const p = fromTemplate('studio', 'Linked studio', 'de');
+  p.id = 'p-linked';
+  return p;
+})();
 
-interface Case { name: string; hash: string; lang: string; currency: RegExp; country: string; phone?: boolean; dark?: boolean; extra?: (page: Page) => Promise<void> }
+interface Case {
+  name: string;
+  hash: string;
+  lang: string;
+  currency: RegExp;
+  country: string;
+  phone?: boolean;
+  dark?: boolean;
+  extra?: (page: Page) => Promise<void>;
+}
 const CASES: Case[] = [
   { name: 'Serbia · Serbian', hash: 'c=rs&l=sr', lang: 'sr-Latn', currency: /RSD/, country: 'rs' },
-  { name: 'Bosnia and Herzegovina · Bosnian', hash: 'c=ba&l=bs', lang: 'bs', currency: /\d\.\d{3},\d{2}\sKM/, country: 'ba',
-    extra: async page => { await expect(page.locator('#slots .flag.est').first()).toBeVisible(); await expect(page.locator('#summary')).toContainText(/JYSK/); } },
-  { name: 'Croatia · Croatian', hash: 'c=hr&l=hr', lang: 'hr', currency: /€/, country: 'hr', extra: async page => { await expect(page.locator('#summary')).toContainText('Trgovine: IKEA'); await expect(page.locator('#sel-fridge')).toBeAttached(); await expect(page.locator('#slot-fridge label')).toContainText('Hladnjak'); } },
+  {
+    name: 'Bosnia and Herzegovina · Bosnian',
+    hash: 'c=ba&l=bs',
+    lang: 'bs',
+    currency: /\d\.\d{3},\d{2}\sKM/,
+    country: 'ba',
+    extra: async page => {
+      await expect(page.locator('#slots .flag.est').first()).toBeVisible();
+      await expect(page.locator('#summary')).toContainText(/JYSK/);
+    },
+  },
+  {
+    name: 'Croatia · Croatian',
+    hash: 'c=hr&l=hr',
+    lang: 'hr',
+    currency: /€/,
+    country: 'hr',
+    extra: async page => {
+      await expect(page.locator('#summary')).toContainText('Trgovine: IKEA');
+      await expect(page.locator('#sel-fridge')).toBeAttached();
+      await expect(page.locator('#slot-fridge label')).toContainText('Hladnjak');
+    },
+  },
   { name: 'Germany · German', hash: 'c=de&l=de', lang: 'de', currency: /€/, country: 'de' },
   { name: 'Austria · English', hash: 'c=at&l=en', lang: 'en', currency: /€/, country: 'at' },
   { name: 'Bosnia and Herzegovina on a phone', hash: 'c=ba&l=en', lang: 'en', currency: /KM|BAM/, country: 'ba', phone: true },
-  { name: 'Croatia in dark mode, German', hash: 'c=hr&l=de', lang: 'de', currency: /€/, country: 'hr', dark: true,
-    extra: async page => { const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor); expect(bg).toBe('rgb(22, 24, 27)'); } },
-  { name: 'Link with moved furniture', hash: `c=rs&l=en&m=${pack({ sofa: { x: 1.2, z: 1.5, rot: 0 } })}`, lang: 'en', currency: /RSD/, country: 'rs',
-    extra: async page => { expect(await page.evaluate(() => (window as any).flatfit.project.moves?.sofa)).toEqual({ x: 1.2, z: 1.5, rot: 0 }); } },
-  { name: 'Link with a whole floor plan', hash: `c=de&l=en&plan=${pack(studio)}`, lang: 'en', currency: /€/, country: 'de',
-    extra: async page => { await expect(page.locator('#project')).toContainText('Linked studio'); expect(await page.evaluate(() => (window as any).flatfit.project.rooms.length)).toBe(3); } },
+  {
+    name: 'Croatia in dark mode, German',
+    hash: 'c=hr&l=de',
+    lang: 'de',
+    currency: /€/,
+    country: 'hr',
+    dark: true,
+    extra: async page => {
+      const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+      expect(bg).toBe('rgb(22, 24, 27)');
+    },
+  },
+  {
+    name: 'Link with moved furniture',
+    hash: `c=rs&l=en&m=${pack({ sofa: { x: 1.2, z: 1.5, rot: 0 } })}`,
+    lang: 'en',
+    currency: /RSD/,
+    country: 'rs',
+    extra: async page => {
+      expect(await page.evaluate(() => (window as any).flatfit.project.moves?.sofa)).toEqual({ x: 1.2, z: 1.5, rot: 0 });
+    },
+  },
+  {
+    name: 'Link with a whole floor plan',
+    hash: `c=de&l=en&plan=${pack(studio)}`,
+    lang: 'en',
+    currency: /€/,
+    country: 'de',
+    extra: async page => {
+      await expect(page.locator('#project')).toContainText('Linked studio');
+      expect(await page.evaluate(() => (window as any).flatfit.project.rooms.length)).toBe(3);
+    },
+  },
   { name: 'Broken link falls back to the demo', hash: 'c=xx&l=zz&s=%%%&m=@@@&plan=!!!', lang: 'en', currency: /RSD|€|KM/, country: '' },
 ];
 
 for (const c of CASES) {
   test.describe(`URL matrix · ${c.name}`, () => {
-    test.use({ locale: 'en-GB', ...(c.phone ? { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } : {}), ...(c.dark ? { colorScheme: 'dark' as const } : {}) });
+    test.use({
+      locale: 'en-GB',
+      ...(c.phone ? { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } : {}),
+      ...(c.dark ? { colorScheme: 'dark' as const } : {}),
+    });
     test(`loads cleanly: #${c.hash.slice(0, 40)}`, async ({ page }) => {
       const errors = watchErrors(page);
       await page.goto('./#' + c.hash);
@@ -66,7 +134,32 @@ test.describe('Refresh prices', () => {
       const no = /q=(\d+)/.exec(r.request().url())![1];
       first ||= no;
       const sale = no === first;
-      await r.fulfill({ contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ searchResultPage: { products: { main: { items: [{ product: { itemNo: no, id: no, salesPrice: { numeral: sale ? 1 : 9999, currencyCode: 'EUR', previous: sale ? { wholeNumber: '9999' } : undefined, validTo: '2026-12-01' } } }] } } } }) });
+      await r.fulfill({
+        contentType: 'application/json',
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify({
+          searchResultPage: {
+            products: {
+              main: {
+                items: [
+                  {
+                    product: {
+                      itemNo: no,
+                      id: no,
+                      salesPrice: {
+                        numeral: sale ? 1 : 9999,
+                        currencyCode: 'EUR',
+                        previous: sale ? { wholeNumber: '9999' } : undefined,
+                        validTo: '2026-12-01',
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        }),
+      });
     });
     await page.goto('./#c=hr&l=en');
     await ready(page);

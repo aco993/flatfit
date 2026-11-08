@@ -30,12 +30,23 @@ describe('delivery rules', () => {
   });
 });
 
-describe.each([['rs', rs], ['ba', ba], ['hr', hr], ['de', de], ['at', at]] as const)('delivery for the demo flat (%s)', (id, cat) => {
+describe.each([
+  ['rs', rs],
+  ['ba', ba],
+  ['hr', hr],
+  ['de', de],
+  ['at', at],
+] as const)('delivery for the demo flat (%s)', (id, cat) => {
   it('covers every store in the catalogue except estimates, with an https source', () => {
-    for (const s of (cat as Catalog).stores) if (s.id !== 'est') { expect(DELIVERY[id][s.id], `${id}.${s.id}`).toBeTruthy(); expect(DELIVERY[id][s.id].url).toMatch(/^https:\/\//); }
+    for (const s of (cat as Catalog).stores)
+      if (s.id !== 'est') {
+        expect(DELIVERY[id][s.id], `${id}.${s.id}`).toBeTruthy();
+        expect(DELIVERY[id][s.id].url).toMatch(/^https:\/\//);
+      }
   });
   it('adds up store by store', () => {
-    const ix = indexCatalog(cat as Catalog), ls = lines(DEMO, generate('light', DEMO, ix, '2026-11-03'), ix, '2026-11-03');
+    const ix = indexCatalog(cat as Catalog),
+      ls = lines(DEMO, generate('light', DEMO, ix, '2026-11-03'), ix, '2026-11-03');
     const d = deliveryFor(ls, DELIVERY[id]);
     expect(d.stores.length).toBeGreaterThan(0);
     expect(d.total).toBe(d.stores.reduce((a, s) => a + s.cost, 0));

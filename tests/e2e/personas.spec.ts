@@ -6,7 +6,9 @@ import AxeBuilder from '@axe-core/playwright';
  * Prices change, so the tests compare totals with each other instead of hard-coding amounts.
  */
 
-const ready = async (page: Page) => { await expect(page.locator('body[data-ready="1"]')).toBeAttached({ timeout: 30_000 }); };
+const ready = async (page: Page) => {
+  await expect(page.locator('body[data-ready="1"]')).toBeAttached({ timeout: 30_000 });
+};
 const total = async (page: Page) => (await page.getByTestId('total').innerText()).replace(/[^\d,.]/g, '');
 const num = (s: string) => Number(s.replace(/[.,](?=\d{3}\b)/g, '').replace(',', '.'));
 
@@ -53,7 +55,9 @@ test.describe('Jonas · Berlin, desktop, German', () => {
     const sofa = page.locator('#sel-sofa');
     const options = await sofa.locator('option').evaluateAll(os => os.map(o => (o as HTMLOptionElement).value));
     await sofa.selectOption(options[options.length - 1]);
-    await expect(page.getByRole('button', { name: 'Deine Auswahl' }).or(page.locator('.summary', { hasText: 'Deine Auswahl' }))).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Deine Auswahl' }).or(page.locator('.summary', { hasText: 'Deine Auswahl' })),
+    ).toBeVisible();
     const t2 = await total(page);
     expect(t2).not.toBe(t1);
     await page.getByRole('button', { name: /Link zu dieser Auswahl/ }).click();
@@ -89,7 +93,15 @@ test.describe('Mira · uses only the keyboard and a screen reader', () => {
     }
     const scan = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).exclude('#viewer canvas').analyze();
     const serious = scan.violations.filter(v => v.impact === 'serious' || v.impact === 'critical');
-    expect(serious.map(v => `${v.id}: ${v.nodes.map(n => n.target.join(' ')).slice(0, 3).join(' | ')}`)).toEqual([]);
+    expect(
+      serious.map(
+        v =>
+          `${v.id}: ${v.nodes
+            .map(n => n.target.join(' '))
+            .slice(0, 3)
+            .join(' | ')}`,
+      ),
+    ).toEqual([]);
   });
 });
 
@@ -115,7 +127,8 @@ test.describe('Luka · landlord adding his own flat', () => {
     await expect(page.getByRole('tab', { name: /Bedroom/ })).toBeVisible();
     await expect(page.locator('#slot-bed')).toBeVisible();
     // the plan survives a reload
-    await page.reload(); await ready(page);
+    await page.reload();
+    await ready(page);
     await expect(page.locator('#project option:checked')).toHaveText('Studio test');
     await page.locator('#project').selectOption('__manage');
     const dlg = page.getByRole('dialog', { name: 'My apartments' });
@@ -175,21 +188,27 @@ test.describe('Sara · rearranges the living room with the mouse', () => {
     await ready(page);
     await page.getByRole('tab', { name: /Whole flat/ }).click();
     await page.waitForTimeout(900);
-    const at = (x: number, y: number, z: number) => page.evaluate(([x, y, z]) => (window as any).flatfit.viewer.toScreen(x, y, z), [x, y, z]);
-    const centre = await page.evaluate(() => { const c = (window as any).flatfit.viewer.slotCenter('sofa'); return [c.x, c.z]; });
+    const at = (x: number, y: number, z: number) =>
+      page.evaluate(([x, y, z]) => (window as any).flatfit.viewer.toScreen(x, y, z), [x, y, z]);
+    const centre = await page.evaluate(() => {
+      const c = (window as any).flatfit.viewer.slotCenter('sofa');
+      return [c.x, c.z];
+    });
     // wait until the camera has stopped moving (software GL on CI animates slowly)
     let s = await at(centre[0], 0.35, centre[1]);
     for (let i = 0; i < 30; i++) {
       await page.waitForTimeout(150);
       const n = await at(centre[0], 0.35, centre[1]);
-      const still = Math.hypot(n.x - s.x, n.y - s.y) < 0.5; s = n;
+      const still = Math.hypot(n.x - s.x, n.y - s.y) < 0.5;
+      s = n;
       if (still) break;
     }
     // first click selects, then the selected piece can be dragged
     await page.mouse.click(s.x, s.y);
     await expect(page.locator('#card h3')).toHaveText('Sofa');
     await expect(page.locator('#card')).toContainText('Drag it in the 3D view');
-    const s0 = await at(centre[0], 0, centre[1]), t = await at(centre[0] + 1.2, 0, centre[1]);
+    const s0 = await at(centre[0], 0, centre[1]),
+      t = await at(centre[0] + 1.2, 0, centre[1]);
     await page.mouse.move(s.x, s.y);
     await page.mouse.down();
     await page.mouse.move(s.x + (t.x - s0.x) / 2, s.y + (t.y - s0.y) / 2, { steps: 6 });
@@ -200,7 +219,12 @@ test.describe('Sara · rearranges the living room with the mouse', () => {
     await expect(page.getByTestId('issues')).toContainText(/Sofa: Runs \d+ cm into: Coffee table/);
     await expect(page.locator('#card')).toContainText('Back to suggested place');
     // the selection frame follows the piece to where it was dropped (it once stayed at 0,0 after the rebuild)
-    const gap = await page.evaluate(() => { const v = (window as any).flatfit.viewer, c = v.slotCenter('sofa'), b = v.sel.box; return Math.hypot((b.min.x + b.max.x) / 2 - c.x, (b.min.z + b.max.z) / 2 - c.z); });
+    const gap = await page.evaluate(() => {
+      const v = (window as any).flatfit.viewer,
+        c = v.slotCenter('sofa'),
+        b = v.sel.box;
+      return Math.hypot((b.min.x + b.max.x) / 2 - c.x, (b.min.z + b.max.z) / 2 - c.z);
+    });
     expect(gap).toBeLessThan(0.1);
     await page.keyboard.press('t');
     const turned = await page.evaluate(() => (window as any).flatfit.project.moves.sofa.rot);
@@ -226,13 +250,25 @@ test.describe('Nina · has only a picture of her floor plan', () => {
     await dlg.locator('#ed-bd-file').setInputFiles('tests/e2e/fixtures/plan.png');
     await expect(dlg.getByRole('status')).toContainText('Click two points');
     // the 8 m dimension line runs from pixel (100,120) to (900,120) of the 1000 px wide picture
-    const toScreen = (px: number, py: number) => page.evaluate(([px, py]) => {
-      const svg = document.getElementById('ed-svg') as unknown as SVGSVGElement, img = svg.querySelector('image')!;
-      const x = +img.getAttribute('x')!, y = +img.getAttribute('y')!, w = +img.getAttribute('width')!, h = +img.getAttribute('height')!;
-      const p = svg.createSVGPoint(); p.x = x + px / 1000 * w; p.y = y + py / 700 * h;
-      const q = p.matrixTransform(svg.getScreenCTM()!); return { x: q.x, y: q.y };
-    }, [px, py]);
-    const a = await toScreen(100, 120), b = await toScreen(900, 120);
+    const toScreen = (px: number, py: number) =>
+      page.evaluate(
+        ([px, py]) => {
+          const svg = document.getElementById('ed-svg') as unknown as SVGSVGElement,
+            img = svg.querySelector('image')!;
+          const x = +img.getAttribute('x')!,
+            y = +img.getAttribute('y')!,
+            w = +img.getAttribute('width')!,
+            h = +img.getAttribute('height')!;
+          const p = svg.createSVGPoint();
+          p.x = x + (px / 1000) * w;
+          p.y = y + (py / 700) * h;
+          const q = p.matrixTransform(svg.getScreenCTM()!);
+          return { x: q.x, y: q.y };
+        },
+        [px, py],
+      );
+    const a = await toScreen(100, 120),
+      b = await toScreen(900, 120);
     await page.mouse.click(a.x, a.y);
     await page.mouse.click(b.x, b.y);
     await dlg.getByLabel('Real distance (m)').fill('8');
@@ -262,7 +298,8 @@ test.describe('Emir · Sarajevo, 9,000 KM to spend, no measurements yet', () => 
     await page.getByRole('button', { name: 'Opremi za ovoliko' }).click();
     await expect(page.locator('#summary')).toContainText('do 9.000');
     const spent = num(await total(page));
-    expect(spent).toBeLessThanOrEqual(9000); expect(spent).toBeGreaterThan(start);
+    expect(spent).toBeLessThanOrEqual(9000);
+    expect(spent).toBeGreaterThan(start);
     await expect(page.getByTestId('issues').locator('li.hard')).toHaveCount(0);
     // delivery is shown store by store (JYSK free above 600 KM, Technoshop 10 KM)
     await expect(page.locator('.delivery')).toContainText('besplatna dostava: JYSK');

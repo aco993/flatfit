@@ -18,9 +18,9 @@
 | | |
 |---|---|
 | **Stack** | TypeScript (strict), three.js, three-gpu-pathtracer, Intel OIDN on WebGPU, Vite, Vitest, Playwright + axe-core, GitHub Actions, GitHub Pages |
-| **Size** | ~3,900 lines of TypeScript, no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
+| **Size** | ~8,000 lines of TypeScript (formatted by Biome), no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
 | **Data** | 5 markets, ~570 real products; every price re-checked daily by a GitHub Action and committed to git ([why](docs/adr/0002-static-site-git-scraped-prices.md)); IKEA prices checked live from the browser on request |
-| **Quality** | 141 unit tests, 41 end-to-end runs (9 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 94–96 / mobile 68–70, CodeQL, Dependabot |
+| **Quality** | Biome lint and format in CI, 148 unit tests, 41 end-to-end runs (9 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 94–96 / mobile 68–70, CodeQL, Dependabot |
 | **Hard parts** | GPU driver resets during path tracing, a cold-cache shader stall found with a CPU profile, collision checks on every pointer move, a budget solved as a multiple-choice knapsack, honest labelling of prices that cannot be checked automatically |
 
 I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue.
@@ -101,6 +101,7 @@ flowchart LR
 ```
 
 - `src/domain` has no DOM or three.js imports, so the planner, fit checks and pricing run in Node tests.
+- `src/ui/app.ts` holds the state and the glue; the list, product card, keyboard shortcuts, flats, price refresh, share links and undo history are separate modules (`list`, `card`, `keyboard`, `projects`, `prices`, `share`, `history`).
 - Products are referenced by stable ids; share links store `{slot: id}` compressed with lz-string.
 - Everything is static: the site is a Vite build on GitHub Pages; plans and choices stay in the visitor's browser (`localStorage`).
 
@@ -120,7 +121,7 @@ Adding a country: a catalogue JSON in `src/data/catalogs/`, an entry in `src/dat
 
 | Layer | Tool | What |
 |---|---|---|
-| Unit (141) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 5 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema, sale dates and estimates, live price refresh (stubbed network), budget solver, delivery rules, measuring sheet, translation key parity and an ijekavian check for Bosnian and Croatian |
+| Unit (148) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 5 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema, sale dates and estimates, live price refresh (stubbed network), budget solver, delivery rules, measuring sheet, translation key parity and an ijekavian check for Bosnian and Croatian, share links and undo history |
 | End to end | Playwright | persona journeys and a URL matrix, see below |
 | Accessibility | axe-core | WCAG 2 A/AA, no serious or critical violations |
 
@@ -137,7 +138,7 @@ Personas (`tests/e2e/personas.spec.ts`):
 
 URL matrix (`tests/e2e/matrix.spec.ts`), in Chromium, Firefox and WebKit: every market and all five languages, Bosnia on a phone, Croatia in dark mode, a link with moved furniture, a link carrying a whole floor plan, and a deliberately broken link. Each must load without console errors, show the total in the right currency and never scroll sideways. A separate test stubs IKEA's endpoint and checks that *Refresh prices* applies a new sale and remembers it after a reload.
 
-CI (`.github/workflows/ci.yml`): typecheck → unit tests → build → Playwright (Chromium, Firefox, WebKit) → deploy to GitHub Pages on `main`. CodeQL scans the code weekly and on every pull request; Dependabot proposes dependency updates monthly.
+CI (`.github/workflows/ci.yml`): lint (Biome) → typecheck → unit tests → build → Playwright (Chromium, Firefox, WebKit) → deploy to GitHub Pages on `main`. CodeQL scans the code weekly and on every pull request; Dependabot proposes dependency updates monthly.
 
 ## Run it
 
@@ -145,6 +146,7 @@ CI (`.github/workflows/ci.yml`): typecheck → unit tests → build → Playwrig
 npm install
 npm run dev          # http://localhost:5173
 npm test             # unit tests
+npm run lint         # Biome lint + format check (npm run format fixes)
 npm run build && npx playwright test
 ```
 

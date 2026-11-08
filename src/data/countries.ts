@@ -1,6 +1,12 @@
 import type { Catalog } from '../types';
 
-export interface Country { id: string; currency: string; locale: string; flag: string; eurRate?: number }
+export interface Country {
+  id: string;
+  currency: string;
+  locale: string;
+  flag: string;
+  eurRate?: number;
+}
 
 /** Supported markets. Adding one = a catalogue JSON in src/data/catalogs + an entry here + a name in i18n. */
 export const COUNTRIES: Country[] = [
@@ -25,5 +31,10 @@ export async function loadCatalog(id: string): Promise<Catalog> {
 }
 
 export function money(v: number, c: Country, locale?: string) {
-  return new Intl.NumberFormat(locale || c.locale, { style: 'currency', currency: c.currency, maximumFractionDigits: c.currency === 'RSD' ? 0 : 2, minimumFractionDigits: c.currency === 'RSD' ? 0 : (Number.isInteger(v) ? 0 : 2) }).format(v);
+  return new Intl.NumberFormat(locale || c.locale, {
+    style: 'currency',
+    currency: c.currency,
+    maximumFractionDigits: c.currency === 'RSD' ? 0 : 2,
+    minimumFractionDigits: c.currency === 'RSD' ? 0 : Number.isInteger(v) ? 0 : 2,
+  }).format(v);
 }

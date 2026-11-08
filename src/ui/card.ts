@@ -9,13 +9,22 @@ import { flags } from './list';
 
 /** The card of the selected piece: product, price, store link, how to move it, and nearby alternatives. */
 export function renderCard(app: App) {
-  const card = $('#card'), slot = app.selected, ix = app.ix;
-  if (!slot || !ix) { card.hidden = true; return; }
-  const p = app.product(slot), l = lines(app.project, app.sel, ix, today()).find(x => x.slot === slot);
+  const card = $('#card'),
+    slot = app.selected,
+    ix = app.ix;
+  if (!slot || !ix) {
+    card.hidden = true;
+    return;
+  }
+  const p = app.product(slot),
+    l = lines(app.project, app.sel, ix, today()).find(x => x.slot === slot);
   // alternatives closest in price to the current pick
-  const alts = (ix.bySlot.get(slot) || []).filter(o => o.id !== p?.id)
-    .sort((a, b) => Math.abs(a.price - (p?.price || 0)) - Math.abs(b.price - (p?.price || 0))).slice(0, 3);
-  const units = l && l.units > 1 ? `<span class="muted small">${esc(t('item.units', { n: l.units }))} ${app.fmt(l.unitPrice)} = </span>` : '';
+  const alts = (ix.bySlot.get(slot) || [])
+    .filter(o => o.id !== p?.id)
+    .sort((a, b) => Math.abs(a.price - (p?.price || 0)) - Math.abs(b.price - (p?.price || 0)))
+    .slice(0, 3);
+  const units =
+    l && l.units > 1 ? `<span class="muted small">${esc(t('item.units', { n: l.units }))} ${app.fmt(l.unitPrice)} = </span>` : '';
   const body = p
     ? `<p class="pname">${esc(p.name)}</p><p class="muted small">${esc(app.storeName(p.store))}${p.w ? ' · ' + dimTxt(p) : ''} · ${esc(p.color)}</p>
       <p class="big">${units}${app.fmt(l?.total ?? p.price)}</p>
@@ -32,7 +41,8 @@ export function renderCard(app: App) {
 }
 
 function moveControls(app: App, slot: SlotId) {
-  const key = moveKey(slot); if (!key || !app.product(key) || !app.pose(key)) return '';
+  const key = moveKey(slot);
+  if (!key || !app.product(key) || !app.pose(key)) return '';
   const moved = !!app.project.moves?.[key];
   return `<div class="move"><p class="muted small">${esc(t('item.moveHint'))}</p><div class="row">
       <button type="button" class="btn ghost" data-turn-piece>${esc(t('item.turn'))}</button>

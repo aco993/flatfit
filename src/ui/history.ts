@@ -21,7 +21,14 @@ export class History<T> {
     if (s !== undefined) this.undoStack.push(current);
     return s;
   }
-  clear() { this.undoStack = []; this.redoStack = []; }
-  get canUndo() { return this.undoStack.length > 0; }
-  get canRedo() { return this.redoStack.length > 0; }
+  clear() {
+    this.undoStack = [];
+    this.redoStack = [];
+  }
+  get canUndo() {
+    return this.undoStack.length > 0;
+  }
+  get canRedo() {
+    return this.redoStack.length > 0;
+  }
 }

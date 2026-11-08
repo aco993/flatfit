@@ -10,11 +10,25 @@ import { fromTemplate } from '../../src/data/templates';
 import { autoLayout } from '../../src/domain/layout';
 import { activeSlots } from '../../src/domain/slots';
 import {
-  decodeSelection, dimsOf, effectivePrice, encodeSelection, family, fitIssues, fixDeps, generate, indexCatalog, lines, total, unitsNeeded,
+  decodeSelection,
+  dimsOf,
+  effectivePrice,
+  encodeSelection,
+  family,
+  fitIssues,
+  fixDeps,
+  generate,
+  indexCatalog,
+  lines,
+  total,
+  unitsNeeded,
 } from '../../src/domain/selection';
 
-const ixRS = indexCatalog(rs as Catalog), ixDE = indexCatalog(de as Catalog), ixAT = indexCatalog(at as Catalog);
-const ixBA = indexCatalog(ba as Catalog), ixHR = indexCatalog(hr as Catalog);
+const ixRS = indexCatalog(rs as Catalog),
+  ixDE = indexCatalog(de as Catalog),
+  ixAT = indexCatalog(at as Catalog);
+const ixBA = indexCatalog(ba as Catalog),
+  ixHR = indexCatalog(hr as Catalog);
 const TODAY = '2026-10-30';
 
 describe('units needed', () => {
@@ -82,18 +96,26 @@ describe('fit checks', () => {
 
 describe('generated proposals', () => {
   const projects: Project[] = [DEMO, fromTemplate('studio', 's', 'de'), fromTemplate('tworoom', 't', 'de')];
-  for (const [name, ix] of [['rs', ixRS], ['ba', ixBA], ['hr', ixHR], ['de', ixDE], ['at', ixAT]] as const) {
+  for (const [name, ix] of [
+    ['rs', ixRS],
+    ['ba', ixBA],
+    ['hr', ixHR],
+    ['de', ixDE],
+    ['at', ixAT],
+  ] as const) {
     for (const p of projects) {
       it(`${name} / ${p.rooms.length} rooms: "cheap" fills every required slot and nothing is a hard misfit`, () => {
         const sel = generate('cheap', p, ix, TODAY);
-        for (const sd of activeSlots(p)) if (!sd.optional && !sd.dependent && ix.bySlot.get(sd.id)?.length) expect(sel[sd.id], sd.id).toBeTruthy();
+        for (const sd of activeSlots(p))
+          if (!sd.optional && !sd.dependent && ix.bySlot.get(sd.id)?.length) expect(sel[sd.id], sd.id).toBeTruthy();
         const hard = fitIssues(p, sel, ix).filter(i => i.hard && !/needs/.test(i.code));
         expect(hard.map(i => i.slot + ':' + i.code)).toEqual([]);
       });
     }
   }
   it('"dark" prefers dark colours more often than "light"', () => {
-    const dark = generate('dark', DEMO, ixRS, TODAY), light = generate('light', DEMO, ixRS, TODAY);
+    const dark = generate('dark', DEMO, ixRS, TODAY),
+      light = generate('light', DEMO, ixRS, TODAY);
     const count = (s: typeof dark, f: string) => Object.values(s).filter(id => family(ixRS.byId.get(id!)?.hex) === f).length;
     expect(count(dark, 'dark')).toBeGreaterThan(count(light, 'dark'));
   });
@@ -105,15 +127,22 @@ describe('layout', () => {
     const L = autoLayout(DEMO, s => dimsOf(sel[s] ? ixRS.byId.get(sel[s]!) : undefined, s));
     for (const pl of L.placements) {
       const r = DEMO.rooms.find(x => x.id === pl.room)!;
-      expect(pl.x, pl.slot).toBeGreaterThanOrEqual(r.x - 0.01); expect(pl.x, pl.slot).toBeLessThanOrEqual(r.x + r.w + 0.01);
-      expect(pl.z, pl.slot).toBeGreaterThanOrEqual(r.z - 0.01); expect(pl.z, pl.slot).toBeLessThanOrEqual(r.z + r.d + 0.01);
+      expect(pl.x, pl.slot).toBeGreaterThanOrEqual(r.x - 0.01);
+      expect(pl.x, pl.slot).toBeLessThanOrEqual(r.x + r.w + 0.01);
+      expect(pl.z, pl.slot).toBeGreaterThanOrEqual(r.z - 0.01);
+      expect(pl.z, pl.slot).toBeLessThanOrEqual(r.z + r.d + 0.01);
     }
-    for (const s of ['sofa', 'tvunit', 'bed', 'wardrobe', 'kitchen', 'table', 'hall', 'washer', 'terrace'] as const) expect(L.placements.some(p => p.slot === s), s).toBe(true);
+    for (const s of ['sofa', 'tvunit', 'bed', 'wardrobe', 'kitchen', 'table', 'hall', 'washer', 'terrace'] as const)
+      expect(
+        L.placements.some(p => p.slot === s),
+        s,
+      ).toBe(true);
     expect(L.curtains.length).toBe(2);
   });
   it('puts the sofa and TV on opposite walls of the living room', () => {
     const L = autoLayout(DEMO, s => dimsOf(undefined, s));
-    const sofa = L.placements.find(p => p.slot === 'sofa')!, tv = L.placements.find(p => p.slot === 'tvunit')!;
+    const sofa = L.placements.find(p => p.slot === 'sofa')!,
+      tv = L.placements.find(p => p.slot === 'tvunit')!;
     expect(Math.abs(Math.abs(sofa.rot - tv.rot) - Math.PI)).toBeLessThan(1e-6);
   });
 });

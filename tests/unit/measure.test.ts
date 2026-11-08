@@ -16,8 +16,10 @@ describe('measuring sheet', () => {
   });
   it('lists where the entrance is and how wide it is (the corner by the bathroom)', () => {
     const dining = m.rooms.find(r => r.id === 'dining')!;
-    const at = dining.items.find(i => i.kind === 'entry' && i.what === 'at')!, size = dining.items[dining.items.indexOf(at) + 1];
-    expect(at).toMatchObject({ side: 's', value: 3.05 }); expect(size).toMatchObject({ what: 'size', value: 0.85 });
+    const at = dining.items.find(i => i.kind === 'entry' && i.what === 'at')!,
+      size = dining.items[dining.items.indexOf(at) + 1];
+    expect(at).toMatchObject({ side: 's', value: 3.05 });
+    expect(size).toMatchObject({ what: 'size', value: 0.85 });
   });
   it('asks for the sill of each window, and covers radiators and the TV socket', () => {
     const windows = DEMO.openings.filter(o => o.kind === 'window').length;

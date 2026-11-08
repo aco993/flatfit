@@ -24,12 +24,22 @@ export const DELIVERY_CHECKED = CHECKED;
 
 export const DELIVERY: Record<string, Record<string, Delivery>> = {
   rs: {
-    ik: { fee: 1999, from: true, note: 'truck to the building, zone 1', url: 'https://www.ikea.com/rs/sr/customer-service/services/delivery/' },
+    ik: {
+      fee: 1999,
+      from: true,
+      note: 'truck to the building, zone 1',
+      url: 'https://www.ikea.com/rs/sr/customer-service/services/delivery/',
+    },
     jysk: { unknown: true, url: 'https://jysk.rs/pravila-i-uslovi#5' },
     fi: { unknown: true, url: 'https://formaideale.rs/' },
     les: { unknown: true, url: 'https://www.xxxlesnina.rs/' },
     moe: { unknown: true, url: 'https://www.moemax.rs/' },
-    emz: { fee: 600, from: true, note: 'up to 30 kg; heavier orders by weight and distance', url: 'https://www.emmezeta.rs/kontakt-i-usluge/dostava-cesta-pitanja' },
+    emz: {
+      fee: 600,
+      from: true,
+      note: 'up to 30 kg; heavier orders by weight and distance',
+      url: 'https://www.emmezeta.rs/kontakt-i-usluge/dostava-cesta-pitanja',
+    },
     giga: { fee: 2399, perExtra: 1199, note: 'large appliances', url: 'https://gigatron.rs/isporuka' },
   },
   ba: {
@@ -37,12 +47,35 @@ export const DELIVERY: Record<string, Record<string, Delivery>> = {
     ts: { fee: 10, url: 'https://technoshop.ba/drustvo/22/dostava-i-isporuka' },
   },
   hr: {
-    ikea: { fee: 59.99, from: true, note: 'to the driveway, zone 1, up to 100 kg', url: 'https://www.ikea.com/hr/hr/customer-service/services/delivery/' },
+    ikea: {
+      fee: 59.99,
+      from: true,
+      note: 'to the driveway, zone 1, up to 100 kg',
+      url: 'https://www.ikea.com/hr/hr/customer-service/services/delivery/',
+    },
   },
   de: {
-    ikea: { tiers: [[400, 89], [1000, 99], [Infinity, 159]], note: 'to a room of your choice', url: 'https://www.ikea.com/de/de/customer-service/services/delivery/' },
+    ikea: {
+      tiers: [
+        [400, 89],
+        [1000, 99],
+        [Infinity, 159],
+      ],
+      note: 'to a room of your choice',
+      url: 'https://www.ikea.com/de/de/customer-service/services/delivery/',
+    },
   },
   at: {
-    ikea: { tiers: [[149.99, 39], [499.99, 49], [999.99, 99], [1499.99, 149], [Infinity, 249]], note: 'to a room of your choice', url: 'https://www.ikea.com/at/de/customer-service/services/delivery/' },
+    ikea: {
+      tiers: [
+        [149.99, 39],
+        [499.99, 49],
+        [999.99, 99],
+        [1499.99, 149],
+        [Infinity, 249],
+      ],
+      note: 'to a room of your choice',
+      url: 'https://www.ikea.com/at/de/customer-service/services/delivery/',
+    },
   },
 };

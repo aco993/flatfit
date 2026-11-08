@@ -15,14 +15,19 @@ const slotIds = new Set(SLOTS.map(s => s.id));
 describe.each(Object.entries(CATS))('catalogue %s', (id, cat) => {
   it('belongs to a configured country with the same currency', () => {
     const c = COUNTRIES.find(x => x.id === id)!;
-    expect(c).toBeTruthy(); expect(cat.currency).toBe(c.currency); expect(cat.country).toBe(id);
+    expect(c).toBeTruthy();
+    expect(cat.currency).toBe(c.currency);
+    expect(cat.country).toBe(id);
     expect(cat.checked).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
   it('has unique ids and only known slots and stores', () => {
     const ids = cat.products.map(p => p.id);
     expect(new Set(ids).size).toBe(ids.length);
     const stores = new Set(cat.stores.map(s => s.id));
-    for (const p of cat.products) { expect(slotIds.has(p.slot), p.id).toBe(true); expect(stores.has(p.store), p.id + ' store ' + p.store).toBe(true); }
+    for (const p of cat.products) {
+      expect(slotIds.has(p.slot), p.id).toBe(true);
+      expect(stores.has(p.store), p.id + ' store ' + p.store).toBe(true);
+    }
   });
   it('every product has a price, a colour and an https link', () => {
     for (const p of cat.products) {
@@ -31,14 +36,24 @@ describe.each(Object.entries(CATS))('catalogue %s', (id, cat) => {
       expect(typeof p.color).toBe('string');
       if (p.hex) expect(p.hex, p.id).toMatch(/^#[0-9a-f]{6}$/i);
       if (p.regular) expect(p.regular, p.id).toBeGreaterThan(p.price);
-      for (const k of ['w', 'd', 'h'] as const) if (p[k] !== undefined) { expect(p[k]!, p.id + k).toBeGreaterThan(0); expect(p[k]!, p.id + k).toBeLessThan(400); }
+      for (const k of ['w', 'd', 'h'] as const)
+        if (p[k] !== undefined) {
+          expect(p[k]!, p.id + k).toBeGreaterThan(0);
+          expect(p[k]!, p.id + k).toBeLessThan(400);
+        }
     }
   });
   it('furniture that stands on the floor has sizes (needed for fit checks)', () => {
-    for (const p of cat.products) if (['sofa', 'bed', 'wardrobe', 'tvunit', 'kitchen', 'table', 'coffee', 'night', 'hall'].includes(p.slot)) expect(p.w, p.id).toBeGreaterThan(0);
+    for (const p of cat.products)
+      if (['sofa', 'bed', 'wardrobe', 'tvunit', 'kitchen', 'table', 'coffee', 'night', 'hall'].includes(p.slot))
+        expect(p.w, p.id).toBeGreaterThan(0);
   });
   it('covers the main slots', () => {
-    for (const s of ['kitchen', 'fridge', 'sofa', 'bed', 'mattress', 'wardrobe', 'table', 'curtains']) expect(cat.products.some(p => p.slot === s), s).toBe(true);
+    for (const s of ['kitchen', 'fridge', 'sofa', 'bed', 'mattress', 'wardrobe', 'table', 'curtains'])
+      expect(
+        cat.products.some(p => p.slot === s),
+        s,
+      ).toBe(true);
   });
 });
 
@@ -53,31 +68,40 @@ describe.each(['rs', 'ba'])('price check dates (%s)', id => {
 
 describe.each(Object.keys(CATS))('promotions (%s)', id => {
   it('a sale found by the price check comes with its regular price, and every sale ends within a few months', () => {
-    for (const p of CATS[id].products) if (p.until) {
-      // hand-checked offers (stores behind a bot challenge) may only say until when the price holds
-      if (p.checked === CATS[id].checked) expect(p.regular, p.id).toBeGreaterThan(p.price);
-      expect((Date.parse(p.until) - Date.parse(CATS[id].checked)) / 864e5, p.id).toBeLessThanOrEqual(130);
-    }
+    for (const p of CATS[id].products)
+      if (p.until) {
+        // hand-checked offers (stores behind a bot challenge) may only say until when the price holds
+        if (p.checked === CATS[id].checked) expect(p.regular, p.id).toBeGreaterThan(p.price);
+        expect((Date.parse(p.until) - Date.parse(CATS[id].checked)) / 864e5, p.id).toBeLessThanOrEqual(130);
+      }
   });
 });
 
 describe('Bosnia and Herzegovina', () => {
   it('labels every price that is not from a local store as an estimate', () => {
-    for (const p of CATS.ba.products) if (p.store === 'est') { expect(p.estimate, p.id).toBe(true); expect(p.note, p.id).toBeTruthy(); }
+    for (const p of CATS.ba.products)
+      if (p.store === 'est') {
+        expect(p.estimate, p.id).toBe(true);
+        expect(p.note, p.id).toBeTruthy();
+      }
   });
   it('slatted bases are as long as the bed and narrower or as wide', () => {
-    for (const p of CATS.ba.products.filter(p => p.slot === 'base' || p.slot === 'mattress')) { expect(p.d, p.id).toBe(200); expect(p.w!, p.id).toBeLessThanOrEqual(160); }
+    for (const p of CATS.ba.products.filter(p => p.slot === 'base' || p.slot === 'mattress')) {
+      expect(p.d, p.id).toBe(200);
+      expect(p.w!, p.id).toBeLessThanOrEqual(160);
+    }
   });
 });
 
 describe('hand-picked looks', () => {
   it('only use products that exist in the Serbian catalogue and match their slot', () => {
     const byId = new Map(CATS.rs.products.map(p => [p.id, p]));
-    for (const [name, sel] of Object.entries(RS_PRESETS)) for (const [slot, id] of Object.entries(sel)) {
-      if (!id) continue;
-      expect(byId.get(id), `${name}.${slot}=${id}`).toBeTruthy();
-      expect(byId.get(id)!.slot).toBe(slot);
-      expect(byId.get(id)!.unavailable, `${name}.${slot}=${id} is no longer sold`).toBeFalsy();
-    }
+    for (const [name, sel] of Object.entries(RS_PRESETS))
+      for (const [slot, id] of Object.entries(sel)) {
+        if (!id) continue;
+        expect(byId.get(id), `${name}.${slot}=${id}`).toBeTruthy();
+        expect(byId.get(id)!.slot).toBe(slot);
+        expect(byId.get(id)!.unavailable, `${name}.${slot}=${id} is no longer sold`).toBeFalsy();
+      }
   });
 });

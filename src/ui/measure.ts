@@ -5,7 +5,15 @@ import { fmtNum } from './format';
 import { bounds } from '../domain/geometry';
 import { measureList, type MeasureItem } from '../domain/measure';
 
-const FILL: Record<string, string> = { living: '#efe2d0', kitchen: '#e2eadc', dining: '#f3eadb', bedroom: '#e5e2f0', bathroom: '#dde9ee', hall: '#ece9e3', terrace: '#e2e0db' };
+const FILL: Record<string, string> = {
+  living: '#efe2d0',
+  kitchen: '#e2eadc',
+  dining: '#f3eadb',
+  bedroom: '#e5e2f0',
+  bathroom: '#dde9ee',
+  hall: '#ece9e3',
+  terrace: '#e2e0db',
+};
 
 /** Where an item sits on its wall, as a segment on the plan (metres). */
 function seg(r: Room, side: Side, at: number, w: number) {
@@ -21,32 +29,51 @@ function what(it: MeasureItem) {
   if (it.what === 'ceiling') return t('ms.ceiling');
   const kind = t((it.kind === 'radiator' || it.kind === 'tv' ? 'wi.' + it.kind : 'kind.' + it.kind) as Key);
   const wall = t('ms.wall', { side: t(('side.' + it.side) as Key).toLowerCase() });
-  const part = it.what === 'at' ? t(it.side === 'n' || it.side === 's' ? 'ms.fromLeft' : 'ms.fromTop') : it.what === 'size' ? t('ms.size') : t('ms.sill');
+  const part =
+    it.what === 'at'
+      ? t(it.side === 'n' || it.side === 's' ? 'ms.fromLeft' : 'ms.fromTop')
+      : it.what === 'size'
+        ? t('ms.size')
+        : t('ms.sill');
   return `${kind} · ${wall} · ${part}`;
 }
 
 /** A printable page: the plan with numbered rooms and openings, and a table to write the real measurements in. */
 export function measureSheet(p: Project): string {
-  const list = measureList(p), b = bounds(p.rooms), m = 0.9;
+  const list = measureList(p),
+    b = bounds(p.rooms),
+    m = 0.9;
   const vb = [b.x1 - m, b.z1 - m, b.x2 - b.x1 + 2 * m, b.z2 - b.z1 + 2 * m].map(v => fmtNum(v, 2).replace(',', '.'));
   const label = (r: Room) => r.name || t(('room.' + r.type) as Key);
-  const svg = p.rooms.map(r => {
-    const mr = list.rooms.find(x => x.id === r.id)!, [wi, di] = mr.items;
-    const walls = mr.items.map((it, i) => ({ it, size: mr.items[i + 1] })).filter(x => x.it.what === 'at').map(({ it, size }) => {
-      const [x1, z1, x2, z2] = seg(r, it.side!, it.value, size.value), wall = it.kind === 'radiator' || it.kind === 'tv';
-      const lx = (x1 + x2) / 2 + (it.side === 'e' ? 0.28 : it.side === 'w' ? -0.28 : 0), lz = (z1 + z2) / 2 + (it.side === 's' ? 0.3 : it.side === 'n' ? -0.2 : 0.07);
-      return `<line x1="${x1}" y1="${z1}" x2="${x2}" y2="${z2}" class="${wall ? 'wi' : 'op'}"/><text x="${lx}" y="${lz}" class="code">${it.code}</text>`;
-    }).join('');
-    return `<rect x="${r.x}" y="${r.z}" width="${r.w}" height="${r.d}" fill="${FILL[r.type] || '#eee'}" class="room"/>
+  const svg = p.rooms
+    .map(r => {
+      const mr = list.rooms.find(x => x.id === r.id)!,
+        [wi, di] = mr.items;
+      const walls = mr.items
+        .map((it, i) => ({ it, size: mr.items[i + 1] }))
+        .filter(x => x.it.what === 'at')
+        .map(({ it, size }) => {
+          const [x1, z1, x2, z2] = seg(r, it.side!, it.value, size.value),
+            wall = it.kind === 'radiator' || it.kind === 'tv';
+          const lx = (x1 + x2) / 2 + (it.side === 'e' ? 0.28 : it.side === 'w' ? -0.28 : 0),
+            lz = (z1 + z2) / 2 + (it.side === 's' ? 0.3 : it.side === 'n' ? -0.2 : 0.07);
+          return `<line x1="${x1}" y1="${z1}" x2="${x2}" y2="${z2}" class="${wall ? 'wi' : 'op'}"/><text x="${lx}" y="${lz}" class="code">${it.code}</text>`;
+        })
+        .join('');
+      return `<rect x="${r.x}" y="${r.z}" width="${r.w}" height="${r.d}" fill="${FILL[r.type] || '#eee'}" class="room"/>
       <text x="${r.x + r.w / 2}" y="${r.z + r.d / 2}" class="name">${mr.no}. ${esc(label(r))}</text>
       <text x="${r.x + r.w / 2}" y="${r.z + 0.32}" class="dim">↔ ${wi.code}</text>
       <text x="${r.x + 0.16}" y="${r.z + r.d / 2 + 0.3}" class="dim" text-anchor="start">↕ ${di.code}</text>${walls}`;
-  }).join('');
-  const row = (it: MeasureItem) => `<tr><td class="c">${it.code}</td><td>${esc(what(it))}</td><td class="n">${fmtNum(it.value, 2)} m</td><td class="w"></td></tr>`;
-  const tables = list.rooms.map(mr => {
-    const r = p.rooms.find(x => x.id === mr.id)!;
-    return `<tbody><tr class="room-h"><th colspan="4">${mr.no}. ${esc(label(r))}</th></tr>${mr.items.map(row).join('')}</tbody>`;
-  }).join('');
+    })
+    .join('');
+  const row = (it: MeasureItem) =>
+    `<tr><td class="c">${it.code}</td><td>${esc(what(it))}</td><td class="n">${fmtNum(it.value, 2)} m</td><td class="w"></td></tr>`;
+  const tables = list.rooms
+    .map(mr => {
+      const r = p.rooms.find(x => x.id === mr.id)!;
+      return `<tbody><tr class="room-h"><th colspan="4">${mr.no}. ${esc(label(r))}</th></tr>${mr.items.map(row).join('')}</tbody>`;
+    })
+    .join('');
   // an edited copy of the demo is called 'Demo … *' in the editor; the star means nothing on paper
   const title = t('ms.title', { name: (p.demo ? t('proj.demo') : p.name).replace(/\s*\*$/, '') });
   return `<!doctype html><html lang="${document.documentElement.lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

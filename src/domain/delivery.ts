@@ -1,7 +1,15 @@
 import type { Delivery } from '../data/delivery';
 import type { Line } from './selection';
 
-export interface StoreDelivery { store: string; goods: number; cost: number; from: boolean; unknown: boolean; free: boolean; url?: string }
+export interface StoreDelivery {
+  store: string;
+  goods: number;
+  cost: number;
+  from: boolean;
+  unknown: boolean;
+  free: boolean;
+  url?: string;
+}
 
 /** What one store charges to bring this order home (see data/delivery.ts for the sources). */
 export function storeDelivery(d: Delivery | undefined, goods: number, items: number): Omit<StoreDelivery, 'store' | 'goods'> {
@@ -19,8 +27,14 @@ export function deliveryFor(ls: Line[], table: Record<string, Delivery> | undefi
   for (const l of ls) {
     if (!l.product || !l.units || l.product.store === 'est') continue;
     const s = byStore.get(l.product.store) || { goods: 0, items: 0 };
-    s.goods += l.total; s.items += l.units; byStore.set(l.product.store, s);
+    s.goods += l.total;
+    s.items += l.units;
+    byStore.set(l.product.store, s);
   }
-  const stores: StoreDelivery[] = [...byStore].map(([store, s]) => ({ store, goods: s.goods, ...storeDelivery(table?.[store], s.goods, s.items) }));
+  const stores: StoreDelivery[] = [...byStore].map(([store, s]) => ({
+    store,
+    goods: s.goods,
+    ...storeDelivery(table?.[store], s.goods, s.items),
+  }));
   return { stores, total: stores.reduce((a, s) => a + s.cost, 0), from: stores.some(s => s.from), unknown: stores.filter(s => s.unknown) };
 }

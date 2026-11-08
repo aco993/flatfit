@@ -9,6 +9,11 @@ export const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, c => ESC[
 
 let toastTimer = 0;
 export function toast(msg: string) {
-  const el = $('#toast'); el.textContent = msg; el.hidden = false;
-  clearTimeout(toastTimer); toastTimer = window.setTimeout(() => { el.hidden = true; }, 2600);
+  const el = $('#toast');
+  el.textContent = msg;
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => {
+    el.hidden = true;
+  }, 2600);
 }
