@@ -1,7 +1,7 @@
 import type { Project, Room, Side } from '../types';
 import { t, type Key } from '../i18n';
 import { esc } from './dom';
-import { fmtNum } from './app';
+import { fmtNum } from './format';
 import { bounds } from '../domain/geometry';
 import { measureList, type MeasureItem } from '../domain/measure';
 

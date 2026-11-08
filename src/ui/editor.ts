@@ -1,5 +1,5 @@
 import type { App } from './app';
-import { fmtNum } from './app';
+import { fmtNum } from './format';
 import type { Opening, OpeningKind, Project, Room, RoomType, Side, WallItem, WallItemKind } from '../types';
 import { t, type Key } from '../i18n';
 import { $, esc, toast } from './dom';
