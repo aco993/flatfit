@@ -38,7 +38,11 @@ export function storeKey(p: Provider, key: string, remember: boolean) {
   });
 }
 export const savedProvider = (): Provider => (store(() => localStorage.getItem(PROVIDER)) === 'claude' ? 'claude' : 'gemini');
-export const storeProvider = (p: Provider) => store(() => (localStorage.setItem(PROVIDER, p), null));
+export const storeProvider = (p: Provider) =>
+  store(() => {
+    localStorage.setItem(PROVIDER, p);
+    return null;
+  });
 
 /** The Claude request body; pure so it can be checked without a network. */
 export function planRequest(b64: string, mediaType: 'image/jpeg' | 'image/png', w: number, h: number, hint: string) {

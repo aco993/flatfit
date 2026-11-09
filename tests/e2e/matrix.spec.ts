@@ -174,3 +174,28 @@ test.describe('Refresh prices', () => {
     await expect(page.locator('#slots select option', { hasText: '€1' }).first()).toBeAttached();
   });
 });
+
+test.describe('Switching country fast', () => {
+  test('ends on the last country with that country’s own products, even after a reload', async ({ page }) => {
+    await page.goto('./#c=ba&l=bs');
+    await ready(page);
+    // three changes before any catalogue has arrived: an older, slower load must not win
+    await page.evaluate(() => {
+      const c = document.getElementById('country') as HTMLSelectElement;
+      for (const v of ['rs', 'ba', 'rs']) {
+        c.value = v;
+        c.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+    await expect(page.getByTestId('total')).toContainText('RSD');
+    await expect(page.getByTestId('total')).not.toHaveText(/^0\s*RSD/);
+    const ids = await page.evaluate(() => Object.values((window as any).flatfit.project.choices.rs.sel) as string[]);
+    expect(ids.length).toBeGreaterThan(5);
+    expect(ids.filter(id => id.startsWith('ba-'))).toEqual([]);
+    await page.goto('./#c=rs&l=bs');
+    await page.reload();
+    await ready(page);
+    await expect(page.getByTestId('total')).toContainText('RSD');
+    await expect(page.getByTestId('total')).not.toHaveText(/^0\s*RSD/);
+  });
+});

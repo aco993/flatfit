@@ -17,6 +17,7 @@ import {
   family,
   fitIssues,
   fixDeps,
+  ownProducts,
   generate,
   indexCatalog,
   lines,
@@ -163,5 +164,18 @@ describe('colour families', () => {
     expect(family('#f2f1ec')).toBe('light');
     expect(family('#c9a679')).toBe('warm');
     expect(family('#3c5a85')).toBe('color');
+  });
+});
+
+describe('a saved selection from another country', () => {
+  it('is not taken as this country’s choice; a few delisted products are tolerated', () => {
+    const rsIx = indexCatalog(rs as Catalog),
+      baIx = indexCatalog(ba as Catalog);
+    const baSel = generate('light', DEMO, baIx, '2026-11-09'),
+      rsSel = generate('light', DEMO, rsIx, '2026-11-09');
+    expect(ownProducts(baSel, rsIx)).toBe(false);
+    expect(ownProducts(rsSel, rsIx)).toBe(true);
+    expect(ownProducts({ ...rsSel, sofa: 'rs-gone-since-last-week' }, rsIx)).toBe(true);
+    expect(ownProducts({}, rsIx)).toBe(false);
   });
 });

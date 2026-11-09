@@ -156,6 +156,15 @@ const cheapest = (ps: Product[] | undefined, pref?: (p: Product) => boolean) => 
   return (pref && list.find(pref)) || list[0];
 };
 
+/**
+ * Whether a saved selection belongs to this catalogue: at least half of its products are in it.
+ * A few may have been delisted since; a selection made of another country's products is not ours.
+ */
+export function ownProducts(sel: Selection, ix: Index): boolean {
+  const ids = Object.values(sel).filter((v): v is string => typeof v === 'string');
+  return ids.length > 0 && ids.filter(id => ix.byId.has(id)).length * 2 >= ids.length;
+}
+
 /** Worktop, slatted base, chairs and curtain rods follow the main piece they belong to. */
 export function fixDeps(sel: Selection, ix: Index): Selection {
   const s = { ...sel };

@@ -16,6 +16,7 @@ import {
   fixDeps,
   generate,
   indexCatalog,
+  ownProducts,
   type Index,
   type Selection,
   type Style,
@@ -79,6 +80,7 @@ export class App {
   lastRender: { url: string; view: string } | null = null;
   private rebuildTimer = 0;
   private hashSel: string | null = null;
+  private loadToken = 0;
 
   async start() {
     setLang(this.prefs.lang || detectLang());
@@ -146,20 +148,26 @@ export class App {
 
   // ---------- data ----------
   async loadCountry(id: string, fromHash?: string | null) {
-    this.prefs.country = id;
-    savePrefs(this.prefs);
+    // a slower, older load (another flat, another country) must not finish over this one
+    const token = ++this.loadToken;
+    let ix: Index;
     try {
-      this.ix = indexCatalog(applyUpdates(await loadCatalog(id), loadPriceUpdates(id)));
+      ix = indexCatalog(applyUpdates(await loadCatalog(id), loadPriceUpdates(id)));
     } catch {
-      $('#summary').textContent = t('misc.catalogFail');
+      if (token === this.loadToken) $('#summary').textContent = t('misc.catalogFail');
       return;
     }
+    if (token !== this.loadToken) return;
+    // the country changes together with its catalogue, so nothing in between saves one country's products under another
+    this.prefs.country = id;
+    savePrefs(this.prefs);
+    this.ix = ix;
     const saved = this.project.choices?.[id],
       fromLink = fromHash ? decodeSelection(fromHash, this.ix) : null;
     if (fromLink && Object.keys(fromLink).length) {
       this.sel = fixDeps(fromLink, this.ix);
       this.preset = 'custom';
-    } else if (!fromHash && saved && Object.keys(saved.sel).length) {
+    } else if (!fromHash && saved && ownProducts(saved.sel, this.ix)) {
       this.sel = fixDeps(saved.sel as Selection, this.ix);
       this.preset = saved.preset;
       this.budget = saved.budget || 0;
