@@ -197,7 +197,8 @@ kbd {
 select,
 input[type="number"],
 input:not([type]),
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
