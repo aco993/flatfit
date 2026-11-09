@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { cluster, fromReading, PLAN_SCHEMA, placeBackdrop, planPrompt, tidyRooms } from '../../src/domain/planread';
 import { openingProblems, overlaps } from '../../src/domain/geometry';
-import { MODEL, planRequest, readResponse } from '../../src/ui/planai';
+import { errorWhy, GEMINI_MODEL, geminiRequest, MODEL, planRequest, readGemini, readResponse } from '../../src/ui/planai';
 import type { Project } from '../../src/types';
 
 /** What Claude would say about tests/e2e/fixtures/plan.png (a made-up 8 × 4.5 m two-room flat), with the
@@ -138,5 +138,53 @@ describe('the request to Claude', () => {
       ok: false,
       why: 'failed',
     });
+  });
+});
+
+describe('the free route: Gemini', () => {
+  it('sends the picture inline and asks for JSON in the same schema', () => {
+    const req = geminiRequest('AAAA', 'image/jpeg', 1000, 700, 'flat 15');
+    expect(req.contents[0].parts[0]).toEqual({ inline_data: { mime_type: 'image/jpeg', data: 'AAAA' } });
+    expect(req.contents[0].parts[1].text).toMatch(/flat 15/);
+    expect(req.generationConfig).toMatchObject({ responseMimeType: 'application/json', responseJsonSchema: PLAN_SCHEMA });
+    expect(GEMINI_MODEL).toMatch(/^gemini-/);
+  });
+
+  it('reads the answer and leaves out the model’s thoughts', () => {
+    const ok = readGemini(
+      {
+        candidates: [
+          { finishReason: 'STOP', content: { parts: [{ text: 'thinking…', thought: true }, { text: JSON.stringify(READING) }] } },
+        ],
+      },
+      1000,
+      700,
+    );
+    expect(ok.ok && ok.plan.rooms).toHaveLength(2);
+    expect(readGemini({ promptFeedback: { blockReason: 'SAFETY' } }, 1, 1)).toEqual({ ok: false, why: 'refused' });
+    expect(readGemini({ candidates: [{ finishReason: 'IMAGE_SAFETY', content: { parts: [] } }] }, 1, 1)).toEqual({
+      ok: false,
+      why: 'refused',
+    });
+    expect(readGemini({ candidates: [{ finishReason: 'MAX_TOKENS', content: { parts: [{ text: '{' }] } }] }, 1, 1)).toEqual({
+      ok: false,
+      why: 'cut',
+    });
+  });
+
+  it('tells a used-up free quota apart from a wrong key', () => {
+    expect(errorWhy('gemini', 429, '{"error":{"status":"RESOURCE_EXHAUSTED"}}').why).toBe('quota');
+    expect(errorWhy('gemini', 400, '{"error":{"message":"API key not valid.","details":[{"reason":"API_KEY_INVALID"}]}}').why).toBe(
+      'badKey',
+    );
+    expect(errorWhy('gemini', 403, 'FREE_TIER_VERIFICATION_REQUIRED').why).toBe('quota');
+    expect(errorWhy('gemini', 403, 'Your API key was reported as leaked.').why).toBe('badKey');
+    expect(errorWhy('gemini', undefined, 'Failed to fetch').why).toBe('offline');
+  });
+
+  it('says Claude needs credit, since it has no free quota', () => {
+    expect(errorWhy('claude', 400, 'Your credit balance is too low to access the Anthropic API.').why).toBe('noCredit');
+    expect(errorWhy('claude', 401, 'invalid x-api-key').why).toBe('badKey');
+    expect(errorWhy('claude', 529, 'Overloaded').why).toBe('overloaded');
   });
 });

@@ -126,8 +126,14 @@ export class RenderDialog {
       // each heavy step is followed by a pause so the dialog stays responsive (Cancel works) on slow machines
       const breathe = () => new Promise(res => setTimeout(res, 30));
       await breathe();
-      // decorative models load lazily; the render must not miss them
-      await app.models.load(import.meta.env.BASE_URL);
+      // decorative models load lazily; the render must not miss them. Cancel must not wait for a slow download.
+      let poll = 0;
+      await Promise.race([
+        app.models.load(import.meta.env.BASE_URL),
+        new Promise<void>(res => {
+          poll = window.setInterval(() => this.cancelled && res(), 100);
+        }),
+      ]).finally(() => clearInterval(poll));
       if (this.cancelled) throw new Cancelled();
       const root = app.buildRoot(true, interior ? app.project.wallHeight : 1.05);
       await breathe();

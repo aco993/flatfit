@@ -1240,3 +1240,19 @@ details.ai input[type="password"] {
     position: static;
   }
 }
+details.ai fieldset.prov {
+  border: 0;
+  padding: 0;
+  margin: 6px 0;
+  display: grid;
+  gap: 4px;
+}
+details.ai fieldset.prov legend {
+  font-weight: 600;
+  font-size: 12px;
+  padding: 0;
+  margin-bottom: 2px;
+}
+details.ai .note a {
+  white-space: nowrap;
+}

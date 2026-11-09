@@ -7,7 +7,7 @@ import { bounds, deriveWalls, edgeOf, openingProblems, overlaps, roomArea } from
 import { fromTemplate, type TemplateId } from '../data/templates';
 import { openMeasureSheet } from './measure';
 import { placeBackdrop } from '../domain/planread';
-import { keyRemembered, readPlan, savedKey, storeKey } from './planai';
+import { keyRemembered, PROVIDERS, readPlan, savedKey, savedProvider, storeKey, storeProvider, type Provider } from './planai';
 
 const TYPES: RoomType[] = ['living', 'kitchen', 'dining', 'bedroom', 'bathroom', 'hall', 'terrace'];
 const KINDS: OpeningKind[] = ['door', 'entry', 'window', 'balcony'];
@@ -70,6 +70,7 @@ export function openEditor(app: App, src: Project | null) {
   let rubber: { x0: number; z0: number; x1: number; z1: number } | null = null;
   let aiFor: string | null = null;
   let aiBusy = false;
+  let prov: Provider = savedProvider();
   let calPts: { x: number; z: number }[] = [];
   const roomLabel = (r: Room) => r.name || t(('room.' + r.type) as Key);
 
@@ -225,12 +226,33 @@ export function openEditor(app: App, src: Project | null) {
       ? ''
       : `<details class="ai"><summary>✨ ${esc(t('ai.title'))}</summary>
         <p class="muted small">${esc(t('ai.intro'))}</p>
-        <label class="field"><span>${esc(t('ai.key'))}</span><input id="ed-ai-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" value="${esc(savedKey())}"></label>
-        <label class="check"><input type="checkbox" id="ed-ai-remember" ${keyRemembered() ? 'checked' : ''}> ${esc(t('ai.remember'))}</label>
+        <fieldset class="prov"><legend>${esc(t('ai.who'))}</legend>${PROVIDERS.map(
+          v =>
+            `<label class="check"><input type="radio" name="ed-ai-prov" value="${v}" ${v === prov ? 'checked' : ''}> ${esc(t(('ai.' + v) as Key))}</label>`,
+        ).join('')}</fieldset>
+        <p class="note small" id="ed-ai-note"></p>
+        <label class="field"><span>${esc(t('ai.key'))}</span><input id="ed-ai-key" type="password" autocomplete="off" spellcheck="false"></label>
+        <label class="check"><input type="checkbox" id="ed-ai-remember"> ${esc(t('ai.remember'))}</label>
         <label class="field"><span>${esc(t('ai.hint'))}</span><input id="ed-ai-hint" maxlength="200" placeholder="${esc(t('ai.hintPh'))}"></label>
         <p class="muted small">${esc(t('ai.privacy'))} ${esc(t('ai.replace'))}</p>
         <div class="row"><button type="button" class="btn primary" id="ed-ai-send">${esc(t('ai.send'))}</button><button type="button" class="btn ghost" id="ed-ai-forget">${esc(t('ai.forget'))}</button></div>
         <p id="ed-ai-out" class="small" role="status" aria-live="polite"></p></details>`;
+    if (src) aiProvider(prov);
+  }
+
+  /** Switches the panel to a provider: its key, its note (free or paid), its key format. */
+  function aiProvider(p: Provider) {
+    prov = p;
+    storeProvider(p);
+    const keyIn = $('#ed-ai-key', dlg) as HTMLInputElement;
+    keyIn.value = savedKey(p);
+    keyIn.placeholder = p === 'gemini' ? 'AIza…' : 'sk-ant-…';
+    ($('#ed-ai-remember', dlg) as HTMLInputElement).checked = keyRemembered(p);
+    $('#ed-ai-note', dlg).innerHTML =
+      p === 'gemini'
+        ? `${esc(t('ai.geminiNote'))} <a href="https://aistudio.google.com/docs/api-key" target="_blank" rel="noopener">${esc(t('ai.getKey'))} ↗</a>`
+        : esc(t('ai.claudeNote'));
+    $('#ed-ai-out', dlg).textContent = '';
   }
 
   async function runAi() {
@@ -245,13 +267,13 @@ export function openEditor(app: App, src: Project | null) {
       keyIn.focus();
       return;
     }
-    storeKey(key, ($('#ed-ai-remember', dlg) as HTMLInputElement).checked);
+    storeKey(prov, key, ($('#ed-ai-remember', dlg) as HTMLInputElement).checked);
     aiBusy = true;
     btn.disabled = true;
     out.textContent = t('ai.busy');
     let res: Awaited<ReturnType<typeof readPlan>>;
     try {
-      res = await readPlan(bd.src, key, ($('#ed-ai-hint', dlg) as HTMLInputElement).value);
+      res = await readPlan(prov, bd.src, key, ($('#ed-ai-hint', dlg) as HTMLInputElement).value);
     } catch (e) {
       res = { ok: false, why: 'failed', detail: String((e as Error).message || e) };
     }
@@ -531,6 +553,10 @@ export function openEditor(app: App, src: Project | null) {
       draw();
       return;
     }
+    if ((el as HTMLInputElement).name === 'ed-ai-prov') {
+      aiProvider(el.value as Provider);
+      return;
+    }
     if (el.closest('#ed-ai')) return;
     if (el === nameIn) {
       draft.name = nameIn.value;
@@ -641,7 +667,7 @@ export function openEditor(app: App, src: Project | null) {
       return;
     }
     if (el.closest('#ed-ai-forget')) {
-      storeKey('', false);
+      storeKey(prov, '', false);
       ($('#ed-ai-key', dlg) as HTMLInputElement).value = '';
       ($('#ed-ai-remember', dlg) as HTMLInputElement).checked = false;
       return;

@@ -388,10 +388,14 @@ test.describe('Dario · got a picture of a plan and has his own Claude API key',
     const dlg = page.getByRole('dialog', { name: 'Floor plan' });
     await dlg.getByRole('button', { name: /Empty/ }).click();
     await dlg.locator('#ed-bd-file').setInputFiles('tests/e2e/fixtures/plan.png');
-    await dlg.getByText('Read the rooms from the picture (Claude)').click();
+    await dlg.getByText('Read the rooms from the picture (AI)').click();
+    // free Gemini is the default; Dario pays for Claude
+    await expect(dlg.getByLabel(/Google Gemini: free/)).toBeChecked();
+    await dlg.getByLabel(/Claude: paid/).check();
+    await expect(dlg.locator('#ed-ai-note')).toContainText('There is no free quota');
     await dlg.getByRole('button', { name: 'Read the plan' }).click();
     await expect(dlg.locator('#ed-ai-out')).toContainText('Enter your API key first');
-    await dlg.getByLabel('Anthropic API key').fill('sk-ant-test-not-a-real-key');
+    await dlg.getByLabel('API key', { exact: true }).fill('sk-ant-test-not-a-real-key');
     await dlg.getByLabel('Which flat? (optional)').fill('the only one');
     await dlg.getByRole('button', { name: 'Read the plan' }).click();
     await expect(dlg.locator('#ed-ai-out')).toContainText('2 rooms read');
@@ -444,5 +448,83 @@ test.describe('Dario · got a picture of a plan and has his own Claude API key',
     await dlg.getByRole('button', { name: 'Save and show in 3D' }).click();
     await ready(page);
     expect(await page.evaluate(() => (window as any).flatfit.project.rooms.length)).toBe(3);
+  });
+});
+
+test.describe('Lea · wants it free, with a Google AI Studio key', () => {
+  test.use({ locale: 'en-GB' });
+  test('Gemini reads the plan for free; when the free quota runs out she is told a paid key is needed', async ({ page }) => {
+    const reading = {
+      found: true,
+      plan_box: { left: 100, top: 120, right: 900, bottom: 570 },
+      rooms: [
+        { type: 'living', name: '', x: 0, z: 0, w: 5, d: 4.5, open_to: -1 },
+        { type: 'bedroom', name: '', x: 5, z: 0, w: 3, d: 4.5, open_to: -1 },
+      ],
+      openings: [{ kind: 'door', room: 0, side: 'e', at: 3.2, width: 0.8 }],
+      notes: '',
+    };
+    const sent: { body: Record<string, unknown>; headers: Record<string, string>; url: string }[] = [];
+    const cors = {
+      'access-control-allow-origin': '*',
+      'access-control-allow-headers': '*',
+      'access-control-allow-methods': 'POST, OPTIONS',
+    };
+    await page.route('https://generativelanguage.googleapis.com/**', async route => {
+      const req = route.request();
+      if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
+      sent.push({ body: req.postDataJSON(), headers: await req.allHeaders(), url: req.url() });
+      if (sent.length === 1)
+        return route.fulfill({
+          status: 200,
+          headers: { ...cors, 'content-type': 'application/json' },
+          body: JSON.stringify({
+            candidates: [{ finishReason: 'STOP', content: { role: 'model', parts: [{ text: JSON.stringify(reading) }] } }],
+          }),
+        });
+      // the second time the free quota is gone
+      return route.fulfill({
+        status: 429,
+        headers: { ...cors, 'content-type': 'application/json' },
+        body: JSON.stringify({ error: { code: 429, message: 'You exceeded your current quota.', status: 'RESOURCE_EXHAUSTED' } }),
+      });
+    });
+    await page.route('https://api.anthropic.com/**', route => route.abort());
+    await page.goto('./#c=de&l=en');
+    await ready(page);
+    await page.locator('#project').selectOption('__new');
+    const dlg = page.getByRole('dialog', { name: 'Floor plan' });
+    await dlg.getByRole('button', { name: /Empty/ }).click();
+    await dlg.locator('#ed-bd-file').setInputFiles('tests/e2e/fixtures/plan.png');
+    await dlg.getByText('Read the rooms from the picture (AI)').click();
+    await expect(dlg.getByLabel(/Google Gemini: free/)).toBeChecked();
+    // she is warned what the free tier means before sending anything
+    await expect(dlg.locator('#ed-ai-note')).toContainText('do not send plans with names or addresses');
+    await expect(dlg.getByRole('link', { name: /Get a free key/ })).toHaveAttribute('href', /aistudio\.google\.com/);
+    await dlg.getByLabel('API key', { exact: true }).fill('AIza-test-not-a-real-key');
+    await dlg.getByRole('button', { name: 'Read the plan' }).click();
+    await expect(dlg.locator('#ed-ai-out')).toContainText('2 rooms read');
+    await expect(dlg.locator('#ed-total')).toContainText('36');
+    expect(sent[0].url).toContain('/v1beta/models/gemini-3.8-flash:generateContent');
+    expect(sent[0].url).not.toContain('AIza');
+    expect(sent[0].headers['x-goog-api-key']).toBe('AIza-test-not-a-real-key');
+    const body = sent[0].body as {
+      contents: { parts: { inline_data?: { mime_type: string }; text?: string }[] }[];
+      generationConfig: Record<string, unknown>;
+    };
+    expect(body.contents[0].parts[0].inline_data?.mime_type).toBe('image/jpeg');
+    expect(body.generationConfig.responseMimeType).toBe('application/json');
+    expect(body.generationConfig.responseJsonSchema).toMatchObject({ type: 'object' });
+
+    await dlg.getByRole('button', { name: 'Read the plan' }).click();
+    await expect(dlg.locator('#ed-ai-out')).toContainText('The free Gemini quota is used up');
+    await expect(dlg.locator('#ed-ai-out')).toContainText('needs a paid key');
+    // what was read before stays
+    await expect(dlg.locator('#ed-total')).toContainText('36');
+    // her choice of the free service is remembered, the key is not unless she asks
+    expect(await page.evaluate(() => [localStorage.getItem('flatfit.aiProvider'), localStorage.getItem('flatfit.geminiKey')])).toEqual([
+      'gemini',
+      null,
+    ]);
   });
 });
