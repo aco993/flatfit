@@ -312,3 +312,30 @@ test.describe('Emir · Sarajevo, 9,000 KM to spend, no measurements yet', () => 
     await expect(sheet.locator('svg rect.room')).toHaveCount(6);
   });
 });
+
+test.describe('Marko · rents the flat out and needs a listing', () => {
+  test.use({ locale: 'bs-BA' });
+  test('opens a listing sheet with photos, plan, facts and the furniture, prices hidden until asked', async ({ page, context }) => {
+    await page.goto('./#c=ba&l=bs');
+    await ready(page);
+    const [sheet] = await Promise.all([context.waitForEvent('page'), page.getByRole('button', { name: 'List za oglas (PDF)' }).click()]);
+    await expect(sheet.locator('h1')).toHaveText('Demo · dvosoban stan · 44,6 m²', { timeout: 60_000 });
+    // photos of the furnished rooms, taken from the 3D view
+    const photos = sheet.locator('figure img');
+    expect(await photos.count()).toBeGreaterThanOrEqual(3);
+    expect(await photos.first().getAttribute('src')).toMatch(/^data:image\/jpeg;base64,/);
+    await expect(sheet.locator('svg rect.room')).toHaveCount(6);
+    await expect(sheet.locator('.lead')).toContainText('Namješten stan od 40,0 m²');
+    await expect(sheet.locator('dl')).toContainText('Stambena površina');
+    await expect(sheet.locator('.equip')).toContainText('Trosjed');
+    // the title can be edited before printing
+    await expect(sheet.locator('h1')).toHaveAttribute('contenteditable', 'true');
+    // prices are hidden until the box is ticked
+    await expect(sheet.locator('.price').first()).toBeHidden();
+    await sheet.getByLabel('Prikaži cijene').check();
+    await expect(sheet.locator('.price').first()).toBeVisible();
+    await expect(sheet.locator('.total')).toContainText('KM');
+    // the 3D view is back where it was
+    expect(await page.evaluate(() => (window as any).flatfit.viewIdx)).toBe(0);
+  });
+});

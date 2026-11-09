@@ -5,7 +5,7 @@ import { fmtNum } from './format';
 import { bounds } from '../domain/geometry';
 import { measureList, type MeasureItem } from '../domain/measure';
 
-const FILL: Record<string, string> = {
+export const FILL: Record<string, string> = {
   living: '#efe2d0',
   kitchen: '#e2eadc',
   dining: '#f3eadb',
@@ -16,7 +16,7 @@ const FILL: Record<string, string> = {
 };
 
 /** Where an item sits on its wall, as a segment on the plan (metres). */
-function seg(r: Room, side: Side, at: number, w: number) {
+export function seg(r: Room, side: Side, at: number, w: number) {
   if (side === 'n') return [r.x + at, r.z, r.x + at + w, r.z];
   if (side === 's') return [r.x + at, r.z + r.d, r.x + at + w, r.z + r.d];
   if (side === 'w') return [r.x, r.z + at, r.x, r.z + at + w];

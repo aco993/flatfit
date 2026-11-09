@@ -36,6 +36,7 @@ import { renderCard } from './card';
 import { onKey, showHelp } from './keyboard';
 import { exportCsv, manageProjects } from './projects';
 import { PriceRefresh } from './prices';
+import { openListing } from './listing';
 
 export { fmtNum, fmtDate, dimTxt, localeOf } from './format';
 
@@ -74,6 +75,8 @@ export class App {
   models = new Models();
   render = new RenderDialog(this);
   prices = new PriceRefresh(this);
+  /** the last photoreal image made in this session, for the listing sheet */
+  lastRender: { url: string; view: string } | null = null;
   private rebuildTimer = 0;
   private hashSel: string | null = null;
 
@@ -546,6 +549,7 @@ export class App {
       }
     });
     $('#csv').addEventListener('click', () => exportCsv(this));
+    $('#listing').addEventListener('click', () => openListing(this));
     $('#render-btn').addEventListener('click', () => this.render.open());
     document.querySelectorAll<HTMLElement>('[data-turn]').forEach(b => {
       b.addEventListener('click', () => this.viewer?.turn(b.dataset.turn === 'left' ? 0.35 : -0.35, 0));

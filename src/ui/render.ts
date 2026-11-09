@@ -179,6 +179,8 @@ export class RenderDialog {
         how = 'render.how.filter';
       }
       const url = out.toDataURL('image/jpeg', 0.92);
+      // the listing sheet uses the last photoreal image as its main photo
+      app.lastRender = { url, view: view?.id || '' };
       const img = $('#pt-img') as HTMLImageElement;
       img.src = url;
       img.alt = t('render.title') + ' · ' + (view?.room ? app.roomName(view.room) : t('view.overview'));
