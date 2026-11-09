@@ -1,7 +1,7 @@
 {
  "country": "at",
  "currency": "EUR",
- "checked": "2026-11-08",
+ "checked": "2026-11-09",
  "stores": [
   {
    "id": "ikea",
@@ -28,7 +28,7 @@
    "d": 61,
    "h": 220,
    "needsWorktop": false,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-79581114",
@@ -43,7 +43,7 @@
    "d": 61,
    "h": 220,
    "needsWorktop": false,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-59614945",
@@ -58,22 +58,22 @@
    "d": 61,
    "h": 220,
    "needsWorktop": false,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-89581123",
+   "id": "at-ik-49581120",
    "slot": "kitchen",
    "store": "ikea",
-   "name": "KNOXHULT Küche, weiß Rahmen, 120x61x220 cm",
-   "url": "https://www.ikea.com/at/de/p/knoxhult-kueche-weiss-rahmen-s89581123/",
-   "price": 195,
+   "name": "KNOXHULT Küche, weiß, 120x61x220 cm",
+   "url": "https://www.ikea.com/at/de/p/knoxhult-kueche-weiss-s49581120/",
+   "price": 175,
    "color": "weiß",
    "hex": "#ffffff",
    "w": 120,
    "d": 61,
    "h": 220,
    "needsWorktop": false,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-59157391",
@@ -86,20 +86,20 @@
    "hex": "#949494",
    "w": 46,
    "d": 45.5,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-59337024",
+   "id": "at-ik-69337028",
    "slot": "sink",
    "store": "ikea",
-   "name": "KILSVIKEN Einbauspüle, 1 Becken, schwarz Quarzkomposit, 56x46 cm",
-   "url": "https://www.ikea.com/at/de/p/kilsviken-einbauspuele-1-becken-schwarz-quarzkomposit-s59337024/",
-   "price": 229,
+   "name": "KILSVIKEN Einbauspüle, 1 Becken, schwarz/Quarzkomposit, 36x46 cm",
+   "url": "https://www.ikea.com/at/de/p/kilsviken-einbauspuele-1-becken-schwarz-quarzkomposit-s69337028/",
+   "price": 194,
    "color": "schwarz",
    "hex": "#000000",
-   "w": 56,
-   "d": 56,
-   "checked": "2026-11-08"
+   "w": 36,
+   "d": 36,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-39253713",
@@ -113,7 +113,7 @@
    "w": 53,
    "d": 47,
    "h": 20,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-70600904",
@@ -124,7 +124,7 @@
    "price": 89,
    "color": "stahlfarben",
    "h": 35.8,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-00602303",
@@ -135,7 +135,7 @@
    "price": 99,
    "color": "stahlfarben",
    "h": 27.4,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-80602304",
@@ -146,7 +146,7 @@
    "price": 99,
    "color": "stahlfarben",
    "h": 29.5,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-10467093",
@@ -160,7 +160,7 @@
    "w": 59,
    "d": 52,
    "h": 4.9,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-90557725",
@@ -174,7 +174,7 @@
    "w": 59,
    "d": 52,
    "h": 5.3,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-20467592",
@@ -188,7 +188,7 @@
    "w": 29,
    "d": 52,
    "h": 5.8,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-60600056",
@@ -202,7 +202,7 @@
    "w": 59.4,
    "d": 56.7,
    "h": 59.5,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-50621709",
@@ -216,7 +216,7 @@
    "w": 59.4,
    "d": 54.7,
    "h": 58.9,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40600284",
@@ -230,7 +230,7 @@
    "w": 59.4,
    "d": 54.6,
    "h": 59.4,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-20388967",
@@ -244,7 +244,7 @@
    "w": 60,
    "d": 51,
    "h": 13,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-50401383",
@@ -258,7 +258,7 @@
    "w": 60,
    "d": 51,
    "h": 13,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40593132",
@@ -272,7 +272,7 @@
    "w": 52,
    "d": 45.8,
    "h": 14.9,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-50619457",
@@ -286,7 +286,7 @@
    "w": 47,
    "d": 51.5,
    "h": 150,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-60584631",
@@ -299,7 +299,7 @@
    "w": 29.5,
    "d": 59.5,
    "h": 87.5,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-30578801",
@@ -313,21 +313,21 @@
    "w": 55,
    "d": 57,
    "h": 83.2,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-30529467",
+   "id": "at-ik-40529462",
    "slot": "table",
    "store": "ikea",
-   "name": "PINNTORP Tisch, hellbraun lasiert/weiß las. Kiefer, 125x75 cm",
-   "url": "https://www.ikea.com/at/de/p/pinntorp-tisch-hellbraun-lasiert-weiss-las-kiefer-30529467/",
+   "name": "PINNTORP Tisch, hellbraun lasiert/rot las., 125x75 cm",
+   "url": "https://www.ikea.com/at/de/p/pinntorp-tisch-hellbraun-lasiert-rot-las-40529462/",
    "price": 149,
-   "color": "braun / weiß",
+   "color": "braun / rot",
    "hex": "#814820",
    "w": 125,
    "d": 75,
    "h": 75,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40568726",
@@ -341,7 +341,7 @@
    "w": 130,
    "d": 80,
    "h": 75,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-20593802",
@@ -356,7 +356,7 @@
    "d": 120,
    "h": 74,
    "round": true,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-70581359",
@@ -371,7 +371,7 @@
    "w": 150,
    "d": 80,
    "h": 77,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-00587492",
@@ -385,7 +385,7 @@
    "w": 130,
    "d": 80,
    "h": 75,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-10582644",
@@ -398,7 +398,7 @@
    "hex": "#949494",
    "regular": 119,
    "qty": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40605253",
@@ -413,7 +413,7 @@
    "d": 45,
    "h": 76,
    "qty": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-90635177",
@@ -428,7 +428,7 @@
    "d": 49,
    "h": 90,
    "qty": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-80592767",
@@ -443,22 +443,22 @@
    "d": 55,
    "h": 81,
    "qty": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-30635123",
+   "id": "at-ik-10576718",
    "slot": "chairs",
    "store": "ikea",
-   "name": "TOBIAS Stuhl, schwarz/grau/schwarz",
-   "url": "https://www.ikea.com/at/de/p/tobias-stuhl-schwarz-grau-schwarz-30635123/",
-   "price": 89.99,
-   "color": "grau / schwarz",
-   "hex": "#949494",
-   "w": 55,
-   "d": 56,
-   "h": 82,
+   "name": "HAUGA Stuhl, weiß",
+   "url": "https://www.ikea.com/at/de/p/hauga-stuhl-weiss-10576718/",
+   "price": 29.99,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 40,
+   "d": 49,
+   "h": 87,
    "qty": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-59579193",
@@ -471,20 +471,20 @@
    "hex": "#949494",
    "w": 205,
    "d": 88,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-79633759",
+   "id": "at-ik-69509010",
    "slot": "sofa",
    "store": "ikea",
-   "name": "EKTORP 3er-Sofa, Blekinge weiß",
-   "url": "https://www.ikea.com/at/de/p/ektorp-3er-sofa-blekinge-weiss-s79633759/",
-   "price": 499,
+   "name": "EKTORP 3er-Sofa, Kilanda hellbeige",
+   "url": "https://www.ikea.com/at/de/p/ektorp-3er-sofa-kilanda-hellbeige-s69509010/",
+   "price": 549,
    "color": "beige",
    "hex": "#f4f3d7",
    "w": 218,
    "d": 88,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-49440597",
@@ -499,20 +499,20 @@
    "w": 228,
    "d": 95,
    "h": 83,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-30618519",
+   "id": "at-ik-40618514",
    "slot": "sofa",
    "store": "ikea",
-   "name": "SALTMYRAN 3er-Sofa, Öreryd blau",
-   "url": "https://www.ikea.com/at/de/p/saltmyran-3er-sofa-oereryd-blau-30618519/",
+   "name": "SALTMYRAN 3er-Sofa, Öreryd graubeige",
+   "url": "https://www.ikea.com/at/de/p/saltmyran-3er-sofa-oereryd-graubeige-40618514/",
    "price": 249,
-   "color": "blau",
-   "hex": "#0058a3",
+   "color": "beige / grau",
+   "hex": "#f4f3d7",
    "w": 187,
    "d": 79,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-30583384",
@@ -525,21 +525,20 @@
    "w": 232,
    "d": 89,
    "h": 80,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-39270326",
+   "id": "at-ik-79489634",
    "slot": "sofa",
    "store": "ikea",
-   "name": "LANDSKRONA 3er-Sofa, Gunnared hellgrün/Holz",
-   "url": "https://www.ikea.com/at/de/p/landskrona-3er-sofa-gunnared-hellgruen-holz-s39270326/",
-   "price": 699,
-   "color": "grün",
-   "hex": "#3b7d22",
-   "w": 204,
-   "d": 89,
-   "h": 78,
-   "checked": "2026-11-08"
+   "name": "HYLTARP 3er-Sofa, Gransel natur",
+   "url": "https://www.ikea.com/at/de/p/hyltarp-3er-sofa-gransel-natur-s79489634/",
+   "price": 649,
+   "color": "beige",
+   "hex": "#f4f3d7",
+   "w": 232,
+   "d": 93,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-39240787",
@@ -554,21 +553,7 @@
    "w": 68,
    "d": 82,
    "h": 100,
-   "checked": "2026-11-08"
-  },
-  {
-   "id": "at-ik-89625004",
-   "slot": "armchair",
-   "store": "ikea",
-   "name": "POÄNG Sessel, Nussbaumnachbildung/Kelinge graublau",
-   "url": "https://www.ikea.com/at/de/p/poaeng-sessel-nussbaumnachbildung-kelinge-graublau-s89625004/",
-   "price": 129,
-   "color": "Nussbaumnachbildung/Kelinge graublau",
-   "regular": 149,
-   "w": 68,
-   "d": 82,
-   "h": 100,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-60506898",
@@ -582,20 +567,35 @@
    "w": 64,
    "d": 78,
    "h": 76,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-10624328",
+   "id": "at-ik-89625004",
    "slot": "armchair",
    "store": "ikea",
-   "name": "EKENÄSET Sessel, Eichenachbildung/Kilanda hellbeige",
-   "url": "https://www.ikea.com/at/de/p/ekenaeset-sessel-eichenachbildung-kilanda-hellbeige-10624328/",
-   "price": 199,
-   "color": "Eichenachbildung/Kilanda hellbeige",
-   "w": 65,
-   "d": 74,
-   "h": 75,
-   "checked": "2026-11-08"
+   "name": "POÄNG Sessel, Nussbaumnachbildung/Kelinge graublau",
+   "url": "https://www.ikea.com/at/de/p/poaeng-sessel-nussbaumnachbildung-kelinge-graublau-s89625004/",
+   "price": 129,
+   "color": "Nussbaumnachbildung/Kelinge graublau",
+   "regular": 149,
+   "w": 68,
+   "d": 82,
+   "h": 100,
+   "checked": "2026-11-09"
+  },
+  {
+   "id": "at-ik-40555309",
+   "slot": "armchair",
+   "store": "ikea",
+   "name": "SKÅLBODA Sessel, orange",
+   "url": "https://www.ikea.com/at/de/p/skalboda-sessel-orange-40555309/",
+   "price": 79.99,
+   "color": "orange",
+   "hex": "#ff9a02",
+   "w": 64,
+   "d": 69,
+   "h": 71,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-90449905",
@@ -609,7 +609,7 @@
    "w": 90,
    "d": 55,
    "h": 45,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-10608998",
@@ -623,7 +623,7 @@
    "w": 90,
    "d": 90,
    "h": 41,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-30604348",
@@ -638,7 +638,7 @@
    "d": 75,
    "h": 45,
    "round": true,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-00104291",
@@ -652,7 +652,7 @@
    "w": 118,
    "d": 78,
    "h": 45,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-70389356",
@@ -667,21 +667,34 @@
    "d": 70,
    "h": 42,
    "round": true,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-39622908",
+   "id": "at-ik-89330691",
    "slot": "tvunit",
    "store": "ikea",
-   "name": "BESTÅ TV-Bank mit Türen, schwarzbraun Hedeviken/braun las. Eichenfurnier, 180x42x38 cm",
-   "url": "https://www.ikea.com/at/de/p/besta-tv-bank-mit-tueren-schwarzbraun-hedeviken-braun-las-eichenfurnier-s39622908/",
-   "price": 270,
-   "color": "schwarzbraun Hedeviken/braun las. Eichenfurnier",
-   "regular": 285,
+   "name": "BESTÅ TV-Bank mit Türen, weiß/Lappviken weiß, 180x42x38 cm",
+   "url": "https://www.ikea.com/at/de/p/besta-tv-bank-mit-tueren-weiss-lappviken-weiss-s89330691/",
+   "price": 140,
+   "color": "weiß/Lappviken weiß",
+   "regular": 155,
    "w": 180,
    "d": 42,
    "h": 38,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
+  },
+  {
+   "id": "at-ik-00625521",
+   "slot": "tvunit",
+   "store": "ikea",
+   "name": "LACK TV-Bank, weiß, 90x36x45 cm",
+   "url": "https://www.ikea.com/at/de/p/lack-tv-bank-weiss-00625521/",
+   "price": 17.99,
+   "color": "weiß",
+   "w": 90,
+   "d": 36,
+   "h": 45,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-00474070",
@@ -695,20 +708,22 @@
    "w": 180,
    "d": 40,
    "h": 38,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-00625521",
+   "id": "at-ik-79612139",
    "slot": "tvunit",
    "store": "ikea",
-   "name": "LACK TV-Bank, weiß, 90x36x45 cm",
-   "url": "https://www.ikea.com/at/de/p/lack-tv-bank-weiss-00625521/",
-   "price": 17.99,
-   "color": "weiß",
-   "w": 90,
-   "d": 36,
-   "h": 45,
-   "checked": "2026-11-08"
+   "name": "BESTÅ TV-Bank, schwarzbraun Lappviken/braun Nussbaumnachbildung, 180x42x39 cm",
+   "url": "https://www.ikea.com/at/de/p/besta-tv-bank-schwarzbraun-lappviken-braun-nussbaumnachbildung-s79612139/",
+   "price": 175,
+   "color": "braun / schwarz",
+   "hex": "#814820",
+   "regular": 190,
+   "w": 180,
+   "d": 42,
+   "h": 39,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40597818",
@@ -722,21 +737,7 @@
    "w": 176.4,
    "d": 48.2,
    "h": 66.1,
-   "checked": "2026-11-08"
-  },
-  {
-   "id": "at-ik-40586508",
-   "slot": "tvunit",
-   "store": "ikea",
-   "name": "STOCKHOLM 2025 TV-Bank+Schiebetüren, Eichenfurnier, 179x42x56 cm",
-   "url": "https://www.ikea.com/at/de/p/stockholm-2025-tv-bank-schiebetueren-eichenfurnier-40586508/",
-   "price": 349,
-   "color": "beige",
-   "hex": "#f4f3d7",
-   "w": 178.8,
-   "d": 42,
-   "h": 56.2,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-20595698",
@@ -750,7 +751,7 @@
    "w": 230,
    "d": 160,
    "h": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-80492616",
@@ -764,7 +765,7 @@
    "w": 230,
    "d": 160,
    "h": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-20576435",
@@ -778,7 +779,7 @@
    "w": 230,
    "d": 160,
    "h": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-10623220",
@@ -792,7 +793,7 @@
    "w": 230,
    "d": 160,
    "h": 1,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-70595667",
@@ -804,19 +805,7 @@
    "color": "beige",
    "hex": "#f4f3d7",
    "h": 156,
-   "checked": "2026-11-08"
-  },
-  {
-   "id": "at-ik-20393600",
-   "slot": "floorlamp",
-   "store": "ikea",
-   "name": "HEKTAR Standleuchte mit 3er-Spot, dunkelgrau",
-   "url": "https://www.ikea.com/at/de/p/hektar-standleuchte-mit-3er-spot-dunkelgrau-20393600/",
-   "price": 79.99,
-   "color": "grau",
-   "hex": "#949494",
-   "h": 176,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-80477734",
@@ -828,7 +817,19 @@
    "color": "grau",
    "hex": "#949494",
    "h": 160,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
+  },
+  {
+   "id": "at-ik-50592354",
+   "slot": "floorlamp",
+   "store": "ikea",
+   "name": "FÖRLIG Wand-/Standleuchte, LED, weiß/anpassbare Farbe, 132 cm",
+   "url": "https://www.ikea.com/at/de/p/foerlig-wand-standleuchte-led-weiss-anpassbare-farbe-50592354/",
+   "price": 19.99,
+   "color": "weiß/anpassbare Farbe",
+   "w": 3,
+   "h": 132,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40571248",
@@ -842,7 +843,7 @@
    "w": 164,
    "d": 206,
    "needsBase": true,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-69929233",
@@ -856,7 +857,7 @@
    "w": 168,
    "d": 209,
    "needsBase": true,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-79627268",
@@ -870,7 +871,7 @@
    "w": 174,
    "d": 210,
    "needsBase": false,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-90608126",
@@ -885,7 +886,7 @@
    "d": 208,
    "h": 113,
    "needsBase": true,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-09929373",
@@ -900,21 +901,21 @@
    "d": 209,
    "h": 100,
    "needsBase": true,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-20404806",
+   "id": "at-ik-40458898",
    "slot": "bed",
    "store": "ikea",
-   "name": "MALM Bettgestell mit Aufbewahrung, weiß, 160x200 cm",
-   "url": "https://www.ikea.com/at/de/p/malm-bettgestell-mit-aufbewahrung-weiss-20404806/",
-   "price": 549,
+   "name": "IDANÄS Bettgestell, weiß, 160x200 cm",
+   "url": "https://www.ikea.com/at/de/p/idanaes-bettgestell-weiss-40458898/",
+   "price": 399,
    "color": "weiß",
    "hex": "#ffffff",
-   "w": 175,
-   "d": 210,
+   "w": 171,
+   "d": 207,
    "needsBase": true,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-09481354",
@@ -927,7 +928,7 @@
    "hex": "#f4f3d7",
    "w": 140,
    "d": 200,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-90160211",
@@ -941,7 +942,7 @@
    "w": 90,
    "d": 200,
    "h": 4,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40450680",
@@ -956,7 +957,7 @@
    "until": "2027-02-21",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40450623",
@@ -970,7 +971,7 @@
    "regular": 299,
    "w": 160,
    "d": 200,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-80640513",
@@ -983,7 +984,7 @@
    "hex": "#ffffff",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-30569953",
@@ -996,7 +997,7 @@
    "hex": "#ffffff",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-70481473",
@@ -1009,7 +1010,7 @@
    "hex": "#ffffff",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-00441758",
@@ -1023,7 +1024,7 @@
    "w": 117,
    "d": 55,
    "h": 176,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40407922",
@@ -1037,7 +1038,7 @@
    "w": 117,
    "d": 50,
    "h": 190,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40400478",
@@ -1051,7 +1052,7 @@
    "w": 78,
    "d": 50,
    "h": 190,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-70453762",
@@ -1065,7 +1066,7 @@
    "w": 117,
    "d": 55,
    "h": 176,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-90493446",
@@ -1079,21 +1080,21 @@
    "w": 122,
    "d": 59,
    "h": 216,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-49502632",
+   "id": "at-ik-69502631",
    "slot": "wardrobe",
    "store": "ikea",
-   "name": "PAX Kleiderschrank, weiß, 175x58x201 cm",
-   "url": "https://www.ikea.com/at/de/p/pax-kleiderschrank-weiss-s49502632/",
-   "price": 416,
+   "name": "PAX Kleiderschrank, weiß, 175x58x236 cm",
+   "url": "https://www.ikea.com/at/de/p/pax-kleiderschrank-weiss-s69502631/",
+   "price": 484,
    "color": "weiß",
    "hex": "#ffffff",
    "w": 175,
    "d": 58,
-   "h": 201.2,
-   "checked": "2026-11-08"
+   "h": 236.4,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-20561740",
@@ -1108,7 +1109,7 @@
    "w": 53,
    "d": 43,
    "h": 69,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-80489322",
@@ -1122,7 +1123,7 @@
    "w": 40,
    "d": 40,
    "h": 59,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-40627684",
@@ -1136,7 +1137,7 @@
    "w": 42,
    "d": 41,
    "h": 56,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-00381764",
@@ -1150,7 +1151,7 @@
    "w": 40,
    "d": 39,
    "h": 65,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-20569977",
@@ -1164,7 +1165,7 @@
    "w": 42,
    "d": 33.5,
    "h": 52,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-80501258",
@@ -1176,7 +1177,7 @@
    "color": "beige / weiß",
    "hex": "#f4f3d7",
    "h": 50,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-60573538",
@@ -1189,7 +1190,7 @@
    "hex": "#f4f3d7",
    "w": 18,
    "h": 30,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-80096372",
@@ -1203,7 +1204,7 @@
    "regular": 19.99,
    "w": 25,
    "h": 24,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-60523765",
@@ -1217,7 +1218,7 @@
    "w": 59.5,
    "d": 57.2,
    "h": 85.5,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-30622984",
@@ -1231,7 +1232,7 @@
    "w": 60,
    "d": 61.6,
    "h": 45,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-10530259",
@@ -1245,21 +1246,7 @@
    "w": 49,
    "d": 28,
    "h": 135,
-   "checked": "2026-11-08"
-  },
-  {
-   "id": "at-ik-60530266",
-   "slot": "hall",
-   "store": "ikea",
-   "name": "STÄLL Schuhschrank 4 Fächer, weiß, 96x17x90 cm",
-   "url": "https://www.ikea.com/at/de/p/staell-schuhschrank-4-faecher-weiss-60530266/",
-   "price": 149,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 96,
-   "d": 17,
-   "h": 90,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-50530262",
@@ -1273,22 +1260,35 @@
    "w": 79,
    "d": 29,
    "h": 148,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-50587692",
+   "id": "at-ik-40587697",
    "slot": "hall",
    "store": "ikea",
-   "name": "GULLABERG Schuhschrank, 2fach, weiß, 88x30x122 cm",
-   "url": "https://www.ikea.com/at/de/p/gullaberg-schuhschrank-2fach-weiss-50587692/",
+   "name": "GULLABERG Schuhschrank, 2fach, grau, 88x30x122 cm",
+   "url": "https://www.ikea.com/at/de/p/gullaberg-schuhschrank-2fach-grau-40587697/",
    "price": 129,
-   "color": "weiß",
-   "hex": "#ffffff",
+   "color": "grau",
    "regular": 149,
    "w": 88,
    "d": 30,
    "h": 122,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
+  },
+  {
+   "id": "at-ik-60530266",
+   "slot": "hall",
+   "store": "ikea",
+   "name": "STÄLL Schuhschrank 4 Fächer, weiß, 96x17x90 cm",
+   "url": "https://www.ikea.com/at/de/p/staell-schuhschrank-4-faecher-weiss-60530266/",
+   "price": 149,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 96,
+   "d": 17,
+   "h": 90,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-60531893",
@@ -1302,7 +1302,7 @@
    "w": 50,
    "d": 8,
    "h": 13,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-10563711",
@@ -1316,7 +1316,7 @@
    "w": 16,
    "d": 2,
    "h": 5,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-30618736",
@@ -1332,7 +1332,7 @@
    "w": 36.5,
    "d": 6.8,
    "h": 13,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-89615533",
@@ -1345,7 +1345,7 @@
    "w": 70,
    "d": 70,
    "h": 83,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-79494862",
@@ -1356,7 +1356,7 @@
    "price": 219,
    "color": "blau / schwarz",
    "hex": "#0058a3",
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-59544740",
@@ -1367,7 +1367,7 @@
    "price": 129.99,
    "color": "braun / grün",
    "hex": "#814820",
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-90594855",
@@ -1382,7 +1382,7 @@
    "d": 2,
    "h": 250,
    "pack": 2,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-10559672",
@@ -1397,7 +1397,7 @@
    "d": 2,
    "h": 250,
    "pack": 2,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-60491038",
@@ -1412,7 +1412,7 @@
    "d": 2,
    "h": 250,
    "pack": 2,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-10556329",
@@ -1427,19 +1427,19 @@
    "d": 2,
    "h": 300,
    "pack": 2,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-80489690",
+   "id": "at-ik-30489683",
    "slot": "rods",
    "store": "ikea",
-   "name": "BEKRÄFTA Gardinenstangen-Set, weiß, 120-210 cm 28 mm",
-   "url": "https://www.ikea.com/at/de/p/bekraefta-gardinenstangen-set-weiss-80489690/",
+   "name": "BEKRÄFTA Gardinenstangen-Set, schwarz, 120-210 cm 28 mm",
+   "url": "https://www.ikea.com/at/de/p/bekraefta-gardinenstangen-set-schwarz-30489683/",
    "price": 19.99,
-   "color": "weiß",
-   "hex": "#ffffff",
+   "color": "schwarz",
+   "hex": "#000000",
    "w": 210,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-30489536",
@@ -1451,7 +1451,7 @@
    "color": "weiß",
    "hex": "#ffffff",
    "w": 210,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-70117172",
@@ -1462,7 +1462,7 @@
    "price": 1.99,
    "color": "weiß",
    "hex": "#ffffff",
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-70311697",
@@ -1475,7 +1475,7 @@
    "hex": "#f4f3d7",
    "w": 50,
    "h": 54,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-90585950",
@@ -1486,7 +1486,7 @@
    "price": 159,
    "color": "gelb",
    "hex": "#ffdb00",
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
    "id": "at-ik-89388125",
@@ -1499,21 +1499,19 @@
    "hex": "#ffdb00",
    "w": 30,
    "h": 25,
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   },
   {
-   "id": "at-ik-80595681",
+   "id": "at-ik-29613301",
    "slot": "pendant",
    "store": "ikea",
-   "name": "SJÖMAKT Hängeleuchte, beige/Esche, 38 cm",
-   "url": "https://www.ikea.com/at/de/p/sjoemakt-haengeleuchte-beige-esche-80595681/",
-   "price": 34.99,
-   "color": "beige",
-   "hex": "#f4f3d7",
-   "w": 180,
-   "d": 180,
-   "h": 21,
-   "checked": "2026-11-08"
+   "name": "GULLSUDARE / HAVSDJUP Hängeleuchte, weiß, 45 cm",
+   "url": "https://www.ikea.com/at/de/p/gullsudare-havsdjup-haengeleuchte-weiss-s29613301/",
+   "price": 7.98,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 45,
+   "checked": "2026-11-09"
   },
   {
    "id": "at-est-tv43",
