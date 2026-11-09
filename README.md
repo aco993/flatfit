@@ -17,17 +17,17 @@
 
 | | |
 |---|---|
-| **Stack** | TypeScript (strict), three.js, three-gpu-pathtracer, Intel OIDN on WebGPU, Vite, Vitest, Playwright + axe-core, GitHub Actions, GitHub Pages |
+| **Stack** | TypeScript (strict), three.js, three-gpu-pathtracer, Intel OIDN on WebGPU, Claude API (vision + structured output, optional), Vite, Vitest, Playwright + axe-core, GitHub Actions, GitHub Pages |
 | **Size** | ~8,000 lines of TypeScript (formatted by Biome), no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
 | **Data** | 5 markets, ~570 real products; every price re-checked daily by a GitHub Action and committed to git ([why](docs/adr/0002-static-site-git-scraped-prices.md)); IKEA prices checked live from the browser on request |
-| **Quality** | Biome lint and format in CI, 153 unit tests, 42 end-to-end runs (10 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 94–96 / mobile 68–70, CodeQL, Dependabot |
+| **Quality** | Biome lint and format in CI, 162 unit tests, 43 end-to-end runs (11 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 94–96 / mobile 68–70, CodeQL, Dependabot |
 | **Hard parts** | GPU driver resets during path tracing, a cold-cache shader stall found with a CPU profile, collision checks on every pointer move, a budget solved as a multiple-choice knapsack, honest labelling of prices that cannot be checked automatically |
 
 I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue.
 
 ## What it does
 
-- **Any apartment.** Draw rooms on a grid (drag, resize, keyboard), add doors and windows, radiators and the TV socket, mark open-plan connections. Only have a picture of the plan? Load it, click the two ends of a wall whose length you know, and trace the rooms over it. Walls, floors and camera views are derived from the plan. A real two-room flat (44.6 m²) ships as the demo.
+- **Any apartment.** Draw rooms on a grid (drag, resize, keyboard), add doors and windows, radiators and the TV socket, mark open-plan connections. Only have a picture of the plan, or a sketch? Load it, click the two ends of a wall whose length you know, then drag over it to draw rooms and click on walls to put doors and windows. Or let Claude read it: with your own Anthropic API key the picture goes from your browser straight to the Claude API, comes back as rooms, doors and windows laid over the picture, and you correct what it got wrong ([how](docs/adr/0005-reading-plans-with-claude-from-the-browser.md)). Walls, floors and camera views are derived from the plan. A real two-room flat (44.6 m²) ships as the demo.
 - **Real products, by country.** Serbia (Forma Ideale, JYSK, IKEA, XXXLesnina, mömax, Emmezeta, Gigatron — 145 products), Bosnia and Herzegovina (JYSK, Technoshop, prices in KM — 97), Croatia, Germany and Austria (IKEA, ~110 each). Every 3D piece is built from the chosen product's width, depth, height and colour, and links to the store page. Dining chairs, armchairs, round coffee tables, TV benches and nightstands use CC0 models from Poly Haven, stretched to the product's exact size and repainted in its colour on a canvas (so the path tracer sees the same colour); sofas, beds and wardrobes stay procedural, because no modern CC0 model exists and a period piece would misrepresent what the store sells.
 - **Prices that keep up with sales.** *Refresh prices* checks every IKEA price live from your browser, including when a sale ends, and takes the other stores from the daily check that a GitHub Action commits to this repository. Where no local store sells online with sizes (kitchen units in Bosnia), the price is an estimate from a neighbouring market and labelled as one.
 - **Automatic layout.** A rule-based planner finds free wall stretches (doors and their swing, windows and radiators for tall items), puts the TV by its socket and the sofa opposite it, the bed against the best wall with bedside tables, the wardrobe where it does not block the bed, the kitchen run with the fridge in the niche, the table where people can sit.
@@ -122,7 +122,7 @@ Adding a country: a catalogue JSON in `src/data/catalogs/`, an entry in `src/dat
 
 | Layer | Tool | What |
 |---|---|---|
-| Unit (153) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 5 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema, sale dates and estimates, live price refresh (stubbed network), budget solver, delivery rules, measuring sheet, translation key parity and an ijekavian check for Bosnian and Croatian, share links, undo history and the listing sheet |
+| Unit (162) | Vitest | wall derivation, demo areas, quantities, promotions, dependencies, fit checks, layout inside rooms, generated proposals fit for 5 markets × 3 flats, moving pieces (rigid groups, snapping, turning, collisions with furniture, walls, doors and radiators), TV socket and radiators in the planner, share links, catalogue schema, sale dates and estimates, live price refresh (stubbed network), budget solver, delivery rules, measuring sheet, translation key parity and an ijekavian check for Bosnian and Croatian, share links, undo history, the listing sheet, and reading a plan picture (cleaning Claude's answer, lining up walls, placing the picture, the request and its schema) |
 | End to end | Playwright | persona journeys and a URL matrix, see below |
 | Accessibility | axe-core | WCAG 2 A/AA, no serious or critical violations |
 
@@ -133,6 +133,7 @@ Personas (`tests/e2e/personas.spec.ts`):
 - **Mira**, keyboard and screen reader only: skip link, view shortcuts, help dialog, language cycling, axe scan.
 - **Luka**, a landlord: draws a studio from a template, adds a bedroom with the keyboard, saves, reloads, exports JSON, deletes.
 - **Nina**, only a picture of her plan: loads it, sets the scale from the 8 m dimension line, draws the living room to it, saves; the picture never goes into share links.
+- **Dario**, has a picture of a plan and his own Claude API key: lets Claude read it (the API is stubbed; the test checks the request), gets two rooms over the picture, draws a third by dragging, clicks a window onto its wall, saves.
 - **Sara**, rearranging: selects the sofa, drags it with the mouse into the coffee table, sees the warning, turns it with `T`, undoes everything with the button and Ctrl+Z, redoes with Ctrl+Y.
 - **Petra**, old laptop: starts a photoreal render, cancels it mid-way, the page stays usable.
 - **Emir** in Sarajevo, in Bosnian, 9,000 KM to spend: sets the budget, checks the total stays under it with nothing that does not fit, sees delivery store by store, and opens the measuring sheet.
@@ -159,6 +160,7 @@ npm run build && npx playwright test
 ## Limits
 
 - Room shapes are rectangles (L-shapes are built from several rooms with open connections).
+- Reading a plan with Claude needs your own API key, costs a few cents per plan and is a first draft: check the rooms against the picture before saving.
 - The planner is rule-based; it proposes, you drag things where you want them. Fit checks use the plan, not a laser measure.
 - Prices are at most a day old (IKEA: live on *Refresh prices*); stores behind a bot challenge are checked by hand, and the app shows the date.
 - The interface is in English, German, Serbian, Bosnian and Croatian. Croatian is a layer over Bosnian with only the words that differ (hladnjak, kupaonica, tlocrt), and a unit test fails if an ekavian word slips into either.

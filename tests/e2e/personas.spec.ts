@@ -339,3 +339,110 @@ test.describe('Marko · rents the flat out and needs a listing', () => {
     expect(await page.evaluate(() => (window as any).flatfit.viewIdx)).toBe(0);
   });
 });
+
+test.describe('Dario · got a picture of a plan and has his own Claude API key', () => {
+  test.use({ locale: 'en-GB' });
+  test('lets Claude read the rooms, then draws one more and clicks a window onto its wall', async ({ page }) => {
+    // never the real API in tests: answer as Claude would for the made-up two-room plan in the fixture
+    const reading = {
+      found: true,
+      plan_box: { left: 100, top: 120, right: 900, bottom: 570 },
+      rooms: [
+        { type: 'living', name: 'Dnevna soba', x: 0, z: 0, w: 4.97, d: 4.5, open_to: -1 },
+        { type: 'bedroom', name: 'Soba', x: 5.04, z: 0.02, w: 2.96, d: 4.49, open_to: -1 },
+      ],
+      openings: [
+        { kind: 'window', room: 0, side: 'n', at: 2, width: 1.2 },
+        { kind: 'door', room: 0, side: 'e', at: 3.2, width: 0.8 },
+      ],
+      notes: 'Only one dimension was written.',
+    };
+    let sent: { body: Record<string, unknown>; headers: Record<string, string> } | null = null;
+    const cors = {
+      'access-control-allow-origin': '*',
+      'access-control-allow-headers': '*',
+      'access-control-allow-methods': 'POST, OPTIONS',
+    };
+    await page.route('https://api.anthropic.com/**', async route => {
+      const req = route.request();
+      if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
+      sent = { body: req.postDataJSON(), headers: await req.allHeaders() };
+      await route.fulfill({
+        status: 200,
+        headers: { ...cors, 'content-type': 'application/json' },
+        body: JSON.stringify({
+          id: 'msg_test',
+          type: 'message',
+          role: 'assistant',
+          model: 'claude-opus-5-5',
+          stop_reason: 'end_turn',
+          stop_sequence: null,
+          content: [{ type: 'text', text: JSON.stringify(reading) }],
+          usage: { input_tokens: 2000, output_tokens: 900 },
+        }),
+      });
+    });
+    await page.goto('./#c=de&l=en');
+    await ready(page);
+    await page.locator('#project').selectOption('__new');
+    const dlg = page.getByRole('dialog', { name: 'Floor plan' });
+    await dlg.getByRole('button', { name: /Empty/ }).click();
+    await dlg.locator('#ed-bd-file').setInputFiles('tests/e2e/fixtures/plan.png');
+    await dlg.getByText('Read the rooms from the picture (Claude)').click();
+    await dlg.getByRole('button', { name: 'Read the plan' }).click();
+    await expect(dlg.locator('#ed-ai-out')).toContainText('Enter your API key first');
+    await dlg.getByLabel('Anthropic API key').fill('sk-ant-test-not-a-real-key');
+    await dlg.getByLabel('Which flat? (optional)').fill('the only one');
+    await dlg.getByRole('button', { name: 'Read the plan' }).click();
+    await expect(dlg.locator('#ed-ai-out')).toContainText('2 rooms read');
+    await expect(dlg.locator('#ed-ai-out')).toContainText('Only one dimension was written.');
+    await expect(dlg.locator('#ed-total')).toContainText('36');
+    // the request: the picture and the user's key, straight from the browser to the current model
+    expect(sent!.headers.authorization).toBe('Bearer sk-ant-test-not-a-real-key');
+    expect(sent!.headers['anthropic-dangerous-direct-browser-access']).toBe('true');
+    expect(sent!.body).toMatchObject({ model: 'claude-opus-5-5', fallbacks: 'default' });
+    const content = (sent!.body.messages as { content: { type: string; text?: string }[] }[])[0].content;
+    expect(content[0].type).toBe('image');
+    expect(content[1].text).toContain('the only one');
+    // not remembered unless asked
+    expect(await page.evaluate(() => [localStorage.getItem('flatfit.claudeKey'), sessionStorage.getItem('flatfit.claudeKey')])).toEqual([
+      null,
+      'sk-ant-test-not-a-real-key',
+    ]);
+    // the picture was laid under the rooms: 800 of its 1000 px are the 8 m flat
+    expect(Number(await dlg.locator('#ed-svg image').getAttribute('width'))).toBeCloseTo(10, 1);
+
+    const toScreen = (x: number, z: number) =>
+      page.evaluate(
+        ([x, z]) => {
+          const svg = document.getElementById('ed-svg') as unknown as SVGSVGElement,
+            p = svg.createSVGPoint();
+          p.x = x;
+          p.y = z;
+          const q = p.matrixTransform(svg.getScreenCTM()!);
+          return { x: q.x, y: q.y };
+        },
+        [x, z],
+      );
+    // draw a 2 × 2 m room next to the bedroom: it starts on the bedroom's wall
+    await dlg.getByRole('button', { name: 'Draw a room' }).click();
+    const a = await toScreen(8.05, 0.03),
+      b = await toScreen(10, 2);
+    await page.mouse.move(a.x, a.y);
+    await page.mouse.down();
+    await page.mouse.move((a.x + b.x) / 2, (a.y + b.y) / 2);
+    await page.mouse.move(b.x, b.y);
+    await page.mouse.up();
+    await expect(dlg.locator('#ed-total')).toContainText('40');
+    await expect(dlg.locator('[data-f="x"]')).toHaveValue('8');
+    // a window clicked onto its top wall
+    await dlg.getByLabel('What to add').selectOption('window');
+    const w = await toScreen(9, 0.04);
+    await page.mouse.click(w.x, w.y);
+    await expect(dlg.locator('#ed-svg .op.window')).toHaveCount(2);
+    await expect(dlg.locator('#ed-problems li')).toHaveCount(0);
+    await dlg.getByRole('button', { name: 'Save and show in 3D' }).click();
+    await ready(page);
+    expect(await page.evaluate(() => (window as any).flatfit.project.rooms.length)).toBe(3);
+  });
+});

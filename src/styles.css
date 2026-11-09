@@ -1039,6 +1039,44 @@ input[type="text"] {
 #ed-svg.img-mode .room {
   pointer-events: none;
 }
+#ed-svg .rubber {
+  fill: rgba(37, 99, 235, 0.12);
+  stroke: #2563eb;
+  stroke-width: 0.04;
+  stroke-dasharray: 0.12 0.06;
+  pointer-events: none;
+}
+.tools {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.tools select {
+  font: inherit;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card, #fff);
+  color: inherit;
+}
+.tools .btn[aria-pressed="true"],
+#ed-bd .btn[aria-pressed="true"] {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+details.ai {
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+details.ai summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+details.ai input[type="password"] {
+  font-family: ui-monospace, monospace;
+}
 #ed-svg .cal {
   fill: #e11d48;
   stroke: #e11d48;

@@ -6,6 +6,8 @@ import { $, esc, toast } from './dom';
 import { bounds, deriveWalls, edgeOf, openingProblems, overlaps, roomArea } from '../domain/geometry';
 import { fromTemplate, type TemplateId } from '../data/templates';
 import { openMeasureSheet } from './measure';
+import { placeBackdrop } from '../domain/planread';
+import { keyRemembered, readPlan, savedKey, storeKey } from './planai';
 
 const TYPES: RoomType[] = ['living', 'kitchen', 'dining', 'bedroom', 'bathroom', 'hall', 'terrace'];
 const KINDS: OpeningKind[] = ['door', 'entry', 'window', 'balcony'];
@@ -42,14 +44,14 @@ export function openEditor(app: App, src: Project | null) {
   dlg.innerHTML = `
     <div class="dlg-head"><h2 id="editor-title">${esc(t('editor.title'))}</h2><button type="button" class="icon" data-close aria-label="${esc(t('editor.cancel'))}">✕</button></div>
     <div class="ed">
-      <div class="ed-canvas"><svg id="ed-svg" tabindex="0" role="application" aria-label="${esc(t('editor.title'))}"></svg><p class="muted small">${esc(t('editor.hint'))}</p></div>
+      <div class="ed-canvas"><svg id="ed-svg" tabindex="0" role="application" aria-label="${esc(t('editor.title'))}"></svg><div class="row tools" id="ed-tools"></div><p class="muted small" id="ed-hint">${esc(t('editor.hint'))}</p></div>
       <div class="ed-side">
         ${src?.demo ? `<p class="note">${esc(t('proj.demoCopy'))}</p>` : ''}
         ${isNew ? `<fieldset class="tpl"><legend>${esc(t('tpl.title'))}</legend>${(['tworoom', 'studio', 'demo', 'empty'] as TemplateId[]).map(k => `<button type="button" class="chip" data-tpl="${k}">${esc(t(('tpl.' + k) as Key))}</button>`).join('')}</fieldset>` : ''}
         <label class="field"><span>${esc(t('editor.projectName'))}</span><input id="ed-name" maxlength="60"></label>
         <label class="field"><span>${esc(t('editor.wallH'))}</span><input id="ed-wallh" type="number" min="2.2" max="4" step="0.05"></label>
         <p id="ed-total" class="muted"></p>
-        <fieldset class="bd"><legend>${esc(t('bd.title'))}</legend><div id="ed-bd"></div></fieldset>
+        <fieldset class="bd"><legend>${esc(t('bd.title'))}</legend><div id="ed-bd"></div><div id="ed-ai"></div></fieldset>
         <div class="row"><button type="button" class="btn" id="ed-add">+ ${esc(t('editor.add'))}</button></div>
         <div id="ed-room"></div>
         <ul id="ed-problems" class="issues"></ul>
@@ -61,8 +63,13 @@ export function openEditor(app: App, src: Project | null) {
     hIn = $('#ed-wallh', dlg) as HTMLInputElement;
 
   const sel = () => draft.rooms.find(r => r.id === selId) || null;
-  /** tracing image: 'move' drags it, 'cal' collects two points to set its scale */
-  let imgMode: 'none' | 'move' | 'cal' = 'none';
+  /** pointer mode: 'move' drags the image, 'cal' collects two points to set its scale,
+   *  'draw' drags out a new room, 'op' puts a door or window where a wall is clicked */
+  let imgMode: 'none' | 'move' | 'cal' | 'draw' | 'op' = 'none';
+  let opKind: OpeningKind = 'door';
+  let rubber: { x0: number; z0: number; x1: number; z1: number } | null = null;
+  let aiFor: string | null = null;
+  let aiBusy = false;
   let calPts: { x: number; z: number }[] = [];
   const roomLabel = (r: Room) => r.name || t(('room.' + r.type) as Key);
 
@@ -141,10 +148,15 @@ export function openEditor(app: App, src: Project | null) {
           `<circle class="cal" cx="${p.x}" cy="${p.z}" r="0.08"/>${i ? `<line class="cal" x1="${calPts[0].x}" y1="${calPts[0].z}" x2="${p.x}" y2="${p.z}"/>` : ''}`,
       )
       .join('');
-    svg.innerHTML = `<g class="grid">${g}</g>${img}<g class="${bd ? 'traced' : ''}">${rooms}</g>${walls}${ops}${wis}${cal}`;
-    svg.classList.toggle('cal-mode', imgMode === 'cal');
+    const rb = rubber
+      ? `<rect class="rubber" x="${Math.min(rubber.x0, rubber.x1)}" y="${Math.min(rubber.z0, rubber.z1)}" width="${Math.abs(rubber.x1 - rubber.x0)}" height="${Math.abs(rubber.z1 - rubber.z0)}"/>`
+      : '';
+    svg.innerHTML = `<g class="grid">${g}</g>${img}<g class="${bd ? 'traced' : ''}">${rooms}</g>${walls}${ops}${wis}${cal}${rb}`;
+    svg.classList.toggle('cal-mode', imgMode === 'cal' || imgMode === 'draw' || imgMode === 'op');
     svg.classList.toggle('img-mode', imgMode === 'move');
     backdropPanel();
+    tools();
+    aiPanel();
     const area = draft.rooms.reduce((s, r) => s + (r.type === 'terrace' ? 0 : roomArea(r)), 0),
       terr = draft.rooms.filter(r => r.type === 'terrace').reduce((s, r) => s + roomArea(r), 0);
     $('#ed-total', dlg).textContent =
@@ -193,6 +205,74 @@ export function openEditor(app: App, src: Project | null) {
         .join('')}</ul>
       <div class="row"><button type="button" class="btn ghost" id="ed-addwi">+ ${esc(t('editor.addWallItem'))}</button><button type="button" class="btn ghost danger" id="ed-del">${esc(t('editor.delete'))}</button></div>
     </fieldset>`;
+  }
+
+  function tools() {
+    $('#ed-tools', dlg).innerHTML =
+      `<button type="button" class="btn ghost" id="ed-draw" aria-pressed="${imgMode === 'draw'}">▭ ${esc(t('tool.draw'))}</button>
+      <button type="button" class="btn ghost" id="ed-opmode" aria-pressed="${imgMode === 'op'}">🚪 ${esc(t('tool.op'))}</button>
+      <select id="ed-opkind" aria-label="${esc(t('tool.opKind'))}">${KINDS.map(k => `<option value="${k}" ${k === opKind ? 'selected' : ''}>${esc(t(('kind.' + k) as Key))}</option>`).join('')}</select>`;
+    $('#ed-hint', dlg).textContent = t(imgMode === 'draw' ? 'tool.drawHint' : imgMode === 'op' ? 'tool.opHint' : 'editor.hint');
+  }
+
+  /** "Read the rooms from the picture": drawn once per picture, so what is typed in it survives redraws. */
+  function aiPanel() {
+    const host = $('#ed-ai', dlg),
+      src = draft.backdrop?.src || null;
+    if (src === aiFor) return;
+    aiFor = src;
+    host.innerHTML = !src
+      ? ''
+      : `<details class="ai"><summary>✨ ${esc(t('ai.title'))}</summary>
+        <p class="muted small">${esc(t('ai.intro'))}</p>
+        <label class="field"><span>${esc(t('ai.key'))}</span><input id="ed-ai-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" value="${esc(savedKey())}"></label>
+        <label class="check"><input type="checkbox" id="ed-ai-remember" ${keyRemembered() ? 'checked' : ''}> ${esc(t('ai.remember'))}</label>
+        <label class="field"><span>${esc(t('ai.hint'))}</span><input id="ed-ai-hint" maxlength="200" placeholder="${esc(t('ai.hintPh'))}"></label>
+        <p class="muted small">${esc(t('ai.privacy'))} ${esc(t('ai.replace'))}</p>
+        <div class="row"><button type="button" class="btn primary" id="ed-ai-send">${esc(t('ai.send'))}</button><button type="button" class="btn ghost" id="ed-ai-forget">${esc(t('ai.forget'))}</button></div>
+        <p id="ed-ai-out" class="small" role="status" aria-live="polite"></p></details>`;
+  }
+
+  async function runAi() {
+    const bd = draft.backdrop,
+      out = $('#ed-ai-out', dlg),
+      keyIn = $('#ed-ai-key', dlg) as HTMLInputElement,
+      key = keyIn.value.trim(),
+      btn = $('#ed-ai-send', dlg) as HTMLButtonElement;
+    if (!bd || aiBusy) return;
+    if (!key) {
+      out.textContent = t('ai.noKey');
+      keyIn.focus();
+      return;
+    }
+    storeKey(key, ($('#ed-ai-remember', dlg) as HTMLInputElement).checked);
+    aiBusy = true;
+    btn.disabled = true;
+    out.textContent = t('ai.busy');
+    let res: Awaited<ReturnType<typeof readPlan>>;
+    try {
+      res = await readPlan(bd.src, key, ($('#ed-ai-hint', dlg) as HTMLInputElement).value);
+    } catch (e) {
+      res = { ok: false, why: 'failed', detail: String((e as Error).message || e) };
+    }
+    aiBusy = false;
+    btn.disabled = false;
+    if (!res.ok) {
+      out.textContent = res.why === 'failed' ? t('ai.failed', { e: res.detail || '?' }) : t(('ai.' + res.why) as Key);
+      return;
+    }
+    const plan = res.plan;
+    draft.rooms = plan.rooms;
+    draft.openings = plan.openings;
+    draft.open = plan.open;
+    draft.wallItems = [];
+    if (draft.backdrop) Object.assign(draft.backdrop, placeBackdrop(plan, draft.backdrop.ar));
+    selId = plan.rooms[0]?.id || null;
+    imgMode = 'none';
+    calPts = [];
+    draw();
+    out.innerHTML =
+      esc(t('ai.done', { n: plan.rooms.length })) + (plan.notes ? `<br><b>${esc(t('ai.notes'))}:</b> ${esc(plan.notes)}` : '');
   }
 
   function backdropPanel() {
@@ -286,8 +366,59 @@ export function openEditor(app: App, src: Project | null) {
   };
   let drag: { id: string; mode: 'move' | 'br' | 'tl'; sx: number; sz: number; r0: Room } | null = null;
   let imgDrag: { sx: number; sz: number; x0: number; z0: number } | null = null;
+  /** snap to the edge of a nearby room (20 cm), otherwise to the 5 cm grid */
+  const edgeSnap = (v: number, axis: 'x' | 'z') => {
+    let best = snap(v),
+      dist = 0.2;
+    for (const r of draft.rooms)
+      for (const e of axis === 'x' ? [r.x, r.x + r.w] : [r.z, r.z + r.d])
+        if (Math.abs(e - v) < dist) {
+          dist = Math.abs(e - v);
+          best = r2(e);
+        }
+    return best;
+  };
+  /** the room wall nearest to a point (within 35 cm); a room the point is inside wins ties, so doors open into it */
+  function nearestWall(p: { x: number; z: number }) {
+    let best: { r: Room; side: Side; along: number; len: number } | null = null,
+      bestD = 0.35;
+    for (const r of draft.rooms) {
+      const inside = p.x > r.x && p.x < r.x + r.w && p.z > r.z && p.z < r.z + r.d ? 0.02 : 0;
+      for (const side of SIDES) {
+        const e = edgeOf(r, side),
+          [u, v] = e.axis === 'x' ? [p.x, p.z] : [p.z, p.x];
+        if (u < e.a1 || u > e.a2) continue;
+        const d = Math.abs(v - e.c) - inside;
+        if (d < bestD) {
+          bestD = d;
+          best = { r, side, along: u - e.a1, len: e.a2 - e.a1 };
+        }
+      }
+    }
+    return best;
+  }
+  const DEFAULT_W: Record<OpeningKind, number> = { door: 0.8, entry: 0.9, window: 1.2, balcony: 0.9 };
   svg.onpointerdown = e => {
     const bd = draft.backdrop;
+    if (imgMode === 'draw') {
+      const p = pt(e),
+        x = edgeSnap(p.x, 'x'),
+        z = edgeSnap(p.z, 'z');
+      rubber = { x0: x, z0: z, x1: x, z1: z };
+      svg.setPointerCapture(e.pointerId);
+      draw();
+      return;
+    }
+    if (imgMode === 'op') {
+      const hit = nearestWall(pt(e));
+      if (!hit || hit.len < 0.6) return;
+      const width = Math.min(DEFAULT_W[opKind], r2(hit.len - 0.1)),
+        at = Math.min(Math.max(0.05, snap(hit.along - width / 2)), r2(hit.len - width - 0.05));
+      draft.openings.push({ id: uid('o', draft.openings), kind: opKind, room: hit.r.id, side: hit.side, at, width });
+      selId = hit.r.id;
+      draw();
+      return;
+    }
     if (bd && imgMode === 'cal') {
       if (calPts.length >= 2) calPts = [];
       calPts.push(pt(e));
@@ -311,6 +442,13 @@ export function openEditor(app: App, src: Project | null) {
     draw();
   };
   svg.onpointermove = e => {
+    if (rubber) {
+      const p = pt(e);
+      rubber.x1 = edgeSnap(p.x, 'x');
+      rubber.z1 = edgeSnap(p.z, 'z');
+      draw();
+      return;
+    }
     if (imgDrag && draft.backdrop) {
       const p = pt(e);
       draft.backdrop.x = r2(imgDrag.x0 + p.x - imgDrag.sx);
@@ -343,6 +481,18 @@ export function openEditor(app: App, src: Project | null) {
   svg.onpointerup = () => {
     drag = null;
     imgDrag = null;
+    if (!rubber) return;
+    const x = Math.min(rubber.x0, rubber.x1),
+      z = Math.min(rubber.z0, rubber.z1),
+      w = r2(Math.abs(rubber.x1 - rubber.x0)),
+      d = r2(Math.abs(rubber.z1 - rubber.z0));
+    rubber = null;
+    if (w >= 0.5 && d >= 0.5) {
+      const id = uid('r', draft.rooms);
+      draft.rooms.push({ id, type: draft.rooms.length ? 'bedroom' : 'living', x: r2(x), z: r2(z), w, d });
+      selId = id;
+    }
+    draw();
   };
   svg.onkeydown = e => {
     const r = sel();
@@ -375,6 +525,13 @@ export function openEditor(app: App, src: Project | null) {
   // ---- side panel ----
   dlg.oninput = e => {
     const el = e.target as HTMLInputElement | HTMLSelectElement;
+    if (el.id === 'ed-opkind') {
+      opKind = el.value as OpeningKind;
+      imgMode = 'op';
+      draw();
+      return;
+    }
+    if (el.closest('#ed-ai')) return;
     if (el === nameIn) {
       draft.name = nameIn.value;
       return;
@@ -470,6 +627,23 @@ export function openEditor(app: App, src: Project | null) {
       draft.rooms.push({ id, type: 'bedroom', x: draft.rooms.length ? snap(b.x2) : 0, z: draft.rooms.length ? snap(b.z1) : 0, w: 3, d: 3 });
       selId = id;
       draw();
+      return;
+    }
+    if (el.closest('#ed-draw') || el.closest('#ed-opmode')) {
+      const m = el.closest('#ed-draw') ? 'draw' : 'op';
+      imgMode = imgMode === m ? 'none' : m;
+      calPts = [];
+      draw();
+      return;
+    }
+    if (el.closest('#ed-ai-send')) {
+      runAi();
+      return;
+    }
+    if (el.closest('#ed-ai-forget')) {
+      storeKey('', false);
+      ($('#ed-ai-key', dlg) as HTMLInputElement).value = '';
+      ($('#ed-ai-remember', dlg) as HTMLInputElement).checked = false;
       return;
     }
     if (el.closest('#ed-measure')) {

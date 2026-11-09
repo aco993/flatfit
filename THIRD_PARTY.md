@@ -8,5 +8,6 @@
 | Intel Open Image Denoise weights `rt_ldr_alb_nrm` | `public/oidn/` (from the `denoiser` npm package) | Apache 2.0 |
 | 3D models: potted plants, ceiling lamp, ceramic vase, outdoor table set, dining chair, armchair, round coffee table, low cabinet (TV bench), side table (nightstand); textures reduced to 512 px | `public/models/`, [Poly Haven](https://polyhaven.com) | CC0 |
 | lz-string | npm | MIT |
+| Anthropic TypeScript SDK (loaded only when a plan is read with Claude) | npm `@anthropic-ai/sdk` | Apache 2.0 |
 
 Product names, prices, sizes and links in `src/data/catalogs/` were read from the stores' public product pages on the date in each file's `checked` field. They are facts listed for comparison; FlatFit is not affiliated with any store. Product photos are not copied.
