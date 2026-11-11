@@ -189,27 +189,26 @@ function living(_p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement[
   out.push({ slot: 'pendant', room: r.id, x: cx, z: cz, rot: 0, maxW: 9, maxD: 9 });
 }
 
-function bedroom(_p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement[]) {
+/** Walking space wanted in front of a wardrobe so its doors open and you can stand there. */
+export const WARDROBE_PASSAGE = 0.6;
+
+interface BedroomPlan {
+  out: Placement[];
+  /** free space between the wardrobe front and the bed, when the bed is in front of it */
+  gap?: number;
+  ward: 'none' | 'short' | 'fits';
+}
+
+/** One arrangement: the bed against `bedSide`, the wardrobe on `wSide`, the bed pushed away from a side wardrobe or centred. */
+function arrangeBedroom(r: Room, bedSide: SideInfo, wSide: { s: SideInfo } | undefined, push: boolean, D: DimsFn): BedroomPlan {
   const bed = D('bed'),
     night = D('night'),
     ward = D('wardrobe');
   const need = bed.w + 2 * night.w + 0.04;
-  const cands = si.filter(s => s.wall && s.low.length);
-  if (!cands.length) return;
-  const score = (s: SideInfo) => len(longest(s.low)!) + (s.windows ? 0 : 0.6) + (len(longest(s.low)!) >= need ? 1 : 0);
-  const bedSide = cands.slice().sort((a, b) => score(b) - score(a))[0];
+  const out: Placement[] = [];
   const bSpan = longest(bedSide.low)!;
-  // wardrobe on another wall, as long as possible, avoiding windows
-  const wc = si
-    .filter(s => s !== bedSide && s.wall && s.tall.length)
-    .map(s => ({ s, span: longest(s.tall)! }))
-    .sort(
-      (a, b) =>
-        len(b.span) + (b.s.side === opposite(bedSide.side) ? -0.4 : 0) - (len(a.span) + (a.s.side === opposite(bedSide.side) ? -0.4 : 0)),
-    );
-  const wSide = wc[0];
   let bedT = (bSpan[0] + bSpan[1]) / 2;
-  if (wSide && perpendicular(wSide.s.side, bedSide.side)) {
+  if (push && wSide && perpendicular(wSide.s.side, bedSide.side)) {
     // push the bed group away from the wardrobe wall
     const wardAtLow = (() => {
       const e = edgeOf(r, wSide.s.side);
@@ -231,6 +230,8 @@ function bedroom(_p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement
   });
   out.push({ slot: 'night', room: r.id, x: nts[0].x, z: nts[0].z, rot: nts[0].rot, maxW: len(bSpan) - bed.w, maxD: depth, extra: nts });
   out.push({ slot: 'lamps', room: r.id, x: nts[0].x, z: nts[0].z, rot: nts[0].rot, maxW: 9, maxD: 9, extra: nts });
+  let gap: number | undefined,
+    wardState: BedroomPlan['ward'] = 'none';
   if (wSide) {
     // keep the wardrobe clear of the bed (50 cm to walk past it) and of the bedside tables
     const [nx, nz] = inward(bedSide.side);
@@ -263,6 +264,7 @@ function bedroom(_p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement
     }
     const span = longest(spans);
     if (span) {
+      wardState = len(span) >= ward.w ? 'fits' : 'short';
       const wt = fitIn(span, ward.w, (span[0] + span[1]) / 2),
         wp = wallItem('wardrobe', r, wSide.s.side, wt, span, roomDepth(r, wSide.s.side));
       // walkway between the wardrobe front and the bed, when they face each other
@@ -272,11 +274,57 @@ function bedroom(_p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement
         hi = wt + ward.w / 2;
       const overl = we.axis === 'x' ? bedRect.x1 < hi && bedRect.x2 > lo : bedRect.z1 < hi && bedRect.z2 > lo;
       if (overl)
-        wp.gap = we.axis === 'x' ? (wnz > 0 ? bedRect.z1 - front : front - bedRect.z2) : wnx > 0 ? bedRect.x1 - front : front - bedRect.x2;
+        wp.gap = gap =
+          we.axis === 'x' ? (wnz > 0 ? bedRect.z1 - front : front - bedRect.z2) : wnx > 0 ? bedRect.x1 - front : front - bedRect.x2;
       out.push(wp);
     }
   }
   out.push({ slot: 'pendant', room: r.id, x: r.x + r.w / 2, z: r.z + r.d / 2, rot: 0, maxW: 9, maxD: 9 });
+  return { out, gap, ward: wardState };
+}
+
+function bedroom(_p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement[]) {
+  const bed = D('bed'),
+    night = D('night');
+  const need = bed.w + 2 * night.w + 0.04;
+  const cands = si.filter(s => s.wall && s.low.length);
+  if (!cands.length) return;
+  const score = (s: SideInfo) => len(longest(s.low)!) + (s.windows ? 0 : 0.6) + (len(longest(s.low)!) >= need ? 1 : 0);
+  const wardSides = (bedSide: SideInfo) =>
+    si
+      .filter(s => s !== bedSide && s.wall && s.tall.length)
+      .map(s => ({ s, span: longest(s.tall)! }))
+      .sort(
+        (a, b) =>
+          len(b.span) + (b.s.side === opposite(bedSide.side) ? -0.4 : 0) - (len(a.span) + (a.s.side === opposite(bedSide.side) ? -0.4 : 0)),
+      );
+  // the usual arrangement: the best wall for the bed, the wardrobe on the longest other wall
+  const bedSide = cands.slice().sort((a, b) => score(b) - score(a))[0];
+  const first = arrangeBedroom(r, bedSide, wardSides(bedSide)[0], true, D);
+  const tight = (pl: BedroomPlan) => (pl.gap === undefined ? 0 : Math.max(0, WARDROBE_PASSAGE - pl.gap));
+  if (first.ward === 'fits' && !tight(first)) {
+    out.push(...first.out);
+    return;
+  }
+  // too tight in front of the wardrobe (or no room for it): try every bed wall, wardrobe wall and bed position
+  const value = (pl: BedroomPlan, bs: SideInfo) =>
+    (pl.ward === 'fits' ? 3 : pl.ward === 'short' ? 1.5 : 0) - tight(pl) * 10 + 0.3 * score(bs) + (bs === bedSide ? 0.2 : 0);
+  let best = first,
+    bestV = value(first, bedSide);
+  for (const bs of cands) {
+    // only walls where the bed and both bedside tables fit: never trade a tight wardrobe for a bed that does not fit
+    if (bs !== bedSide && len(longest(bs.low)!) < need) continue;
+    for (const ws of wardSides(bs))
+      for (const push of [true, false]) {
+        const pl = arrangeBedroom(r, bs, ws, push, D),
+          v = value(pl, bs);
+        if (v > bestV + 1e-6) {
+          best = pl;
+          bestV = v;
+        }
+      }
+  }
+  out.push(...best.out);
 }
 
 function kitchen(_p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement[]) {

@@ -4,10 +4,10 @@ import de from '../../src/data/catalogs/de.json';
 import at from '../../src/data/catalogs/at.json';
 import ba from '../../src/data/catalogs/ba.json';
 import hr from '../../src/data/catalogs/hr.json';
-import type { Catalog, Project } from '../../src/types';
+import type { Catalog, Project, SlotId } from '../../src/types';
 import { DEMO, RS_PRESETS } from '../../src/data/demo';
 import { fromTemplate } from '../../src/data/templates';
-import { autoLayout } from '../../src/domain/layout';
+import { autoLayout, WARDROBE_PASSAGE } from '../../src/domain/layout';
 import { activeSlots } from '../../src/domain/slots';
 import {
   decodeSelection,
@@ -178,4 +178,42 @@ describe('a saved selection from another country', () => {
     expect(ownProducts({ ...rsSel, sofa: 'rs-gone-since-last-week' }, rsIx)).toBe(true);
     expect(ownProducts({}, rsIx)).toBe(false);
   });
+});
+
+describe('wardrobe and bed in a bedroom that is wide but not deep', () => {
+  // A made-up flat: a living room on top, under it a bedroom 3.5 m wide and 3.05 m deep with its door
+  // near the top of the east wall (from the hall) and its window on the west wall. The usual
+  // arrangement put the bed on the long north wall and the wardrobe facing it, about 30 cm away.
+  const flat: Project = {
+    id: 't-bed',
+    name: 'Bedroom test',
+    country: 'rs',
+    wallHeight: 2.6,
+    rooms: [
+      { id: 'liv', type: 'living', x: 0, z: 0, w: 4.9, d: 3.4 },
+      { id: 'bed', type: 'bedroom', x: 0, z: 3.4, w: 3.5, d: 3.05 },
+      { id: 'hal', type: 'hall', x: 3.5, z: 3.4, w: 1.4, d: 3.05 },
+    ],
+    open: [['liv', 'hal']],
+    openings: [
+      { id: 'o1', kind: 'entry', room: 'hal', side: 's', at: 0.25, width: 0.9 },
+      { id: 'o2', kind: 'door', room: 'bed', side: 'e', at: 0.3, width: 0.8 },
+      { id: 'o3', kind: 'window', room: 'liv', side: 'w', at: 1, width: 1.6 },
+      { id: 'o4', kind: 'window', room: 'bed', side: 'w', at: 0.8, width: 1.2 },
+    ],
+  };
+  for (const [name, ix] of [
+    ['rs', ixRS],
+    ['ba', ixBA],
+    ['de', ixDE],
+  ] as const)
+    it(`${name}: leaves at least 60 cm in front of the wardrobe, with the bed and both bedside tables in place`, () => {
+      const sel = generate('light', flat, ix, TODAY);
+      const issues = fitIssues(flat, sel, ix).filter(i => i.slot === 'wardrobe' || i.slot === 'bed' || i.slot === 'night');
+      expect(issues.map(i => i.slot + ':' + i.code)).toEqual([]);
+      const D = (s: SlotId) => dimsOf(sel[s] ? ix.byId.get(sel[s]!) : undefined, s);
+      const w = autoLayout(flat, D).placements.find(p => p.slot === 'wardrobe');
+      expect(w, 'a wardrobe is planned').toBeTruthy();
+      expect(w!.gap === undefined || w!.gap >= WARDROBE_PASSAGE).toBe(true);
+    });
 });
