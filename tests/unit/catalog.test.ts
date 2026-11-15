@@ -6,7 +6,7 @@ import ba from '../../src/data/catalogs/ba.json';
 import hr from '../../src/data/catalogs/hr.json';
 import type { Catalog } from '../../src/types';
 import { SLOTS } from '../../src/domain/slots';
-import { COUNTRIES } from '../../src/data/countries';
+import { COUNTRIES, compareLink } from '../../src/data/countries';
 import { RS_PRESETS } from '../../src/data/demo';
 
 const CATS: Record<string, Catalog> = { rs: rs as Catalog, ba: ba as Catalog, hr: hr as Catalog, de: de as Catalog, at: at as Catalog };
@@ -47,6 +47,10 @@ describe.each(Object.entries(CATS))('catalogue %s', (id, cat) => {
     for (const p of cat.products)
       if (['sofa', 'bed', 'wardrobe', 'tvunit', 'kitchen', 'table', 'coffee', 'night', 'hall'].includes(p.slot))
         expect(p.w, p.id).toBeGreaterThan(0);
+  });
+  it('stores without a reader of their own name a known one, and model codes are plain text', () => {
+    for (const s of cat.stores) if (s.reader) expect(['page'], s.id).toContain(s.reader);
+    for (const p of cat.products) if (p.model !== undefined) expect(p.model.trim(), p.id).toMatch(/^[\w ./-]{3,40}$/);
   });
   it('covers the main slots', () => {
     for (const s of ['kitchen', 'fridge', 'sofa', 'bed', 'mattress', 'wardrobe', 'table', 'curtains'])
@@ -103,5 +107,16 @@ describe('hand-picked looks', () => {
         expect(byId.get(id)!.slot).toBe(slot);
         expect(byId.get(id)!.unavailable, `${name}.${slot}=${id} is no longer sold`).toBeFalsy();
       }
+  });
+});
+
+describe('price-comparison links', () => {
+  it('search the model on the country site and are only offered where there is one', () => {
+    expect(compareLink({ model: 'HHC3U115IN/E' }, 'de')).toEqual({ site: 'geizhals.de', url: 'https://geizhals.de/?fs=HHC3U115IN%2FE' });
+    expect(compareLink({ model: 'IMA 762B MY TIME EE' }, 'rs')?.url).toBe(
+      'https://www.idealno.rs/Trazenje/Proizvodi?q=IMA%20762B%20MY%20TIME%20EE',
+    );
+    expect(compareLink({ model: '43E7S' }, 'ba')).toBeUndefined();
+    expect(compareLink({}, 'at')).toBeUndefined();
   });
 });

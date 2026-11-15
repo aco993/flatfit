@@ -37,6 +37,12 @@
    "id": "giga",
    "name": "Gigatron",
    "web": "https://gigatron.rs"
+  },
+  {
+   "id": "ww",
+   "name": "Win Win",
+   "web": "https://www.winwin.rs",
+   "reader": "page"
   }
  ],
  "products": [
@@ -478,7 +484,8 @@
    "w": 96.5,
    "d": 8,
    "h": 56,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "UE43U8072"
   },
   {
    "id": "fi-his43",
@@ -492,7 +499,8 @@
    "w": 96.5,
    "d": 8,
    "h": 56,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "43E6ST"
   },
   {
    "id": "fi-his55",
@@ -506,7 +514,8 @@
    "w": 122.5,
    "d": 8,
    "h": 71,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "55E6ST"
   },
   {
    "id": "jysk-lingon-n",
@@ -1103,7 +1112,8 @@
    "hex": "#1d1e20",
    "w": 59,
    "d": 52,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "HIC 64404 T"
   },
   {
    "id": "fi-hii",
@@ -1116,7 +1126,8 @@
    "hex": "#1d1e20",
    "w": 59,
    "d": 52,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "HII 64400 TO"
   },
   {
    "id": "fi-wq2160",
@@ -1129,7 +1140,8 @@
    "hex": "#1d1e20",
    "w": 59,
    "d": 51,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "WS Q2160 NE"
   },
   {
    "id": "fi-midea-oven",
@@ -1143,7 +1155,8 @@
    "w": 59.5,
    "d": 56.5,
    "h": 59.5,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "7NM30E0B"
   },
   {
    "id": "fi-vox-hood",
@@ -1157,7 +1170,8 @@
    "w": 59.5,
    "d": 31,
    "h": 25.5,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "PIO6L07W"
   },
   {
    "id": "fi-midea-hood",
@@ -1171,7 +1185,8 @@
    "w": 52,
    "d": 28.5,
    "h": 30,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "MH52BI3200X"
   },
   {
    "id": "fi-beko-hood",
@@ -1185,7 +1200,8 @@
    "w": 60,
    "d": 28,
    "h": 18,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "CTB 6250 B"
   },
   {
    "id": "fi-vox-black",
@@ -1200,7 +1216,8 @@
    "d": 20.5,
    "h": 48,
    "chimney": true,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "CGL6V17BL"
   },
   {
    "id": "fi-beko-fr",
@@ -1214,7 +1231,8 @@
    "w": 54,
    "d": 55,
    "h": 177,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "B1RCSO264W"
   },
   {
    "id": "fi-beko-fr-s",
@@ -1228,7 +1246,8 @@
    "w": 54,
    "d": 57.5,
    "h": 180,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "B1RCNO254S"
   },
   {
    "id": "giga-candy",
@@ -1243,7 +1262,8 @@
    "d": 55,
    "h": 145,
    "note": "dimenzije približne, provjeriti na stranici",
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "CNDQ2S514EW"
   },
   {
    "id": "giga-gorenje",
@@ -1258,7 +1278,8 @@
    "d": 56,
    "h": 180,
    "note": "dimenzije približne, provjeriti na stranici",
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "RK4182PS4"
   },
   {
    "id": "fi-beko-wash",
@@ -1272,7 +1293,8 @@
    "w": 58,
    "d": 60,
    "h": 84.5,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "B3WFU410415WW"
   },
   {
    "id": "fi-midea-wash",
@@ -1286,7 +1308,8 @@
    "w": 59.5,
    "d": 47,
    "h": 85,
-   "checked": "2026-11-15"
+   "checked": "2026-11-15",
+   "model": "MF200W80WB"
   },
   {
    "id": "fi-varadero",
@@ -2125,6 +2148,96 @@
    "price": 9500,
    "color": "patlidžan",
    "hex": "#5b3a4a",
+   "checked": "2026-11-15"
+  },
+  {
+   "id": "ww-vox-kg2730e",
+   "slot": "fridge",
+   "store": "ww",
+   "name": "VOX kombinovani frižider KG2730E, beli",
+   "url": "https://www.winwin.rs/bela-tehnika/frizideri/kombinovani-frizideri/vox-kombinovani-frizider-kg2730e-1263112",
+   "price": 18999,
+   "color": "bela",
+   "hex": "#f2f1ec",
+   "w": 55,
+   "d": 55,
+   "h": 143,
+   "model": "KG2730E",
+   "checked": "2026-11-15"
+  },
+  {
+   "id": "ww-indesit-ima762b",
+   "slot": "washer",
+   "store": "ww",
+   "name": "INDESIT veš mašina IMA 762B MY TIME EE (7 kg)",
+   "url": "https://www.winwin.rs/bela-tehnika/ves-masine/masine-za-pranje-vesa/indesit-masina-za-pranje-vesa-ima-762b-my-time-ee-1246279",
+   "price": 24999,
+   "color": "bela",
+   "hex": "#f2f1ec",
+   "w": 60,
+   "d": 47.4,
+   "h": 85,
+   "model": "IMA 762B MY TIME EE",
+   "checked": "2026-11-15"
+  },
+  {
+   "id": "ww-beko-bbie11100b",
+   "slot": "oven",
+   "store": "ww",
+   "name": "BEKO ugradna rerna BBIE11100B",
+   "url": "https://www.winwin.rs/bela-tehnika/ugradne-rerne-i-ploce/ugradne-rerne/beko-ugradna-rerna-bbie11100b-1231223",
+   "price": 21999,
+   "color": "crna",
+   "hex": "#1d1e20",
+   "w": 59.4,
+   "d": 56.7,
+   "h": 59.5,
+   "model": "BBIE11100B",
+   "checked": "2026-11-15"
+  },
+  {
+   "id": "ww-candy-ch64ccb",
+   "slot": "hob",
+   "store": "ww",
+   "name": "CANDY staklokeramička ploča CH64CCB/4U2",
+   "url": "https://www.winwin.rs/bela-tehnika/ugradne-rerne-i-ploce/ugradne-ploce/candy-ugradna-ploca-ch64ccb-4u2-1231195",
+   "price": 14999,
+   "color": "crna",
+   "hex": "#1d1e20",
+   "w": 59,
+   "d": 52,
+   "h": 4.5,
+   "model": "CH64CCB/4U2",
+   "checked": "2026-11-15"
+  },
+  {
+   "id": "ww-vox-pio6l03w",
+   "slot": "hood",
+   "store": "ww",
+   "name": "VOX ugradni aspirator PIO6L03W, beli",
+   "url": "https://www.winwin.rs/bela-tehnika/aspiratori/ugradni-aspiratori/vox-ugradni-aspirator-pio6l03w-1200081",
+   "price": 7999,
+   "color": "bela",
+   "hex": "#f2f1ec",
+   "w": 59.5,
+   "d": 30.8,
+   "h": 17.5,
+   "model": "PIO6L03W",
+   "checked": "2026-11-15"
+  },
+  {
+   "id": "ww-tcl-43v6c",
+   "slot": "tv",
+   "store": "ww",
+   "name": "TCL TV 43\" 43V6C (4K)",
+   "url": "https://www.winwin.rs/tv-foto-audio-i-video/televizori/smart-tv/tcl-smart-televizor-43v6c-1267457",
+   "price": 29999,
+   "color": "crna",
+   "hex": "#1d1e20",
+   "w": 95.7,
+   "d": 7.2,
+   "h": 55.8,
+   "model": "43V6C",
    "checked": "2026-11-15"
   }
  ]

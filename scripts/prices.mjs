@@ -136,6 +136,16 @@ const READERS = {
     if (!now) throw new Error('no price on ' + p.url);
     return { price: km(now), regular: old ? km(old) : undefined };
   },
+  // Shops marked reader: 'page' in the catalogue: the price the page states for search engines, as schema.org
+  // JSON-LD (Win Win, Chipoteka, Neckermann), microdata or the Open Graph product price (Köck, TechnikDirekt)
+  async page(p) {
+    const html = await get(p.url);
+    const micro = html.match(/itemprop="price"[^>]*content="([\d.]+)"/) || html.match(/content="([\d.]+)"[^>]*itemprop="price"/);
+    const og = html.match(/product:price:amount"\s+content="([\d.]+)"/);
+    const price = ldOffer(html, p.url)?.price || num((micro || og || [])[1]);
+    if (!price) throw new Error('no price on ' + p.url);
+    return { price };
+  },
   async emz(p) {
     const html = await get(p.url);
     const price = num((html.match(/Price","amount":"(\d+)/) || [])[1]) || ldOffer(html)?.price;
@@ -151,8 +161,9 @@ READERS.est = p => (/ikea\.com/.test(p.url) ? READERS.ik(p) : null); // estimate
 for (const p of cat.products) p.checked ||= cat.checked;
 const stats = { ok: 0, changed: 0, gone: 0, blocked: 0, failed: 0, skipped: 0 };
 const blockedStores = new Set();
+const storeReader = Object.fromEntries(cat.stores.filter(s => s.reader).map(s => [s.id, READERS[s.reader]]));
 for (const p of cat.products) {
-  const read = READERS[p.store];
+  const read = READERS[p.store] || storeReader[p.store];
   if (!read || blockedStores.has(p.store)) {
     stats.skipped++;
     continue;

@@ -144,6 +144,8 @@ export interface Product {
   pack?: number;
   qty?: number;
   note?: string;
+  /** the maker's model code (appliances, TVs): links the product to the country's price-comparison site */
+  model?: string;
   needsWorktop?: boolean;
   needsBase?: boolean;
   /** colour name of the chairs that come with a table set */
@@ -165,6 +167,8 @@ export interface Store {
   name: string;
   web: string;
   note?: string;
+  /** how the daily price check reads this store's pages when it has no reader of its own ('page': the price in the page's structured data) */
+  reader?: 'page';
 }
 
 export interface Catalog {

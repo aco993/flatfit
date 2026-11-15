@@ -41,6 +41,7 @@ export const DELIVERY: Record<string, Record<string, Delivery>> = {
       url: 'https://www.emmezeta.rs/kontakt-i-usluge/dostava-cesta-pitanja',
     },
     giga: { fee: 2399, perExtra: 1199, note: 'large appliances', url: 'https://gigatron.rs/isporuka' },
+    ww: { unknown: true, url: 'https://www.winwin.rs/' },
   },
   ba: {
     jysk: { fee: 7, from: true, freeFrom: 600, url: 'https://jysk.ba/pravila-i-uslovi' },
@@ -53,6 +54,7 @@ export const DELIVERY: Record<string, Record<string, Delivery>> = {
       note: 'to the driveway, zone 1, up to 100 kg',
       url: 'https://www.ikea.com/hr/hr/customer-service/services/delivery/',
     },
+    chip: { unknown: true, url: 'https://www.chipoteka.hr/' },
   },
   de: {
     ikea: {
@@ -64,6 +66,8 @@ export const DELIVERY: Record<string, Record<string, Delivery>> = {
       note: 'to a room of your choice',
       url: 'https://www.ikea.com/de/de/customer-service/services/delivery/',
     },
+    koeck: { unknown: true, url: 'https://www.elektrokoeck.com/de/' },
+    td: { unknown: true, url: 'https://www.technikdirekt.de/' },
   },
   at: {
     ikea: {
@@ -77,5 +81,7 @@ export const DELIVERY: Record<string, Record<string, Delivery>> = {
       note: 'to a room of your choice',
       url: 'https://www.ikea.com/at/de/customer-service/services/delivery/',
     },
+    koeck: { unknown: true, url: 'https://www.elektrokoeck.com/at/' },
+    neck: { unknown: true, url: 'https://www.neckermann.at/' },
   },
 };

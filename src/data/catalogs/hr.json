@@ -7,6 +7,12 @@
    "id": "ikea",
    "name": "IKEA",
    "web": "https://www.ikea.com/hr/hr/"
+  },
+  {
+   "id": "chip",
+   "name": "Chipoteka",
+   "web": "https://www.chipoteka.hr",
+   "reader": "page"
   }
  ],
  "products": [
@@ -1494,6 +1500,38 @@
    "color": "siva / žuta / bijela",
    "hex": "#949494",
    "h": 32,
+   "checked": "2026-11-15"
+  },
+  {
+   "id": "hr-chip-43e7s",
+   "slot": "tv",
+   "store": "chip",
+   "name": "HISENSE TV 43\" 43E7S (4K QLED)",
+   "url": "https://www.chipoteka.hr/televizor-qled-43incha-hisense-43e7s-vidaa-os-4k-uhd-dvb-t2cs2-hdmi-wifi-bluetooth-usb-a-energetska-oznaka-e-9150066423",
+   "price": 399,
+   "color": "crna",
+   "hex": "#151617",
+   "w": 96,
+   "d": 8,
+   "h": 56,
+   "model": "43E7S",
+   "note": "dimenzije približne, provjeriti na stranici",
+   "checked": "2026-11-15"
+  },
+  {
+   "id": "hr-chip-50p7l",
+   "slot": "tv",
+   "store": "chip",
+   "name": "TCL TV 50\" 50P7L (4K QLED)",
+   "url": "https://www.chipoteka.hr/televizor-qled-50incha-tcl-50p7l-google-tv-4k-uhd-dvb-t2cs2-hdmi-wifi-bluetooth-usb-a-energetska-oznaka-f-9150064791",
+   "price": 399,
+   "color": "crna",
+   "hex": "#151617",
+   "w": 111.5,
+   "d": 8,
+   "h": 65,
+   "model": "50P7L",
+   "note": "dimenzije približne, provjeriti na stranici",
    "checked": "2026-11-15"
   }
  ]

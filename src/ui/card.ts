@@ -5,7 +5,7 @@ import { effectivePrice, lines } from '../domain/selection';
 import type { App } from './app';
 import { $, esc } from './dom';
 import { dimTxt, today } from './format';
-import { flags } from './list';
+import { compareHtml, flags } from './list';
 
 /** The card of the selected piece: product, price, store link, how to move it, and nearby alternatives. */
 export function renderCard(app: App) {
@@ -28,7 +28,7 @@ export function renderCard(app: App) {
   const body = p
     ? `<p class="pname">${esc(p.name)}</p><p class="muted small">${esc(app.storeName(p.store))}${p.w ? ' · ' + dimTxt(p) : ''} · ${esc(p.color)}</p>
       <p class="big">${units}${app.fmt(l?.total ?? p.price)}</p>
-      <p>${flags(p, l || { expired: false })}</p><a class="btn primary" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(t('item.open'))} ↗</a>`
+      <p>${flags(p, l || { expired: false })}</p><a class="btn primary" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(t('item.open'))} ↗</a>${compareHtml(p, app.prefs.country!)}`
     : `<p class="muted">${esc(t('item.none'))}</p>`;
   const altList = alts.length
     ? `<h4>${esc(t('item.alt'))}</h4><ul class="alts">${alts.map(a => `<li><button type="button" data-alt="${esc(a.id)}"><span>${esc(a.name)}</span><span class="muted">${esc(app.storeName(a.store))}${a.w ? ' · ' + dimTxt(a) : ''}</span><b>${app.fmt(effectivePrice(a, today()).price)}</b></button></li>`).join('')}</ul>`

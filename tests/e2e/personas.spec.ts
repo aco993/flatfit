@@ -47,10 +47,10 @@ test.describe('Jonas · Berlin, desktop, German', () => {
     await expect(page.getByText('Fertige Looks')).toBeVisible();
     await page.getByLabel('Land').selectOption('de');
     await expect(page.getByTestId('total')).toContainText('€');
-    // every store link of the German catalogue goes to IKEA Germany or a price comparison
+    // every link of the German catalogue goes to a German store page or a price comparison
     const hrefs = await page.locator('#slots a[href^="http"]').evaluateAll(as => as.map(a => (a as HTMLAnchorElement).href));
     expect(hrefs.length).toBeGreaterThan(10);
-    for (const h of hrefs) expect(h).toMatch(/ikea\.com\/de\/de\/|idealo\.de/);
+    for (const h of hrefs) expect(h).toMatch(/ikea\.com\/de\/de\/|elektrokoeck\.com\/de\/|technikdirekt\.de|idealo\.de|geizhals\.de/);
     const t1 = await total(page);
     const sofa = page.locator('#sel-sofa');
     const options = await sofa.locator('option').evaluateAll(os => os.map(o => (o as HTMLOptionElement).value));

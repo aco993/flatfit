@@ -1,6 +1,6 @@
 import type { Product, SlotId } from '../types';
 import { t, tt, type Key } from '../i18n';
-import { country, money } from '../data/countries';
+import { compareLink, country, money } from '../data/countries';
 import { DELIVERY } from '../data/delivery';
 import { GROUPS, activeSlots, slotDef } from '../domain/slots';
 import { deliveryFor } from '../domain/delivery';
@@ -106,7 +106,7 @@ function slotHtml(app: App, slot: SlotId, l: Line, iss: Issue[]) {
     ? `<span class="price">${l.units > 1 ? `<span class="muted">${esc(t('item.units', { n: l.units }))} ${app.fmt(l.unitPrice)} = </span>` : ''}${app.fmt(l.total)}</span>`
     : '';
   const meta = p
-    ? `<div class="meta">${p.hex ? `<i class="sw" style="background:${esc(p.hex)}"></i>` : ''}<span>${esc(p.color)}</span>${p.w ? `<span>${dimTxt(p)}</span>` : ''}${flags(p, l)}<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(t('item.open'))} ↗</a></div>`
+    ? `<div class="meta">${p.hex ? `<i class="sw" style="background:${esc(p.hex)}"></i>` : ''}<span>${esc(p.color)}</span>${p.w ? `<span>${dimTxt(p)}</span>` : ''}${flags(p, l)}<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(t('item.open'))} ↗</a>${compareHtml(p, app.prefs.country!)}</div>`
     : '';
   return `<div class="slot ${l.units === 0 && p ? 'zero' : ''}" data-slot="${slot}" id="slot-${slot}">
       <label for="sel-${slot}"><span>${esc(t(('slot.' + slot) as Key))}</span>${price}</label>
@@ -114,6 +114,14 @@ function slotHtml(app: App, slot: SlotId, l: Line, iss: Issue[]) {
       ${meta}
       ${iss.map(i => `<p class="issue ${i.hard ? 'hard' : 'soft'}">${esc((i.hard ? t('issue.hard') : t('issue.soft')) + issueText(i))}</p>`).join('')}
     </div>`;
+}
+
+/** A link to the product's model on the country's price-comparison site (opened by the user; FlatFit never reads those sites). */
+export function compareHtml(p: Product, countryId: string) {
+  const c = compareLink(p, countryId);
+  return c
+    ? ` <a class="compare" href="${esc(c.url)}" target="_blank" rel="noopener" title="${esc(t('item.compareHow'))}">${esc(t('item.compare', { site: c.site }))} ↗</a>`
+    : '';
 }
 
 /** Sale, store-only, estimate and stale-price labels of a product. */

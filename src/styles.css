@@ -433,6 +433,11 @@ input[type="password"] {
   justify-content: space-between;
   gap: 8px;
 }
+.card .compare {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+}
 .card h3 {
   margin: 0;
   font-size: 13px;
