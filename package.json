@@ -6,7 +6,9 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
+    "predev": "node scripts/history.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/history.mjs",
     "build": "vite build",
     "preview": "vite preview --port 4173 --strictPort",
     "typecheck": "tsc --noEmit",

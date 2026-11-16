@@ -5,6 +5,7 @@ import { DELIVERY } from '../data/delivery';
 import { GROUPS, activeSlots, slotDef } from '../domain/slots';
 import { deliveryFor } from '../domain/delivery';
 import { effectivePrice, fitIssues, lines, total, type Issue, type Line } from '../domain/selection';
+import type { PriceStats } from '../domain/history';
 import type { App } from './app';
 import { $, esc } from './dom';
 import { daysBetween, dimTxt, fmtDate, localeOf, today } from './format';
@@ -106,7 +107,7 @@ function slotHtml(app: App, slot: SlotId, l: Line, iss: Issue[]) {
     ? `<span class="price">${l.units > 1 ? `<span class="muted">${esc(t('item.units', { n: l.units }))} ${app.fmt(l.unitPrice)} = </span>` : ''}${app.fmt(l.total)}</span>`
     : '';
   const meta = p
-    ? `<div class="meta">${p.hex ? `<i class="sw" style="background:${esc(p.hex)}"></i>` : ''}<span>${esc(p.color)}</span>${p.w ? `<span>${dimTxt(p)}</span>` : ''}${flags(p, l)}<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(t('item.open'))} ↗</a>${compareHtml(p, app.prefs.country!)}</div>`
+    ? `<div class="meta">${p.hex ? `<i class="sw" style="background:${esc(p.hex)}"></i>` : ''}<span>${esc(p.color)}</span>${p.w ? `<span>${dimTxt(p)}</span>` : ''}${flags(p, l, app.priceStats(p))}<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(t('item.open'))} ↗</a>${compareHtml(p, app.prefs.country!)}</div>`
     : '';
   return `<div class="slot ${l.units === 0 && p ? 'zero' : ''}" data-slot="${slot}" id="slot-${slot}">
       <label for="sel-${slot}"><span>${esc(t(('slot.' + slot) as Key))}</span>${price}</label>
@@ -124,9 +125,10 @@ export function compareHtml(p: Product, countryId: string) {
     : '';
 }
 
-/** Sale, store-only, estimate and stale-price labels of a product. */
-export function flags(p: Product, l: { expired: boolean }) {
+/** Sale, lowest-in-30-days, store-only, estimate and stale-price labels of a product. */
+export function flags(p: Product, l: { expired: boolean }, st?: PriceStats | null) {
   let f = '';
+  if (st?.atLow30) f += `<span class="flag low" title="${esc(t('hist.low30How'))}">${esc(t('hist.low30'))}</span>`;
   if (p.until)
     f += `<span class="flag ${l.expired ? 'old' : 'sale'}">${esc(t(l.expired ? 'item.ended' : 'item.until', { date: fmtDate(p.until) }))}</span>`;
   if (p.storeOnly) f += `<span class="flag">${esc(t('item.storeOnly'))}</span>`;

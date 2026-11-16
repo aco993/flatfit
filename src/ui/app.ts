@@ -4,6 +4,8 @@ import { LANGS, detectLang, getLang, setLang, t, tt, type Key } from '../i18n';
 import { COUNTRIES, country, loadCatalog, money } from '../data/countries';
 import { RS_PRESETS, RS_PRESET_BASE } from '../data/demo';
 import { applyUpdates } from '../data/refresh';
+import { feedUrl, loadHistory } from '../data/history';
+import { priceStats, type Series } from '../domain/history';
 import { activeSlots } from '../domain/slots';
 import { autoLayout, autoViews, type Layout } from '../domain/layout';
 import { MOVABLE, applyMoves, moveIssues, moveKey, snapPose, turnPose, type Pose } from '../domain/moves';
@@ -16,12 +18,15 @@ import {
   fixDeps,
   generate,
   indexCatalog,
+  lines,
+  total,
   ownProducts,
   type Index,
   type Selection,
   type Style,
 } from '../domain/selection';
-import { deleteProject, loadPrefs, loadPriceUpdates, loadProjects, savePrefs, saveProject, type Prefs } from '../store';
+import { deleteProject, loadOwn, loadPrefs, loadPriceUpdates, loadProjects, savePrefs, saveProject, type Prefs } from '../store';
+import { validOwn, withOwn } from '../domain/own';
 import { Viewer } from '../three/viewer';
 import { Materials } from '../three/materials';
 import { Models } from '../three/models';
@@ -38,6 +43,8 @@ import { onKey, showHelp } from './keyboard';
 import { exportCsv, manageProjects } from './projects';
 import { PriceRefresh } from './prices';
 import { openListing } from './listing';
+import { openShopping } from './shopping';
+import { openOwn, removeOwn } from './own';
 
 export { fmtNum, fmtDate, dimTxt, localeOf } from './format';
 
@@ -63,6 +70,8 @@ export class App {
   sel: Selection = {};
   preset = 'custom';
   budget = 0;
+  /** shopping-list ticks for this flat and country: slot:productId of what is already bought */
+  bought: string[] = [];
   layout: Layout | null = null;
   /** planner layout before the user's moves */
   baseLayout: Layout | null = null;
@@ -76,6 +85,8 @@ export class App {
   models = new Models();
   render = new RenderDialog(this);
   prices = new PriceRefresh(this);
+  /** price changes per product id, from the git history of the catalogue (data/history.ts) */
+  priceHistory: Record<string, Series> = {};
   /** the last photoreal image made in this session, for the listing sheet */
   lastRender: { url: string; view: string } | null = null;
   private rebuildTimer = 0;
@@ -152,7 +163,7 @@ export class App {
     const token = ++this.loadToken;
     let ix: Index;
     try {
-      ix = indexCatalog(applyUpdates(await loadCatalog(id), loadPriceUpdates(id)));
+      ix = indexCatalog(withOwn(applyUpdates(await loadCatalog(id), loadPriceUpdates(id)), validOwn(loadOwn(id)), t('own.store')));
     } catch {
       if (token === this.loadToken) $('#summary').textContent = t('misc.catalogFail');
       return;
@@ -162,8 +173,9 @@ export class App {
     this.prefs.country = id;
     savePrefs(this.prefs);
     this.ix = ix;
-    const saved = this.project.choices?.[id],
-      fromLink = fromHash ? decodeSelection(fromHash, this.ix) : null;
+    const saved = this.project.choices?.[id];
+    this.bought = saved?.bought || [];
+    const fromLink = fromHash ? decodeSelection(fromHash, this.ix) : null;
     if (fromLink && Object.keys(fromLink).length) {
       this.sel = fixDeps(fromLink, this.ix);
       this.preset = 'custom';
@@ -177,6 +189,42 @@ export class App {
     this.history.clear();
     this.prices.reset();
     this.afterChange(true);
+    this.introOffer();
+    ($('#feed') as HTMLAnchorElement).href = feedUrl(id);
+    this.priceHistory = {};
+    loadHistory(id).then(h => {
+      if (token !== this.loadToken) return;
+      this.priceHistory = h;
+      this.renderList();
+    });
+  }
+  /** Lowest price in 30 days and the chart for a product, from the daily price commits (null without a history). */
+  priceStats(p: Product) {
+    return priceStats(this.priceHistory[p.id], today(), p.price);
+  }
+  /**
+   * First visit: the introduction offers the cheapest setup that fits this flat, with its total. Working it out
+   * tries every product in every slot, so it waits until the page is idle instead of delaying the first frame.
+   */
+  private introOffer() {
+    const btn = $('#intro-cheap') as HTMLButtonElement;
+    btn.hidden = true;
+    if (this.prefs.intro || !this.ix) return;
+    const ix = this.ix,
+      token = this.loadToken;
+    const run = () => {
+      if (token !== this.loadToken || this.prefs.intro) return;
+      const sum = total(lines(this.project, generate('cheap', this.project, ix, today()), ix, today()));
+      btn.textContent = t('intro.cheap', { v: this.fmt(sum) });
+      btn.hidden = false;
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 4000 });
+    else setTimeout(run, 1500);
+  }
+  closeIntro() {
+    this.prefs.intro = true;
+    savePrefs(this.prefs);
+    document.documentElement.classList.add('intro-seen');
   }
   defaultPreset() {
     return this.prefs.country === 'rs' && this.project.demo ? 'scandi' : 'light';
@@ -232,13 +280,7 @@ export class App {
   /** After every change: save the choice, lay the flat out again, redraw the list and (soon) the 3D view. */
   afterChange(newViews = false) {
     if (!this.ix) return;
-    this.project.choices ??= {};
-    this.project.choices[this.prefs.country!] = {
-      preset: this.preset,
-      sel: this.sel,
-      ...(this.preset === 'budget' ? { budget: this.budget } : {}),
-    };
-    saveProject(this.project);
+    this.saveChoice();
     this.baseLayout = autoLayout(this.project, this.D);
     this.layout = applyMoves(this.baseLayout, this.project.moves);
     if (newViews) {
@@ -255,6 +297,17 @@ export class App {
     }, 20);
     this.renderHistory();
   }
+  /** Store this country's choice for the flat: products, look, budget and shopping-list ticks. */
+  saveChoice() {
+    this.project.choices ??= {};
+    this.project.choices[this.prefs.country!] = {
+      preset: this.preset,
+      sel: this.sel,
+      ...(this.preset === 'budget' ? { budget: this.budget } : {}),
+      ...(this.bought.length ? { bought: this.bought } : {}),
+    };
+    saveProject(this.project);
+  }
   refreshPrices() {
     return this.prices.run();
   }
@@ -263,6 +316,7 @@ export class App {
     return id ? this.ix?.byId.get(id) : undefined;
   };
   storeName(id: string) {
+    if (id === 'own') return t('own.store');
     return this.ix?.cat.stores.find(s => s.id === id)?.name || id;
   }
   fmt(v: number) {
@@ -445,6 +499,7 @@ export class App {
     this.renderList();
     this.rebuild();
     this.render.applyLang();
+    this.introOffer();
   }
   renderList() {
     renderList(this);
@@ -515,6 +570,9 @@ export class App {
       const alt = el.closest<HTMLElement>('[data-alt]');
       if (alt && this.selected) this.setSlot(this.selected, alt.dataset.alt!);
       if (el.closest('[data-turn-piece]')) this.nudge(0, 0, true);
+      if (el.closest('[data-own-add]') && this.selected) openOwn(this, this.selected);
+      const own = el.closest<HTMLElement>('[data-own-remove]');
+      if (own) removeOwn(this, own.dataset.ownRemove!);
       const key = this.selected && moveKey(this.selected);
       if (el.closest('[data-reset-piece]') && key) this.movePiece(key, null);
     });
@@ -545,6 +603,15 @@ export class App {
       this.switchProject(v);
     });
     $('#edit-plan').addEventListener('click', () => openEditor(this, this.project));
+    $('#intro-close').addEventListener('click', () => this.closeIntro());
+    $('#intro-draw').addEventListener('click', () => {
+      this.closeIntro();
+      openEditor(this, null);
+    });
+    $('#intro-cheap').addEventListener('click', () => {
+      this.closeIntro();
+      this.applyPreset('cheap');
+    });
     $('#theme').addEventListener('click', () => this.toggleTheme());
     $('#help').addEventListener('click', () => showHelp());
     $('#share').addEventListener('click', async () => {
@@ -557,6 +624,7 @@ export class App {
       }
     });
     $('#csv').addEventListener('click', () => exportCsv(this));
+    $('#shop').addEventListener('click', () => openShopping(this));
     $('#listing').addEventListener('click', () => openListing(this));
     $('#render-btn').addEventListener('click', () => this.render.open());
     document.querySelectorAll<HTMLElement>('[data-turn]').forEach(b => {

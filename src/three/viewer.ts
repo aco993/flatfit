@@ -53,6 +53,8 @@ export class Viewer {
     }
   }
   private bounds = new THREE.Box3(new THREE.Vector3(-1, 0, -1), new THREE.Vector3(8, 3, 8));
+  /** the flat itself (floor to the cut walls), used to frame the overview */
+  private flat = new THREE.Box3();
 
   constructor(
     private host: HTMLElement,
@@ -130,7 +132,10 @@ export class Viewer {
       o.frustumCulled = false;
     });
     this.renderer.shadowMap.needsUpdate = true;
-    if (bounds) this.bounds.copy(bounds).expandByScalar(1.5);
+    if (bounds) {
+      this.bounds.copy(bounds).expandByScalar(1.5);
+      this.flat.set(bounds.min.clone(), new THREE.Vector3(bounds.max.x, 1.05, bounds.max.z));
+    }
     this.updateSelBox();
     this.recompile();
   }
@@ -212,8 +217,9 @@ export class Viewer {
     this.controls.enabled = !v.interior;
     const to = new THREE.Vector3(...v.pos),
       tt = new THREE.Vector3(...v.target);
-    // overview cameras are framed for a wide screen; on a tall phone screen step back so the whole flat fits
-    if (!v.interior && this.camera.aspect < 1.05)
+    if (v.id === 'overview' && !this.flat.isEmpty()) to.copy(this.frame(to, tt));
+    // other outside views are framed for a wide screen; on a tall phone screen step back so the whole flat fits
+    else if (!v.interior && this.camera.aspect < 1.05)
       to.sub(tt)
         .multiplyScalar(Math.min(1.8, 1.05 / this.camera.aspect))
         .add(tt);
@@ -230,6 +236,38 @@ export class Viewer {
       this.finishMove();
     } else this.anim = { from: this.camera.position.clone(), to, ft: this.controls.target.clone(), tt, t0: performance.now(), dur: 650 };
     this.dirty = true;
+  }
+
+  /**
+   * The overview camera keeps its direction but moves to the distance at which the whole flat just fills the
+   * screen (with a margin for the room labels), whatever the screen's shape: a small flat no longer sits in the
+   * middle of an empty frame, and a phone sees all of it.
+   */
+  private frame(pos: THREE.Vector3, target: THREE.Vector3) {
+    const dir = pos.clone().sub(target).normalize(),
+      cam = new THREE.PerspectiveCamera(45, this.camera.aspect || 1, 0.05, 200);
+    const b = this.flat,
+      corners = [0, 1, 2, 3, 4, 5, 6, 7].map(
+        i => new THREE.Vector3(i & 1 ? b.max.x : b.min.x, i & 2 ? b.max.y : b.min.y, i & 4 ? b.max.z : b.min.z),
+      );
+    const fits = (d: number) => {
+      cam.position.copy(target).addScaledVector(dir, d);
+      cam.lookAt(target);
+      cam.updateMatrixWorld();
+      return corners.every(c => {
+        const p = c.clone().project(cam);
+        return Math.abs(p.x) <= 0.86 && Math.abs(p.y) <= 0.8 && p.z < 1;
+      });
+    };
+    let lo = 1,
+      hi = 80;
+    if (!fits(hi)) return pos;
+    for (let i = 0; i < 30; i++) {
+      const mid = (lo + hi) / 2;
+      if (fits(mid)) hi = mid;
+      else lo = mid;
+    }
+    return target.clone().addScaledVector(dir, hi);
   }
 
   /** Arrow keys / buttons in room mode: turn the head. */

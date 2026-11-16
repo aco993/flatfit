@@ -25,7 +25,8 @@ export function storeDelivery(d: Delivery | undefined, goods: number, items: num
 export function deliveryFor(ls: Line[], table: Record<string, Delivery> | undefined) {
   const byStore = new Map<string, { goods: number; items: number }>();
   for (const l of ls) {
-    if (!l.product || !l.units || l.product.store === 'est') continue;
+    // estimates have no store, and the user's own finds have no known delivery terms
+    if (!l.product || !l.units || l.product.store === 'est' || l.product.store === 'own') continue;
     const s = byStore.get(l.product.store) || { goods: 0, items: 0 };
     s.goods += l.total;
     s.items += l.units;

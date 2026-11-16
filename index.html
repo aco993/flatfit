@@ -10,7 +10,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c2410c'/%3E%3Cpath d='M7 23V12l9-6 9 6v11h-6v-6h-6v6z' fill='%23fff'/%3E%3C/svg%3E">
   <script>
     // apply the saved theme before first paint
-    try { const t = JSON.parse(localStorage.getItem('flatfit.prefs') || '{}').theme; if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+    try { const p = JSON.parse(localStorage.getItem('flatfit.prefs') || '{}'), t = p.theme; if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; if (p.intro) document.documentElement.classList.add('intro-seen'); } catch (e) {}
   </script>
 </head>
 <body>
@@ -32,6 +32,11 @@
 
   <main class="app">
     <section class="stage" aria-labelledby="views-label">
+      <div class="intro" id="intro">
+        <p><strong data-i18n="intro.title">Furnish a real flat with furniture you can actually buy.</strong> <span data-i18n="intro.text">Real products from stores in your country, prices checked every day, and every piece checked to fit, in centimetres.</span></p>
+        <ol><li data-i18n="intro.s1">Draw your flat, or load a picture of its plan</li><li data-i18n="intro.s2">Pick your country</li><li data-i18n="intro.s3">Choose a look or type a budget, then shop from the list</li></ol>
+        <div class="row"><button type="button" class="btn primary" id="intro-draw" data-i18n="intro.draw">Draw my flat</button><button type="button" class="btn" id="intro-cheap" hidden></button><button type="button" class="btn ghost" id="intro-close" data-i18n="intro.close">Got it</button></div>
+      </div>
       <h2 id="views-label" class="sr-only" data-i18n="view.label">Camera view</h2>
       <div class="views" id="views" role="tablist"></div>
       <div class="viewer" id="viewer">
@@ -54,12 +59,13 @@
       <div class="summary" id="summary" aria-live="polite"></div>
       <div id="slots"></div>
       <div class="actions">
+        <button type="button" class="btn primary" id="shop" data-i18n="shop.btn">Shopping list by store</button>
         <button type="button" class="btn" id="share" data-i18n="act.share">Copy link to this setup</button>
         <button type="button" class="btn ghost" id="csv" data-i18n="act.csv">Download shopping list (CSV)</button>
         <button type="button" class="btn ghost" id="listing" data-i18n="ad.btn">Listing sheet (PDF)</button>
       </div>
       <p class="foot" id="foot"></p>
-      <p class="foot links"><a href="https://github.com/aco993/flatfit/issues/new?template=feedback.yml" target="_blank" rel="noopener" data-i18n="misc.feedback">Send feedback</a> · <a href="https://github.com/aco993/flatfit" target="_blank" rel="noopener" data-i18n="misc.source">Source code</a></p>
+      <p class="foot links"><a href="https://github.com/aco993/flatfit/issues/new?template=feedback.yml" target="_blank" rel="noopener" data-i18n="misc.feedback">Send feedback</a> · <a href="https://github.com/aco993/flatfit" target="_blank" rel="noopener" data-i18n="misc.source">Source code</a> · <a id="feed" href="feeds/rs.xml" target="_blank" rel="noopener" type="application/rss+xml" data-i18n="hist.feed">Price drops (RSS)</a></p>
     </aside>
   </main>
 
@@ -84,6 +90,8 @@
 
   <dialog id="editor-dlg" class="dlg full" aria-labelledby="editor-title"></dialog>
   <dialog id="help-dlg" class="dlg" aria-labelledby="help-title"></dialog>
+  <dialog id="shop-dlg" class="dlg" aria-labelledby="shop-title"></dialog>
+  <dialog id="own-dlg" class="dlg" aria-labelledby="own-title"></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <script type="module" src="/src/main.ts"></script>
 </body>

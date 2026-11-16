@@ -5,3 +5,6 @@ playwright-report/
 *.log
 .DS_Store
 .vite/
+public/history/
+public/feeds/
+*.stackdump

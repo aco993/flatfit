@@ -39,6 +39,26 @@ describe('translations', () => {
     expect(t('issue.wall', { need: 200, have: 180 })).toContain('200');
     setLang('en');
   });
+  it('picks the word form for a count by each language’s plural rules', () => {
+    setLang('en');
+    expect(t('sum.promos', { n: 1 })).toBe('1 item on sale');
+    expect(t('sum.promos', { n: 3 })).toBe('3 items on sale');
+    expect(t('sum.expired', { n: 1 })).toMatch(/^1 promotion has ended/);
+    setLang('sr');
+    expect(t('sum.promos', { n: 1 })).toBe('1 stavka na akciji');
+    expect(t('sum.promos', { n: 3 })).toBe('3 stavke na akciji');
+    expect(t('sum.promos', { n: 5 })).toBe('5 stavki na akciji');
+    expect(t('sum.promos', { n: 21 })).toBe('21 stavka na akciji');
+    setLang('de');
+    expect(t('sum.expired', { n: 1 })).toMatch(/^1 Angebot ist abgelaufen/);
+    setLang('en');
+  });
+  it('uses plural forms with as many choices as the language has', () => {
+    for (const lang of ['en', 'de', 'sr', 'bs', 'hr'] as const)
+      for (const [k, v] of Object.entries(DICT[lang]))
+        for (const m of v.matchAll(/\{\w+:([^}]*)\}/g))
+          expect(m[1].split('|').length, `${lang}:${k}`).toBe(lang === 'en' || lang === 'de' ? 2 : 3);
+  });
 });
 
 describe('project validation', () => {

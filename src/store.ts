@@ -1,4 +1,4 @@
-import type { Lang, Project } from './types';
+import type { Lang, Product, Project } from './types';
 import type { Quality } from './three/pathtrace';
 import { DEMO } from './data/demo';
 import type { Updates } from './data/refresh';
@@ -10,12 +10,15 @@ export interface Prefs {
   project?: string;
   theme?: 'light' | 'dark' | 'auto';
   quality?: Quality;
+  /** the first-visit introduction was closed */
+  intro?: boolean;
 }
 
 const KEY_PREFS = 'flatfit.prefs',
   KEY_PROJECTS = 'flatfit.projects',
   KEY_DEMO = 'flatfit.demo-choices',
-  KEY_PRICES = 'flatfit.prices.';
+  KEY_PRICES = 'flatfit.prices.',
+  KEY_OWN = 'flatfit.own.';
 
 function read<T>(k: string, def: T): T {
   try {
@@ -38,6 +41,9 @@ export const loadPrefs = () => read<Prefs>(KEY_PREFS, {});
 export const loadPriceUpdates = (country: string) => read<Updates>(KEY_PRICES + country, {});
 export const savePriceUpdates = (country: string, u: Updates) => write(KEY_PRICES + country, u);
 export const savePrefs = (p: Prefs) => write(KEY_PREFS, p);
+/** products the user added from other stores, per country (see domain/own.ts) */
+export const loadOwn = (country: string) => read<unknown>(KEY_OWN + country, []);
+export const saveOwn = (country: string, list: Product[]) => write(KEY_OWN + country, list);
 
 /** The demo flat is built in; only the furniture choices for it are stored. */
 export function loadProjects(): Project[] {
