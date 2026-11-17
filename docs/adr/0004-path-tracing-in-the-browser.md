@@ -8,7 +8,7 @@ A photoreal image sells a layout better than the raster view. Rendering on a ser
 
 ## Decision
 
-three-gpu-pathtracer in WebGL2, denoised by Intel Open Image Denoise running on WebGPU (oidn-web), with a scheduler around it:
+three-gpu-pathtracer in WebGL2, denoised by Intel Open Image Denoise running on WebGPU (oidn-webgpu, formerly oidn-web), with a scheduler around it:
 
 - each pass is split into tiles, and the next tile is queued only when a `WebGLSync` fence says the previous one finished;
 - the tile count adapts to the measured time per tile;

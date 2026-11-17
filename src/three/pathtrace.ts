@@ -298,7 +298,7 @@ export function brightness(c: HTMLCanvasElement) {
 }
 
 // ---------- denoising ----------
-let unet: Awaited<ReturnType<typeof import('oidn-web')['initUNetFromURL']>> | null = null;
+let unet: Awaited<ReturnType<typeof import('oidn-webgpu')['initUNetFromURL']>> | null = null;
 /** Intel Open Image Denoise (neural network on WebGPU) with albedo + normal guides; throws when WebGPU is missing. */
 export async function denoiseOIDN(
   src: HTMLCanvasElement,
@@ -306,7 +306,7 @@ export async function denoiseOIDN(
   base: string,
 ): Promise<HTMLCanvasElement> {
   if (!('gpu' in navigator)) throw new Error('no-webgpu');
-  const { initUNetFromURL } = await import('oidn-web');
+  const { initUNetFromURL } = await import('oidn-webgpu');
   if (!unet) unet = await initUNetFromURL(base + 'oidn/rt_ldr_alb_nrm.tza', undefined, { aux: true, hdr: false });
   const w = src.width,
     h = src.height,

@@ -4,7 +4,7 @@
 |---|---|---|
 | three.js | npm `three` | MIT |
 | three-gpu-pathtracer, three-mesh-bvh | npm | MIT |
-| oidn-web (WebGPU port of Intel Open Image Denoise) | npm `oidn-web` | MIT |
+| oidn-webgpu (WebGPU port of Intel Open Image Denoise, formerly oidn-web) | npm `oidn-webgpu` | MIT |
 | Intel Open Image Denoise weights `rt_ldr_alb_nrm` | `public/oidn/` (from the `denoiser` npm package) | Apache 2.0 |
 | 3D models: potted plants, ceiling lamp, ceramic vase, outdoor table set, dining chair, armchair, round coffee table, low cabinet (TV bench), side table (nightstand); textures reduced to 512 px | `public/models/`, [Poly Haven](https://polyhaven.com) | CC0 |
 | lz-string | npm | MIT |
