@@ -7,8 +7,6 @@ import { WOOD, type WoodTone } from '../three/materials';
 
 const TONES = Object.keys(WOOD) as WoodTone[];
 const toneHex = (t: WoodTone) => `rgb(${WOOD[t].map(v => v + 15).join(',')})`;
-/** dark text on light wood, white on dark wood */
-const toneInk = (t: WoodTone) => (WOOD[t][0] * 0.3 + WOOD[t][1] * 0.59 + WOOD[t][2] * 0.11 > 140 ? '#1d1f22' : '#ffffff');
 
 /** paint buckets and laminate packs in the sizes shops sell most (the sheet says it is an assumption) */
 const BUCKET_L = 15;
@@ -40,11 +38,11 @@ export function openFinish(app: App) {
     </ul>
     <div class="tblwrap"><table class="fin-table"><thead><tr><th scope="col">${esc(t('fin.room'))}</th><th scope="col">${esc(t('fin.walls'))}</th><th scope="col">${esc(t('fin.ceiling'))}</th><th scope="col">${esc(t('fin.floor'))}</th><th scope="col">${esc(t('fin.skirtingCol'))}</th></tr></thead><tbody>${rows}</tbody></table></div>
     <fieldset class="fin-colour"><legend>${esc(t('fin.colour'))}</legend>
-      <div class="row">${SWATCHES.map(h => `<button type="button" class="sw-btn" data-wall="${h}" style="background:${h}" aria-label="${h}" aria-pressed="${h === current}"></button>`).join('')}
+      <div class="row">${SWATCHES.map(h => `<button type="button" class="sw-btn" data-wall="${h}" style="background:${h}" aria-label="${esc(t('fin.colour'))} ${h}" aria-pressed="${h === current}"></button>`).join('')}
       <label class="field"><span class="sr-only">${esc(t('fin.colour'))}</span><input type="color" value="${esc(current)}" data-wall-pick></label></div>
     </fieldset>
     <fieldset class="fin-colour fin-floor"><legend>${esc(t('fin.floorTone'))}</legend>
-      <div class="row">${TONES.map(k => `<button type="button" class="sw-btn wide" data-floor="${k}" style="background:${toneHex(k)};color:${toneInk(k)}" aria-pressed="${k === (app.floor || 'natural')}"><span>${esc(t(('fin.tone.' + k) as Key))}</span></button>`).join('')}</div>
+      <div class="row">${TONES.map(k => `<button type="button" class="tone" data-floor="${k}" aria-pressed="${k === (app.floor || 'natural')}"><i style="background:${toneHex(k)}"></i>${esc(t(('fin.tone.' + k) as Key))}</button>`).join('')}</div>
     </fieldset>
     <p class="muted small">${esc(t('fin.note'))}</p>`;
   const setWall = (hex: string) => {

@@ -1514,13 +1514,24 @@ details.ai .note a {
   gap: 10px;
   pointer-events: auto;
 }
-.sw-btn.wide {
-  width: auto;
-  height: 34px;
+.tone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 0 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
 }
-.sw-btn.wide span {
-  font-size: 12px;
-  font-weight: 600;
+.tone i {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+.tone[aria-pressed="true"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }
