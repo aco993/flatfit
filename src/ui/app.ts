@@ -76,6 +76,8 @@ export class App {
   bought: string[] = [];
   /** wall paint colour for this flat and country (#rrggbb), '' for the default off-white */
   wall = '';
+  /** augmented reality on this device: WebXR (Android), Quick Look (iPhone) or none */
+  ar: 'webxr' | 'quicklook' | null = null;
   layout: Layout | null = null;
   /** planner layout before the user's moves */
   baseLayout: Layout | null = null;
@@ -130,6 +132,13 @@ export class App {
     await this.loadCountry(this.prefs.country!, this.hashSel);
     this.loadModelsLater();
     window.addEventListener('keydown', e => onKey(this, e));
+    import('../three/ar')
+      .then(m => m.arSupport())
+      .then(mode => {
+        this.ar = mode;
+        if (mode && this.selected) renderCard(this);
+      })
+      .catch(() => undefined);
   }
 
   /**
@@ -487,6 +496,18 @@ export class App {
     }
     renderCard(this);
   }
+  /** The selected piece at its real size in the user's room, through the phone's camera (three/ar.ts). */
+  async showInRoom(slot: SlotId) {
+    if (!this.ar) return;
+    try {
+      const m = await import('../three/ar');
+      const piece = m.pieceObject(this.buildRoot(false, this.project.wallHeight), slot);
+      if (!piece) return;
+      await m.showInAR(this.ar, piece, { hint: t('ar.hint'), turn: t('ar.turn'), done: t('ar.done') });
+    } catch {
+      toast(t('ar.fail'));
+    }
+  }
   /** Lamp positions for the path tracer: one warm light under each room ceiling. */
   lamps(): [number, number, number][] {
     return this.project.rooms.filter(r => r.type !== 'terrace').map(r => [r.x + r.w / 2, this.project.wallHeight - 0.35, r.z + r.d / 2]);
@@ -583,6 +604,7 @@ export class App {
       if (alt && this.selected) this.setSlot(this.selected, alt.dataset.alt!);
       if (el.closest('[data-turn-piece]')) this.nudge(0, 0, true);
       if (el.closest('[data-own-add]') && this.selected) openOwn(this, this.selected);
+      if (el.closest('[data-ar]') && this.selected) this.showInRoom(this.selected);
       const own = el.closest<HTMLElement>('[data-own-remove]');
       if (own) removeOwn(this, own.dataset.ownRemove!);
       const key = this.selected && moveKey(this.selected);

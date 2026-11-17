@@ -1491,3 +1491,25 @@ details.ai .note a {
 .tblwrap {
   overflow-x: auto;
 }
+
+/* augmented reality overlay (WebXR dom-overlay) */
+.ar-overlay {
+  position: fixed;
+  inset: auto 0 0 0;
+  padding: 16px 16px max(16px, env(safe-area-inset-bottom));
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  color: #fff;
+  text-shadow: 0 1px 3px #000;
+  pointer-events: none;
+}
+.ar-overlay p {
+  margin: 0;
+  text-align: center;
+}
+.ar-row {
+  display: flex;
+  gap: 10px;
+  pointer-events: auto;
+}
