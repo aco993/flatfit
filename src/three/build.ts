@@ -10,6 +10,8 @@ export interface BuildOptions {
   /** wall height actually drawn: low "doll-house" walls for the overview, full height inside */
   wallH: number;
   lowPoly?: boolean;
+  /** paint colour of the walls (#rrggbb); off-white when not chosen */
+  wallHex?: string;
   ceiling?: boolean;
 }
 export interface Furnish {
@@ -109,7 +111,7 @@ export function buildApartment(p: Project, f: Furnish | null, opt: BuildOptions,
   const b = new Builder(M, opt.lowPoly);
   const H = opt.wallH,
     full = H > 2;
-  const WALL = M.get('#f2f1ed', 'plain', { roughness: 0.92 }),
+  const WALL = M.get(opt.wallHex || '#f2f1ed', 'plain', { roughness: 0.92 }),
     FRAME = M.get('#fafafa', 'plain', { roughness: 0.4 }),
     GLASS = M.get('#d8e6ee', 'glass');
 

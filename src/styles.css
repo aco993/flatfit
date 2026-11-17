@@ -1416,3 +1416,78 @@ details.ai .note a {
 .own-form p {
   margin: 0;
 }
+
+/* payback for landlords */
+.pay-form {
+  display: grid;
+  gap: 8px;
+}
+.pay-form p {
+  margin: -4px 0 0;
+}
+.pay-out p {
+  margin: 6px 0;
+}
+.pay-big {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* walls and floor */
+.fin-sum {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.fin-sum li {
+  display: grid;
+  gap: 2px;
+}
+.fin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.fin-table th,
+.fin-table td {
+  text-align: right;
+  padding: 4px 6px;
+  border-top: 1px solid var(--line);
+}
+.fin-table th[scope="row"],
+.fin-table thead th:first-child {
+  text-align: left;
+}
+.fin-colour {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 12px 0 6px;
+  padding: 8px 10px 10px;
+}
+.fin-colour .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.sw-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.sw-btn[aria-pressed="true"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.fin-colour input[type="color"] {
+  width: 44px;
+  height: 32px;
+  padding: 2px;
+}
+.tblwrap {
+  overflow-x: auto;
+}

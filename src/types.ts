@@ -64,7 +64,7 @@ export interface Project {
   backdrop?: Backdrop;
   demo?: boolean;
   /** chosen product ids per country: { rs: { preset: 'scandi', sel: { sofa: 'fi-vegas', … } } } */
-  choices?: Record<string, { preset: string; sel: Partial<Record<SlotId, string>>; budget?: number; bought?: string[] }>;
+  choices?: Record<string, { preset: string; sel: Partial<Record<SlotId, string>>; budget?: number; bought?: string[]; wall?: string }>;
   /** furniture moved by hand: where the anchor of each movable piece ends up */
   moves?: Moves;
   updatedAt?: number;

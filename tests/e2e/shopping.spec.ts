@@ -65,5 +65,23 @@ test.describe('Vesna · furnishes a flat to rent out, on a budget', () => {
     await page.getByRole('button', { name: 'Shopping list by store' }).click();
     await expect(page.locator('#shop-dlg .shop-progress')).toContainText(/^2 of \d+ bought/);
     await expect(page.locator('#shop-dlg input:checked')).toHaveCount(2);
+    await page.locator('#shop-dlg').getByRole('button', { name: 'Close' }).click();
+
+    // does furnishing pay? 45,000 a month furnished, 38,000 empty
+    await page.getByRole('button', { name: 'Payback for landlords' }).click();
+    const pay = page.locator('#payback-dlg');
+    await pay.getByLabel(/furnished/).fill('45000');
+    await pay.getByLabel(/empty/).fill('38000');
+    await expect(pay.locator('.pay-out')).toContainText(/Paid back after \d+ months/);
+    await expect(pay.locator('.pay-out')).toContainText('Wears out first');
+    await pay.getByRole('button', { name: 'Close' }).click();
+
+    // paint and laminate for the walls and floors of the plan, and a wall colour in 3D
+    await page.getByRole('button', { name: 'Walls and floor' }).click();
+    const fin = page.locator('#finish-dlg');
+    await expect(fin).toContainText(/Paint: about \d+ l/);
+    await expect(fin).toContainText(/Laminate: [\d.,]+ m²/);
+    await fin.locator('[data-wall]').nth(3).click();
+    await expect(fin.locator('[data-wall]').nth(3)).toHaveAttribute('aria-pressed', 'true');
   });
 });

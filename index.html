@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>FlatFit · furnish a flat in 3D</title>
   <meta name="description" content="Furnish an apartment in 3D with real furniture from local stores, with prices by country, fit checks and photoreal path-traced renders in the browser.">
+  <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#16181b" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23c2410c'/%3E%3Cpath d='M7 23V12l9-6 9 6v11h-6v-6h-6v6z' fill='%23fff'/%3E%3C/svg%3E">
@@ -63,6 +64,8 @@
         <button type="button" class="btn" id="share" data-i18n="act.share">Copy link to this setup</button>
         <button type="button" class="btn ghost" id="csv" data-i18n="act.csv">Download shopping list (CSV)</button>
         <button type="button" class="btn ghost" id="listing" data-i18n="ad.btn">Listing sheet (PDF)</button>
+        <button type="button" class="btn ghost" id="payback" data-i18n="pay.btn">Payback for landlords</button>
+        <button type="button" class="btn ghost" id="finish" data-i18n="fin.btn">Walls and floor</button>
       </div>
       <p class="foot" id="foot"></p>
       <p class="foot links"><a href="https://github.com/aco993/flatfit/issues/new?template=feedback.yml" target="_blank" rel="noopener" data-i18n="misc.feedback">Send feedback</a> · <a href="https://github.com/aco993/flatfit" target="_blank" rel="noopener" data-i18n="misc.source">Source code</a> · <a id="feed" href="feeds/rs.xml" target="_blank" rel="noopener" type="application/rss+xml" data-i18n="hist.feed">Price drops (RSS)</a></p>
@@ -92,6 +95,8 @@
   <dialog id="help-dlg" class="dlg" aria-labelledby="help-title"></dialog>
   <dialog id="shop-dlg" class="dlg" aria-labelledby="shop-title"></dialog>
   <dialog id="own-dlg" class="dlg" aria-labelledby="own-title"></dialog>
+  <dialog id="payback-dlg" class="dlg" aria-labelledby="payback-title"></dialog>
+  <dialog id="finish-dlg" class="dlg" aria-labelledby="finish-title"></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <script type="module" src="/src/main.ts"></script>
 </body>

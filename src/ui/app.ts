@@ -44,6 +44,8 @@ import { exportCsv, manageProjects } from './projects';
 import { PriceRefresh } from './prices';
 import { openListing } from './listing';
 import { openShopping } from './shopping';
+import { openPayback } from './payback';
+import { openFinish } from './finish';
 import { openOwn, removeOwn } from './own';
 
 export { fmtNum, fmtDate, dimTxt, localeOf } from './format';
@@ -72,6 +74,8 @@ export class App {
   budget = 0;
   /** shopping-list ticks for this flat and country: slot:productId of what is already bought */
   bought: string[] = [];
+  /** wall paint colour for this flat and country (#rrggbb), '' for the default off-white */
+  wall = '';
   layout: Layout | null = null;
   /** planner layout before the user's moves */
   baseLayout: Layout | null = null;
@@ -175,6 +179,7 @@ export class App {
     this.ix = ix;
     const saved = this.project.choices?.[id];
     this.bought = saved?.bought || [];
+    this.wall = saved?.wall || '';
     const fromLink = fromHash ? decodeSelection(fromHash, this.ix) : null;
     if (fromLink && Object.keys(fromLink).length) {
       this.sel = fixDeps(fromLink, this.ix);
@@ -305,6 +310,7 @@ export class App {
       sel: this.sel,
       ...(this.preset === 'budget' ? { budget: this.budget } : {}),
       ...(this.bought.length ? { bought: this.bought } : {}),
+      ...(this.wall ? { wall: this.wall } : {}),
     };
     saveProject(this.project);
   }
@@ -419,7 +425,13 @@ export class App {
   }
   buildRoot(lowPoly = false, wallH = this.wallH()) {
     const f = this.layout && this.ix ? { product: this.product, dims: this.D, layout: this.layout } : null;
-    return buildApartment(this.project, f, { wallH, lowPoly: lowPoly || !!this.viewer?.soft }, this.M, this.models);
+    return buildApartment(
+      this.project,
+      f,
+      { wallH, lowPoly: lowPoly || !!this.viewer?.soft, wallHex: this.wall || undefined },
+      this.M,
+      this.models,
+    );
   }
   rebuild() {
     if (!this.viewer) return;
@@ -625,6 +637,8 @@ export class App {
     });
     $('#csv').addEventListener('click', () => exportCsv(this));
     $('#shop').addEventListener('click', () => openShopping(this));
+    $('#payback').addEventListener('click', () => openPayback(this));
+    $('#finish').addEventListener('click', () => openFinish(this));
     $('#listing').addEventListener('click', () => openListing(this));
     $('#render-btn').addEventListener('click', () => this.render.open());
     document.querySelectorAll<HTMLElement>('[data-turn]').forEach(b => {

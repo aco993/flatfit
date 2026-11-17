@@ -1,0 +1,11 @@
+{
+  "name": "FlatFit · furnish a flat in 3D",
+  "short_name": "FlatFit",
+  "description": "Furnish a flat in 3D with real furniture from local stores: prices by country, fit checks, a shopping list.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#c2410c",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

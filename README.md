@@ -20,7 +20,7 @@
 | **Stack** | TypeScript (strict), three.js, three-gpu-pathtracer, Intel OIDN on WebGPU, Gemini or Claude API (vision + structured output, optional, the user's own key), Vite, Vitest, Playwright + axe-core, GitHub Actions, GitHub Pages |
 | **Size** | ~10,000 lines of TypeScript (formatted by Biome), no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
 | **Data** | 5 markets, ~590 real products; every price re-checked daily by a GitHub Action and committed to git ([why](docs/adr/0002-static-site-git-scraped-prices.md)); IKEA prices checked live from the browser on request |
-| **Quality** | Biome lint and format in CI, 191 unit tests, 46 end-to-end runs (13 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 94–96 / mobile 68–70, CodeQL, Dependabot |
+| **Quality** | Biome lint and format in CI, 199 unit tests, 47 end-to-end runs (14 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 94–96 / mobile 68–70, CodeQL, Dependabot |
 | **Hard parts** | GPU driver resets during path tracing, a cold-cache shader stall found with a CPU profile, collision checks on every pointer move, a budget solved as a multiple-choice knapsack, honest labelling of prices that cannot be checked automatically |
 
 I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue. The demo is that flat, 44.6 m²: furnished from about €2,450 at Serbian prices (November 2026), every piece checked to fit.
@@ -47,6 +47,9 @@ They are better at what they do: huge model libraries, realistic renders, scanni
 - **Price history from git.** Every daily price check is a commit, so the repository already holds each product's price day by day. At build time `scripts/history.mjs` reads the catalogues' git history into a small file per country: the product card draws the price since the history starts, says what it was before the last drop, and marks a price that is the *lowest in 30 days*. The same script writes an RSS feed of the last 14 days' price drops for each country, so anyone can follow sales without an account or a server.
 - **A shopping list for the shopping trip.** The list grouped by store, the store with the most left to pay first, its delivery terms, a tick for every item bought and what is still left to pay. Ticks stay in the browser with the flat.
 - **Anything from any store.** Found a sofa at a market or second hand? Add it with its price, link, size and colour: it goes into the 3D view, the fit check, the total and the shopping list like any catalogue product, and stays in the browser only.
+- **Walls and floor.** Paint in litres and buckets, laminate in square metres and packs, skirting board in metres, worked out from the plan: walls between rooms count on both faces, open-plan edges and openings are left out, bathrooms and terraces are skipped. Pick a wall colour and the 3D view is repainted.
+- **Payback for landlords.** Type the rent with and without furniture: FlatFit shows the furniture cost with delivery, the months until the extra rent has paid it back, wear per month from typical lifespans in a rented flat, and which pieces will need replacing first.
+- **Works offline.** After one visit the app, the catalogue and your lists open without a network (a service worker), so the shopping list works in a store with no signal.
 - **Share and export.** A link restores the country, language, flat, every chosen product and where you moved things; custom floor plans travel inside the link. Shopping list as CSV; print view.
 - **Accessible and responsive.** Keyboard shortcuts for everything, skip link, live regions, focus management in dialogs, reduced-motion support, light/dark theme, phone/tablet/desktop layouts.
 
@@ -167,11 +170,10 @@ npm run build && npx playwright test
 
 ## Roadmap
 
-- Walls and floors as products: paint by the litre and laminate by the pack, from the areas the plan already knows.
-- Payback for landlords: furnishing cost against the rent, months to earn it back, which pieces wear out first.
+- Paint and laminate as real products with prices, on top of the quantities the plan gives today.
 - “Place it in my room”: export the chosen piece to AR on a phone, at its real size.
 - L-shaped and angled rooms; more than one floor.
-- Offline use in stores, and a performance budget in CI.
+- A performance budget in CI.
 
 ## Limits
 
