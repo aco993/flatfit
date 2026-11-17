@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { Lang, Moves, Product, Project, SlotId, View } from '../types';
-import { LANGS, detectLang, getLang, setLang, t, tt, type Key } from '../i18n';
+import { LANGS, detectLang, getLang, t, tt, useLang, type Key } from '../i18n';
 import { COUNTRIES, country, loadCatalog, money } from '../data/countries';
 import { RS_PRESETS, RS_PRESET_BASE } from '../data/demo';
 import { applyUpdates } from '../data/refresh';
@@ -102,10 +102,9 @@ export class App {
   private loadToken = 0;
 
   async start() {
-    setLang(this.prefs.lang || detectLang());
     const link = readLink(location.hash);
+    await useLang(link.lang || this.prefs.lang || detectLang());
     if (link.country) this.prefs.country = link.country;
-    if (link.lang) setLang(link.lang);
     if (link.plan) {
       if (!this.projects.some(x => x.id === link.plan!.id)) {
         this.projects.push(link.plan);
@@ -676,8 +675,8 @@ export class App {
       });
     }
   }
-  setLanguage(l: Lang) {
-    setLang(l);
+  async setLanguage(l: Lang) {
+    await useLang(l);
     this.prefs.lang = l;
     savePrefs(this.prefs);
     this.applyLang();

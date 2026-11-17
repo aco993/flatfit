@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import ba from '../../src/data/catalogs/ba.json';
 import type { Catalog } from '../../src/types';
 import { DEMO } from '../../src/data/demo';
-import { setLang } from '../../src/i18n';
+import { useLang } from '../../src/i18n';
 import { generate, indexCatalog, lines, total } from '../../src/domain/selection';
 import { itemText, listingData } from '../../src/ui/listing';
 
@@ -17,8 +17,10 @@ const names: Record<string, string> = {
   terrace: 'Terasa',
 };
 
+// Bosnian loads on demand, like in the app
+await useLang('bs');
+
 describe('listing sheet', () => {
-  setLang('bs');
   const d = listingData(DEMO, sel, ix, id => names[id]);
   it('gives the living area without the terrace, and the terrace apart (44.6 m² flat, 4.6 m² terrace)', () => {
     expect(d.area + d.terrace).toBeCloseTo(44.58, 1);

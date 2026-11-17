@@ -1,9 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { DICT, setLang, t } from '../../src/i18n';
+import { EN, type Key, loadLang, setLang, t } from '../../src/i18n';
+import de from '../../src/i18n/de';
+import sr from '../../src/i18n/sr';
+import bs from '../../src/i18n/bs';
+import hr from '../../src/i18n/hr';
 import { SLOTS, GROUPS } from '../../src/domain/slots';
 import { COUNTRIES } from '../../src/data/countries';
 import { isProject } from '../../src/store';
 import { DEMO } from '../../src/data/demo';
+
+const DICT: Record<'en' | 'de' | 'sr' | 'bs' | 'hr', Record<Key, string>> = { en: EN, de, sr, bs, hr };
 
 describe('translations', () => {
   const en = Object.keys(DICT.en);
@@ -34,12 +40,15 @@ describe('translations', () => {
     for (const g of GROUPS) expect(DICT.en).toHaveProperty('group.' + g);
     for (const c of COUNTRIES) expect(DICT.en).toHaveProperty('country.' + c.id);
   });
-  it('fills placeholders', () => {
+  it('fills placeholders', async () => {
+    await loadLang('de');
     setLang('de');
     expect(t('issue.wall', { need: 200, have: 180 })).toContain('200');
     setLang('en');
   });
-  it('picks the word form for a count by each language’s plural rules', () => {
+  it('picks the word form for a count by each language’s plural rules', async () => {
+    await loadLang('sr');
+    await loadLang('de');
     setLang('en');
     expect(t('sum.promos', { n: 1 })).toBe('1 item on sale');
     expect(t('sum.promos', { n: 3 })).toBe('3 items on sale');
@@ -68,5 +77,17 @@ describe('project validation', () => {
     expect(isProject({ ...DEMO, rooms: [{ id: 'x', type: 'living', x: 0, z: 0, w: -1, d: 1 }] })).toBe(false);
     expect(isProject(null)).toBe(false);
     expect(isProject('{"id":1}')).toBe(false);
+  });
+});
+
+describe('languages on demand', () => {
+  it('falls back to English until a language is loaded, then uses it', async () => {
+    // nothing in this file has loaded Croatian through loadLang yet
+    setLang('hr');
+    expect(t('slot.fridge')).toBe(EN['slot.fridge']);
+    await loadLang('hr');
+    expect(t('slot.fridge')).toBe('Hladnjak');
+    setLang('en');
+    expect(t('slot.fridge')).toBe(EN['slot.fridge']);
   });
 });

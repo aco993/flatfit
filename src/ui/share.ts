@@ -1,6 +1,6 @@
 import LZString from 'lz-string';
 import type { Lang, Moves, Project, SlotId } from '../types';
-import { DICT } from '../i18n';
+import { isLang } from '../i18n';
 import { COUNTRIES } from '../data/countries';
 import { MOVABLE, type Pose } from '../domain/moves';
 import { isProject } from '../store';
@@ -28,7 +28,7 @@ export function readLink(hash: string): LinkState {
   const c = h.get('c'),
     l = h.get('l');
   if (c && COUNTRIES.some(x => x.id === c)) out.country = c;
-  if (l && DICT[l as Lang]) out.lang = l as Lang;
+  if (l && isLang(l)) out.lang = l;
   const plan = h.get('plan');
   if (plan) {
     try {
