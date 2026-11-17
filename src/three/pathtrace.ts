@@ -298,7 +298,7 @@ export function brightness(c: HTMLCanvasElement) {
 }
 
 // ---------- denoising ----------
-let unet: any = null;
+let unet: Awaited<ReturnType<typeof import('oidn-web')['initUNetFromURL']>> | null = null;
 /** Intel Open Image Denoise (neural network on WebGPU) with albedo + normal guides; throws when WebGPU is missing. */
 export async function denoiseOIDN(
   src: HTMLCanvasElement,
@@ -312,7 +312,7 @@ export async function denoiseOIDN(
     h = src.height,
     color = src.getContext('2d')!.getImageData(0, 0, w, h);
   const out: ImageData = await new Promise((res, rej) =>
-    unet.tileExecute({
+    unet!.tileExecute({
       color,
       albedo: new ImageData(new Uint8ClampedArray(aux.albedo), w, h),
       normal: new ImageData(new Uint8ClampedArray(aux.normal), w, h),
@@ -324,7 +324,11 @@ export async function denoiseOIDN(
   const c = document.createElement('canvas');
   c.width = w;
   c.height = h;
-  c.getContext('2d')!.putImageData(out instanceof ImageData ? out : new ImageData(new Uint8ClampedArray((out as any).data), w, h), 0, 0);
+  c.getContext('2d')!.putImageData(
+    out instanceof ImageData ? out : new ImageData(new Uint8ClampedArray((out as { data: ArrayLike<number> }).data), w, h),
+    0,
+    0,
+  );
   if (brightness(c) < 1.5) throw new Error('empty');
   return c;
 }

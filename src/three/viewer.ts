@@ -24,6 +24,26 @@ export interface DragHandler {
  * Raster 3D view. Two camera modes: an orbiting overview of the whole flat (low walls),
  * and a "stand in the room and look around" mode for each room (full-height walls).
  */
+/**
+ * The private parts of three's PMREMGenerator that makeEnv() uses to compile the environment shaders up front.
+ * They differ between three versions (planar targets up to r186, cube targets from r187), so all are optional
+ * and makeEnv() checks which exist.
+ */
+interface PmremInternals {
+  _setSize(size: number): void;
+  _allocateTargets?: () => THREE.WebGLRenderTarget;
+  _allocateTarget: () => THREE.WebGLRenderTarget;
+  _lodMeshes?: THREE.Mesh[];
+  _blurMaterial?: THREE.Material;
+  _ggxMaterial?: THREE.Material;
+  _integrationMaterial?: THREE.Material;
+  _renderCube: (...args: unknown[]) => unknown;
+  _getSourceTarget(): unknown;
+  _applyPMREM(rt: THREE.WebGLRenderTarget): void;
+  _blur(rt: THREE.WebGLRenderTarget, sigma: number): void;
+  _boxMesh: THREE.Mesh;
+}
+
 export class Viewer {
   renderer: THREE.WebGLRenderer;
   scene = new THREE.Scene();
@@ -165,7 +185,7 @@ export class Viewer {
   private async makeEnv() {
     const r = this.renderer,
       pm = new THREE.PMREMGenerator(r),
-      P = pm as unknown as Record<string, any>,
+      P = pm as unknown as PmremInternals,
       room = new RoomEnvironment();
     try {
       const prev = r.getRenderTarget(),

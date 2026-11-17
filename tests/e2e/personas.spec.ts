@@ -188,10 +188,9 @@ test.describe('Sara · rearranges the living room with the mouse', () => {
     await ready(page);
     await page.getByRole('tab', { name: /Whole flat/ }).click();
     await page.waitForTimeout(900);
-    const at = (x: number, y: number, z: number) =>
-      page.evaluate(([x, y, z]) => (window as any).flatfit.viewer.toScreen(x, y, z), [x, y, z]);
+    const at = (x: number, y: number, z: number) => page.evaluate(([x, y, z]) => window.flatfit.viewer!.toScreen(x, y, z), [x, y, z]);
     const centre = await page.evaluate(() => {
-      const c = (window as any).flatfit.viewer.slotCenter('sofa');
+      const c = window.flatfit.viewer!.slotCenter('sofa')!;
       return [c.x, c.z];
     });
     // wait until the camera has stopped moving (software GL on CI animates slowly)
@@ -212,7 +211,7 @@ test.describe('Sara · rearranges the living room with the mouse', () => {
     await page.mouse.move(s.x, s.y);
     await page.mouse.down();
     await page.mouse.move(s.x + (t.x - s0.x) / 2, s.y + (t.y - s0.y) / 2, { steps: 6 });
-    expect(await page.evaluate(() => (window as any).flatfit.viewer.dragging)).toBe(true);
+    expect(await page.evaluate(() => window.flatfit.viewer!.dragging)).toBe(true);
     await page.mouse.move(s.x + (t.x - s0.x), s.y + (t.y - s0.y), { steps: 6 });
     await page.mouse.up();
     // pushed into the middle of the room it runs into the coffee table
@@ -220,19 +219,19 @@ test.describe('Sara · rearranges the living room with the mouse', () => {
     await expect(page.locator('#card')).toContainText('Back to suggested place');
     // the selection frame follows the piece to where it was dropped (it once stayed at 0,0 after the rebuild)
     const gap = await page.evaluate(() => {
-      const v = (window as any).flatfit.viewer,
-        c = v.slotCenter('sofa'),
-        b = v.sel.box;
+      const v = window.flatfit.viewer!,
+        c = v.slotCenter('sofa')!,
+        b = (v as unknown as { sel: { box: { min: { x: number; z: number }; max: { x: number; z: number } } } }).sel.box;
       return Math.hypot((b.min.x + b.max.x) / 2 - c.x, (b.min.z + b.max.z) / 2 - c.z);
     });
     expect(gap).toBeLessThan(0.1);
     await page.keyboard.press('t');
-    const turned = await page.evaluate(() => (window as any).flatfit.project.moves.sofa.rot);
+    const turned = await page.evaluate(() => window.flatfit.project.moves!.sofa!.rot);
     expect(Math.abs(turned)).toBeLessThan(0.01 + Math.PI);
     await page.getByRole('button', { name: 'Undo' }).click();
     await page.keyboard.press('Control+z');
     await expect(page.getByTestId('issues')).not.toContainText('Sofa:');
-    expect(await page.evaluate(() => Object.keys((window as any).flatfit.project.moves || {}).length)).toBe(0);
+    expect(await page.evaluate(() => Object.keys(window.flatfit.project.moves || {}).length)).toBe(0);
     await expect(page.getByRole('button', { name: 'Undo' })).toBeDisabled();
     await page.keyboard.press('Control+y');
     await expect(page.getByTestId('issues')).toContainText('Sofa:');
@@ -283,7 +282,7 @@ test.describe('Nina · has only a picture of her floor plan', () => {
     await dlg.getByRole('button', { name: 'Save and show in 3D' }).click();
     await ready(page);
     // the picture stays with the flat but never goes into a share link
-    const shared = await page.evaluate(() => (window as any).flatfit.shareUrl());
+    const shared = await page.evaluate(() => window.flatfit.shareUrl());
     expect(shared.length).toBeLessThan(4000);
   });
 });
@@ -336,7 +335,7 @@ test.describe('Marko · rents the flat out and needs a listing', () => {
     await expect(sheet.locator('.price').first()).toBeVisible();
     await expect(sheet.locator('.total')).toContainText('KM');
     // the 3D view is back where it was
-    expect(await page.evaluate(() => (window as any).flatfit.viewIdx)).toBe(0);
+    expect(await page.evaluate(() => window.flatfit.viewIdx)).toBe(0);
   });
 });
 
@@ -447,7 +446,7 @@ test.describe('Dario · got a picture of a plan and has his own Claude API key',
     await expect(dlg.locator('#ed-problems li')).toHaveCount(0);
     await dlg.getByRole('button', { name: 'Save and show in 3D' }).click();
     await ready(page);
-    expect(await page.evaluate(() => (window as any).flatfit.project.rooms.length)).toBe(3);
+    expect(await page.evaluate(() => window.flatfit.project.rooms.length)).toBe(3);
   });
 });
 

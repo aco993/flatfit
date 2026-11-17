@@ -38,6 +38,12 @@ export const ikeaItem = (p: Product) => {
 const amount = (x?: { wholeNumber?: string; decimals?: string }) =>
   x?.wholeNumber ? parseFloat(x.wholeNumber.replace(/\D/g, '') + '.' + (x.decimals || '0').replace(/\D/g, '')) : undefined;
 const days = (a: string, b: string) => (Date.parse(b) - Date.parse(a)) / 864e5;
+/** the fields of an item in IKEA's search answer that are read */
+interface IkeaHit {
+  itemNo?: string;
+  id?: string;
+  salesPrice?: { numeral?: number; previous?: { wholeNumber?: string; decimals?: string }; validTo?: string; currencyCode?: string };
+}
 
 /** Current IKEA price of one item; null when IKEA no longer lists it. */
 export async function ikeaPrice(loc: string, item: string, signal?: AbortSignal) {
@@ -46,14 +52,15 @@ export async function ikeaPrice(loc: string, item: string, signal?: AbortSignal)
   if (!r.ok) throw new Error(`IKEA ${r.status}`);
   const d = await r.json();
   const hit = (d.searchResultPage?.products?.main?.items || [])
-    .map((i: { product?: any }) => i.product)
-    .find((x: any) => x && (x.itemNo === no || x.id === item));
-  if (!hit?.salesPrice?.numeral) return null;
-  const sp = hit.salesPrice,
-    prev = amount(sp.previous);
+    .map((i: { product?: IkeaHit }) => i.product)
+    .find((x: IkeaHit | undefined) => x && (x.itemNo === no || x.id === item)) as IkeaHit | undefined;
+  const sp = hit?.salesPrice,
+    now = sp?.numeral;
+  if (!sp || !now) return null;
+  const prev = amount(sp.previous);
   return {
-    price: sp.numeral as number,
-    regular: prev && prev > sp.numeral ? prev : undefined,
+    price: now,
+    regular: prev && prev > now ? prev : undefined,
     validTo: sp.validTo as string | undefined,
     currency: sp.currencyCode as string,
   };

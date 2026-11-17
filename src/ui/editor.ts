@@ -575,7 +575,7 @@ export function openEditor(app: App, src: Project | null) {
       bf = el.dataset.bd;
     if (bf && draft.backdrop) {
       const v = parseFloat(el.value);
-      if (Number.isFinite(v) && (bf !== 'w' || v >= 1)) (draft.backdrop as any)[bf] = v;
+      if (Number.isFinite(v) && (bf !== 'w' || v >= 1)) (draft.backdrop as unknown as Record<string, number>)[bf] = v;
       draw();
       return;
     }
@@ -593,7 +593,7 @@ export function openEditor(app: App, src: Project | null) {
       } else if (wf === 'side') w.side = el.value as Side;
       else {
         const v = parseFloat(el.value);
-        if (Number.isFinite(v)) (w as any)[wf] = Math.max(wf === 'width' ? 0.1 : 0, v);
+        if (Number.isFinite(v)) (w as unknown as Record<string, number>)[wf] = Math.max(wf === 'width' ? 0.1 : 0, v);
       }
       redrawKeepFocus(el);
       return;
@@ -604,7 +604,7 @@ export function openEditor(app: App, src: Project | null) {
       else {
         const v = parseFloat(el.value);
         if (!Number.isFinite(v)) return;
-        (r as any)[f] = f === 'w' || f === 'd' ? Math.max(0.5, v) : v;
+        (r as unknown as Record<string, number>)[f] = f === 'w' || f === 'd' ? Math.max(0.5, v) : v;
       }
       redrawKeepFocus(el);
       return;
@@ -616,7 +616,7 @@ export function openEditor(app: App, src: Project | null) {
       else if (of === 'side') o.side = el.value as Side;
       else {
         const v = parseFloat(el.value);
-        if (Number.isFinite(v)) (o as any)[of] = Math.max(of === 'width' ? 0.4 : 0, v);
+        if (Number.isFinite(v)) (o as unknown as Record<string, number>)[of] = Math.max(of === 'width' ? 0.4 : 0, v);
       }
       redrawKeepFocus(el);
     }

@@ -1,4 +1,4 @@
-import type { Placement, Project, Room, Side, SlotId, View } from '../types';
+import type { Opening, Placement, Project, Room, Side, SlotId, View } from '../types';
 import { WALL_T, deriveWalls, edgeOf, inward, openingSpan } from './geometry';
 
 export interface Dims {
@@ -369,7 +369,7 @@ function diningTable(p: Project, r: Room, out: Placement[], D: DimsFn) {
 function hall(p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement[]) {
   const entry = p.openings.find(o => o.kind === 'entry' && o.room === r.id);
   const h = D('hall');
-  let best: { side: Side; t: number; span: Span } | null = null;
+  let best: { side: Side; t: number; span: Span; dist: number } | null = null;
   if (entry) {
     const s = openingSpan(entry, p.rooms)!;
     for (const info of si) {
@@ -381,10 +381,7 @@ function hall(p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement[]) 
       for (const span of info.tall) {
         const t = nearEnd === 'a1' ? span[0] + 0.45 + h.w / 2 : span[1] - 0.45 - h.w / 2;
         if (t - h.w / 2 < span[0] - 1e-3 || t + h.w / 2 > span[1] + 1e-3) continue;
-        if (!best || distToDoor < Math.abs((best as any).dist ?? 99)) {
-          best = { side: info.side, t, span };
-          (best as any).dist = distToDoor;
-        }
+        if (!best || distToDoor < best.dist) best = { side: info.side, t, span, dist: distToDoor };
       }
     }
   }
@@ -392,7 +389,7 @@ function hall(p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement[]) 
     const info = si.filter(s => s.wall && s.tall.length).sort((a, b) => len(longest(b.tall)!) - len(longest(a.tall)!))[0];
     if (!info) return;
     const span = longest(info.tall)!;
-    best = { side: info.side, t: fitIn(span, h.w, span[0] + h.w / 2), span };
+    best = { side: info.side, t: fitIn(span, h.w, span[0] + h.w / 2), span, dist: 99 };
   }
   const pl = wallItem('hall', r, best.side, best.t, best.span, roomDepth(r, best.side));
   out.push(pl, { ...pl, slot: 'hooks' });
@@ -424,14 +421,14 @@ function bathroom(p: Project, r: Room, si: SideInfo[], D: DimsFn, out: Placement
   out.push(wallItem('washer', r, ws.side, fitIn(wsp, wash.w, (wsp[0] + wsp[1]) / 2), wsp, roomDepth(r, ws.side)));
 }
 function sameLine(o: { room: string; side: Side; at: number; width: number }, r: Room, p: Project) {
-  const s = openingSpan(o as any, p.rooms);
+  const s = openingSpan(o as Opening, p.rooms);
   if (!s) return false;
   return SIDES.some(side => {
     const e = edgeOf(r, side);
     return e.axis === s.axis && Math.abs(e.c - s.c) < 1e-3 && s.a >= e.a1 - 1e-3 && s.b <= e.a2 + 1e-3;
   });
 }
-function sideOfOpening(o: any, r: Room, p: Project): Side | null {
+function sideOfOpening(o: Opening, r: Room, p: Project): Side | null {
   const s = openingSpan(o, p.rooms);
   if (!s) return null;
   return (

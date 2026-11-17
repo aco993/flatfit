@@ -18,12 +18,16 @@
 | | |
 |---|---|
 | **Stack** | TypeScript (strict), three.js, three-gpu-pathtracer, Intel OIDN on WebGPU, Gemini or Claude API (vision + structured output, optional, the user's own key), Vite, Vitest, Playwright + axe-core, GitHub Actions, GitHub Pages |
-| **Size** | ~8,000 lines of TypeScript (formatted by Biome), no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
+| **Size** | ~10,000 lines of TypeScript (formatted by Biome), no UI framework ([why](docs/adr/0001-no-ui-framework.md)); domain logic has no DOM or three.js imports |
 | **Data** | 5 markets, ~590 real products; every price re-checked daily by a GitHub Action and committed to git ([why](docs/adr/0002-static-site-git-scraped-prices.md)); IKEA prices checked live from the browser on request |
 | **Quality** | Biome lint and format in CI, 191 unit tests, 46 end-to-end runs (13 persona journeys, 10 URL/device combinations in Chromium, Firefox and WebKit, a price-refresh test), accessibility scan, Lighthouse desktop 94–96 / mobile 68–70, CodeQL, Dependabot |
 | **Hard parts** | GPU driver resets during path tracing, a cold-cache shader stall found with a CPU profile, collision checks on every pointer move, a budget solved as a multiple-choice knapsack, honest labelling of prices that cannot be checked automatically |
 
-I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue.
+I built FlatFit while furnishing a small flat I rent out: I wanted to see what a cheap but nice setup looks like *with the actual products I can buy*, know the total before I go shopping, and be sure the sofa fits the wall. It grew into a general tool: draw any apartment, pick a country, and it proposes a furnished layout from that market's real catalogue. The demo is that flat, 44.6 m²: furnished from about €2,450 at Serbian prices (November 2026), every piece checked to fit.
+
+### Why not Planner 5D or IKEA Kreativ?
+
+They are better at what they do: huge model libraries, realistic renders, scanning a real room. None of them answers *what exactly do I buy in my country, for how much, and does it fit?* FlatFit is built around that question: real products from local stores in five markets, prices checked every day with their history, fit checks in centimetres, a budget, delivery per store and a shopping list to tick off. It is free, needs no account, and keeps your plans in your browser.
 
 ## What it does
 
@@ -160,6 +164,14 @@ npm run build && npx playwright test
 ## Keyboard
 
 `0–9` camera views · arrows look around · `+`/`−` zoom · `T` turn the selected piece · Shift + arrows nudge it · Ctrl+Z / Ctrl+Y undo/redo · `R` photoreal render · `E` floor plan · `L` language · `Esc` close/cancel · `?` help
+
+## Roadmap
+
+- Walls and floors as products: paint by the litre and laminate by the pack, from the areas the plan already knows.
+- Payback for landlords: furnishing cost against the rent, months to earn it back, which pieces wear out first.
+- “Place it in my room”: export the chosen piece to AR on a phone, at its real size.
+- L-shaped and angled rooms; more than one floor.
+- Offline use in stores, and a performance budget in CI.
 
 ## Limits
 

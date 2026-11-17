@@ -70,8 +70,13 @@ export function deleteProject(id: string) {
   );
 }
 
+/** Untrusted JSON (an imported file, a shared link) read field by field. */
+type Loose = Record<string, unknown>;
+const num = (v: unknown) => typeof v === 'number' && Number.isFinite(v);
+
 /** Minimal shape check for imported or shared plans. */
-export function isProject(x: any): x is Project {
+export function isProject(input: unknown): input is Project {
+  const x = input as Loose & { rooms: Loose[]; openings: Loose[]; wallItems?: Loose[]; backdrop?: Loose };
   return (
     !!x &&
     typeof x === 'object' &&
@@ -81,35 +86,33 @@ export function isProject(x: any): x is Project {
     Array.isArray(x.openings) &&
     Array.isArray(x.open) &&
     x.rooms.every(
-      (r: any) =>
+      r =>
         typeof r.id === 'string' &&
-        ['living', 'kitchen', 'dining', 'bedroom', 'bathroom', 'hall', 'terrace'].includes(r.type) &&
-        [r.x, r.z, r.w, r.d].every(n => typeof n === 'number' && Number.isFinite(n)) &&
-        r.w > 0 &&
-        r.d > 0,
+        ['living', 'kitchen', 'dining', 'bedroom', 'bathroom', 'hall', 'terrace'].includes(r.type as string) &&
+        [r.x, r.z, r.w, r.d].every(num) &&
+        (r.w as number) > 0 &&
+        (r.d as number) > 0,
     ) &&
     x.openings.every(
-      (o: any) =>
+      o =>
         typeof o.room === 'string' &&
-        ['n', 's', 'e', 'w'].includes(o.side) &&
-        ['door', 'entry', 'window', 'balcony'].includes(o.kind) &&
+        ['n', 's', 'e', 'w'].includes(o.side as string) &&
+        ['door', 'entry', 'window', 'balcony'].includes(o.kind as string) &&
         typeof o.at === 'number' &&
         typeof o.width === 'number',
     ) &&
     (x.backdrop === undefined ||
       (typeof x.backdrop === 'object' &&
         typeof x.backdrop.src === 'string' &&
-        /^data:image\/(png|jpeg|webp);/.test(x.backdrop.src) &&
-        [x.backdrop.x, x.backdrop.z, x.backdrop.w, x.backdrop.ar].every(
-          (n: unknown) => typeof n === 'number' && Number.isFinite(n as number),
-        ))) &&
+        /^data:image\/(png|jpeg|webp);/.test(x.backdrop.src as string) &&
+        [x.backdrop.x, x.backdrop.z, x.backdrop.w, x.backdrop.ar].every(num))) &&
     (x.wallItems === undefined ||
       (Array.isArray(x.wallItems) &&
         x.wallItems.every(
-          (w: any) =>
+          w =>
             typeof w.room === 'string' &&
-            ['n', 's', 'e', 'w'].includes(w.side) &&
-            ['radiator', 'tv'].includes(w.kind) &&
+            ['n', 's', 'e', 'w'].includes(w.side as string) &&
+            ['radiator', 'tv'].includes(w.kind as string) &&
             typeof w.at === 'number' &&
             typeof w.width === 'number',
         )))

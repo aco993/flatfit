@@ -83,7 +83,7 @@ const CASES: Case[] = [
     currency: /RSD/,
     country: 'rs',
     extra: async page => {
-      expect(await page.evaluate(() => (window as any).flatfit.project.moves?.sofa)).toEqual({ x: 1.2, z: 1.5, rot: 0 });
+      expect(await page.evaluate(() => window.flatfit.project.moves?.sofa)).toEqual({ x: 1.2, z: 1.5, rot: 0 });
     },
   },
   {
@@ -94,7 +94,7 @@ const CASES: Case[] = [
     country: 'de',
     extra: async page => {
       await expect(page.locator('#project')).toContainText('Linked studio');
-      expect(await page.evaluate(() => (window as any).flatfit.project.rooms.length)).toBe(3);
+      expect(await page.evaluate(() => window.flatfit.project.rooms.length)).toBe(3);
     },
   },
   { name: 'Broken link falls back to the demo', hash: 'c=xx&l=zz&s=%%%&m=@@@&plan=!!!', lang: 'en', currency: /RSD|€|KM/, country: '' },
@@ -189,7 +189,7 @@ test.describe('Switching country fast', () => {
     });
     await expect(page.getByTestId('total')).toContainText('RSD');
     await expect(page.getByTestId('total')).not.toHaveText(/^0\s*RSD/);
-    const ids = await page.evaluate(() => Object.values((window as any).flatfit.project.choices.rs.sel) as string[]);
+    const ids = await page.evaluate(() => Object.values(window.flatfit.project.choices!.rs.sel) as string[]);
     expect(ids.length).toBeGreaterThan(5);
     expect(ids.filter(id => id.startsWith('ba-'))).toEqual([]);
     await page.goto('./#c=rs&l=bs');
