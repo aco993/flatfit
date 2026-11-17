@@ -89,11 +89,20 @@ A second round, on the throttled mobile profile, took total blocking time from 9
 
 "Furnish this for 9,000 KM" is a multiple-choice knapsack: every slot picks one product (optional slots may stay empty), a pick costs what it adds to the shopping list including its dependents (a bed frame with its slatted base), and its value is the slot's typical price × log(cost), so the money goes where it shows and each extra mark on a slot is worth a little less. Dynamic programming over the budget in 600 steps solves it in milliseconds. Pieces chosen one by one can still clash (a wide fridge next to a long kitchen), so the result is run through the fit checks and any piece that breaks the plan falls back to the cheapest one that fits; if quantities push the real total over the budget, it solves again a little lower.
 
+### 7. Features from the shopping trip, not from a wish list
+
+The second round of features came from furnishing the flat for real. The questions in the store were: *is this a real sale?* (the git history of the daily price check now answers it: a 30-day low on the product card, an RSS feed of drops), *what have I bought and what is left to pay?* (a shopping list by store with ticks), *the sofa at the market is not in any catalogue* (add any product with its size and price, and it goes through the same fit checks), *the store has no signal* (a service worker), and for a landlord *does furnishing pay?* (furniture and wear against the extra rent). Paint and laminate quantities come from the wall and floor areas the plan already knows.
+
+### 8. Refactoring without changing a pixel
+
+The floor-plan editor had grown into one function of 787 lines and the furniture builder into one of 464. The editor is now a state object and modules by concern (view, pointer, typing and buttons, the plan picture, AI reading), with the geometry of editing (snapping, the wall nearest a click, resizing) moved into pure, unit-tested functions. The builder makes one context and calls one module per part of the flat. To prove the 3D scene did not change, a fingerprint of every mesh (slot, geometry, world matrix rounded to a millimetre, colour) was compared before and after for three looks and both wall heights: identical.
+
 ## What I would do next
 
 - L-shaped rooms as one room instead of two connected rectangles.
 - Assembly costs per store, and delivery prices read from the stores that only show them in the basket.
 - Real user sessions: the feedback form in the app goes to GitHub issues.
+- Paint and laminate as real products with prices; "when to buy" advice once the price history covers a few sales cycles.
 
 ## How it was built
 

@@ -97,10 +97,10 @@ flowchart LR
     MV[moves.ts<br/>drag · snap · collisions]
   end
   subgraph ui [Browser]
-    B[three/build.ts<br/>meshes from product sizes]
+    B[three/build.ts + furniture/*<br/>meshes from product sizes]
     V[viewer.ts<br/>orbit + look-around, picking]
     PT[pathtrace.ts<br/>tiles · fences · OIDN]
-    E[editor.ts<br/>SVG floor plan]
+    E[editor/*<br/>SVG floor plan]
     A[app.ts<br/>list · presets · i18n · share]
   end
   P --> G --> L --> MV --> S
@@ -112,7 +112,8 @@ flowchart LR
 ```
 
 - `src/domain` has no DOM or three.js imports, so the planner, fit checks and pricing run in Node tests.
-- `src/ui/app.ts` holds the state and the glue; the list, product card, keyboard shortcuts, flats, price refresh, share links and undo history are separate modules (`list`, `card`, `keyboard`, `projects`, `prices`, `share`, `history`).
+- `src/ui/app.ts` holds the state and the glue; the list, product card, keyboard shortcuts, flats, price refresh, share links, undo history, shopping list, own products, payback and walls-and-floor sheets are separate modules.
+- The floor-plan editor (`src/ui/editor/`) shares one state object between its view, pointer handling, side-panel actions, plan picture and AI reading; the geometry of editing (snapping, nearest wall, resizing) is in `src/domain/planedit.ts`. The 3D builder makes one context and calls a module per part of the flat (`src/three/furniture/`).
 - Products are referenced by stable ids; share links store `{slot: id}` compressed with lz-string.
 - Everything is static: the site is a Vite build on GitHub Pages; plans and choices stay in the visitor's browser (`localStorage`).
 

@@ -8,3 +8,5 @@ playwright-report/
 public/history/
 public/feeds/
 *.stackdump
+lhci/
+.lighthouseci/
