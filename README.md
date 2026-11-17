@@ -57,6 +57,10 @@ They are better at what they do: huge model libraries, realistic renders, scanni
 |---|---|---|---|
 | ![](docs/screenshot-desktop.jpg) | ![](docs/screenshot-phone.jpg) | ![](docs/screenshot-editor.jpg) | ![](docs/screenshot-render.jpg) |
 
+| Price history | Shopping list by store | Payback for landlords | Walls and floor |
+|---|---|---|---|
+| ![The product card: price since 30 October, was 35,799, lowest in 30 days](docs/screenshot-history.jpg) | ![The shopping list grouped by store with ticks and what is left to pay](docs/screenshot-shopping.jpg) | ![Furniture with delivery, months to pay back from the extra rent, wear per month](docs/screenshot-payback.jpg) | ![Paint, laminate and skirting worked out from the plan, wall colours](docs/screenshot-walls.jpg) |
+
 ## Path tracing that does not crash laptops
 
 The first version froze or showed a black image on an Intel UHD laptop. The causes, and what the render pipeline does now:

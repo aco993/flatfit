@@ -1421,6 +1421,7 @@ details.ai .note a {
 .pay-form {
   display: grid;
   gap: 8px;
+  margin-top: 10px;
 }
 .pay-form p {
   margin: -4px 0 0;
