@@ -3,7 +3,10 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import type { Placement, Product, Project, SlotId } from '../types';
 import { WALL_T, deriveWalls, edgeOf, inward } from '../domain/geometry';
 import type { Dims, Layout } from '../domain/layout';
-import { type Materials, isWood, type Kind } from './materials';
+import { type FloorKind, type Materials, type WoodTone, isWood, type Kind } from './materials';
+
+const floorKind = (k: 'oak' | 'marble' | 'tile' | 'bathTile', tone?: WoodTone): FloorKind =>
+  k === 'oak' && tone && tone !== 'natural' ? `oak-${tone}` : k;
 import type { Models } from './models';
 import { type FurnishCtx, hexOf } from './furniture/context';
 import { bedroom } from './furniture/bedroom';
@@ -18,6 +21,8 @@ export interface BuildOptions {
   lowPoly?: boolean;
   /** paint colour of the walls (#rrggbb); off-white when not chosen */
   wallHex?: string;
+  /** tone of the wood floors (living rooms, bedrooms); natural oak when not chosen */
+  floor?: WoodTone;
   ceiling?: boolean;
 }
 export interface Furnish {
@@ -123,7 +128,7 @@ export function buildApartment(p: Project, f: Furnish | null, opt: BuildOptions,
 
   // floors and ground
   for (const r of p.rooms) {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(r.w, r.d), M.floor(FLOOR[r.type] || 'oak', r.w, r.d));
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(r.w, r.d), M.floor(floorKind(FLOOR[r.type] || 'oak', opt.floor), r.w, r.d));
     m.rotation.x = -Math.PI / 2;
     m.position.set(r.x + r.w / 2, 0.001, r.z + r.d / 2);
     m.receiveShadow = true;

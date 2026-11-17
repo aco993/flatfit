@@ -28,7 +28,7 @@ import {
 import { deleteProject, loadOwn, loadPrefs, loadPriceUpdates, loadProjects, savePrefs, saveProject, type Prefs } from '../store';
 import { validOwn, withOwn } from '../domain/own';
 import { Viewer } from '../three/viewer';
-import { Materials } from '../three/materials';
+import { Materials, type WoodTone } from '../three/materials';
 import { Models } from '../three/models';
 import { buildApartment } from '../three/build';
 import { RenderDialog } from './render';
@@ -76,6 +76,8 @@ export class App {
   bought: string[] = [];
   /** wall paint colour for this flat and country (#rrggbb), '' for the default off-white */
   wall = '';
+  /** tone of the wood floors for this flat and country ('' = natural oak) */
+  floor: WoodTone | '' = '';
   /** augmented reality on this device: WebXR (Android), Quick Look (iPhone) or none */
   ar: 'webxr' | 'quicklook' | null = null;
   layout: Layout | null = null;
@@ -189,6 +191,7 @@ export class App {
     const saved = this.project.choices?.[id];
     this.bought = saved?.bought || [];
     this.wall = saved?.wall || '';
+    this.floor = (saved?.floor as WoodTone) || '';
     const fromLink = fromHash ? decodeSelection(fromHash, this.ix) : null;
     if (fromLink && Object.keys(fromLink).length) {
       this.sel = fixDeps(fromLink, this.ix);
@@ -320,6 +323,7 @@ export class App {
       ...(this.preset === 'budget' ? { budget: this.budget } : {}),
       ...(this.bought.length ? { bought: this.bought } : {}),
       ...(this.wall ? { wall: this.wall } : {}),
+      ...(this.floor ? { floor: this.floor } : {}),
     };
     saveProject(this.project);
   }
@@ -437,7 +441,7 @@ export class App {
     return buildApartment(
       this.project,
       f,
-      { wallH, lowPoly: lowPoly || !!this.viewer?.soft, wallHex: this.wall || undefined },
+      { wallH, lowPoly: lowPoly || !!this.viewer?.soft, wallHex: this.wall || undefined, floor: this.floor || undefined },
       this.M,
       this.models,
     );

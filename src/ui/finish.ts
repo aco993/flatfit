@@ -1,8 +1,14 @@
-import { t } from '../i18n';
+import { t, type Key } from '../i18n';
 import { COATS, LAMINATE_WASTE, PAINT_L_PER_M2, packs, surfaces } from '../domain/surfaces';
 import type { App } from './app';
 import { $, esc } from './dom';
 import { fmtNum } from './format';
+import { WOOD, type WoodTone } from '../three/materials';
+
+const TONES = Object.keys(WOOD) as WoodTone[];
+const toneHex = (t: WoodTone) => `rgb(${WOOD[t].map(v => v + 15).join(',')})`;
+/** dark text on light wood, white on dark wood */
+const toneInk = (t: WoodTone) => (WOOD[t][0] * 0.3 + WOOD[t][1] * 0.59 + WOOD[t][2] * 0.11 > 140 ? '#1d1f22' : '#ffffff');
 
 /** paint buckets and laminate packs in the sizes shops sell most (the sheet says it is an assumption) */
 const BUCKET_L = 15;
@@ -37,6 +43,9 @@ export function openFinish(app: App) {
       <div class="row">${SWATCHES.map(h => `<button type="button" class="sw-btn" data-wall="${h}" style="background:${h}" aria-label="${h}" aria-pressed="${h === current}"></button>`).join('')}
       <label class="field"><span class="sr-only">${esc(t('fin.colour'))}</span><input type="color" value="${esc(current)}" data-wall-pick></label></div>
     </fieldset>
+    <fieldset class="fin-colour fin-floor"><legend>${esc(t('fin.floorTone'))}</legend>
+      <div class="row">${TONES.map(k => `<button type="button" class="sw-btn wide" data-floor="${k}" style="background:${toneHex(k)};color:${toneInk(k)}" aria-pressed="${k === (app.floor || 'natural')}"><span>${esc(t(('fin.tone.' + k) as Key))}</span></button>`).join('')}</div>
+    </fieldset>
     <p class="muted small">${esc(t('fin.note'))}</p>`;
   const setWall = (hex: string) => {
     app.wall = hex === SWATCHES[0] ? '' : hex.toLowerCase();
@@ -54,5 +63,16 @@ export function openFinish(app: App) {
     }
   });
   d.querySelector('[data-wall-pick]')!.addEventListener('input', e => setWall((e.target as HTMLInputElement).value));
+  d.querySelector('.fin-floor')!.addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-floor]');
+    if (!b) return;
+    const tone = b.dataset.floor as WoodTone;
+    app.floor = tone === 'natural' ? '' : tone;
+    app.saveChoice();
+    app.rebuild();
+    d.querySelectorAll<HTMLElement>('[data-floor]').forEach(x => {
+      x.setAttribute('aria-pressed', String(x === b));
+    });
+  });
   d.showModal();
 }

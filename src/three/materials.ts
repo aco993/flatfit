@@ -22,35 +22,52 @@ function canvasTex(w: number, h: number, draw: (g: CanvasRenderingContext2D, w: 
   return t;
 }
 
-// floors
-export const TEX = {
-  oak: () =>
-    canvasTex(512, 512, (g, w, h) => {
-      const r = rand(7),
-        ph = h / 4;
-      for (let row = 0; row < 4; row++) {
-        const off = (row % 2) * w * 0.5;
-        for (let k = -1; k < 2; k++) {
-          const x = k * w + off,
-            tone = 110 + r() * 30;
-          g.fillStyle = `rgb(${tone + 28},${tone - 2},${tone - 34})`;
-          g.fillRect(x, row * ph, w, ph);
-          for (let l = 0; l < 18; l++) {
-            g.strokeStyle = `rgba(60,38,20,${0.08 + r() * 0.12})`;
-            g.lineWidth = 1 + r() * 2;
-            const y = row * ph + r() * ph;
-            g.beginPath();
-            g.moveTo(x, y);
-            g.bezierCurveTo(x + w * 0.3, y + (r() - 0.5) * 10, x + w * 0.6, y + (r() - 0.5) * 10, x + w, y + (r() - 0.5) * 6);
-            g.stroke();
-          }
-          g.fillStyle = 'rgba(50,32,18,.55)';
-          g.fillRect(x, row * ph, 2, ph);
+/** Wood floor tones: the darkest plank colour; each plank adds up to 30 to it. */
+export const WOOD = {
+  light: [196, 170, 132],
+  natural: [138, 108, 76],
+  grey: [150, 144, 136],
+  dark: [92, 64, 44],
+} as const satisfies Record<string, readonly [number, number, number]>;
+export type WoodTone = keyof typeof WOOD;
+
+/** Oak planks in a tone: rows of boards with a half-board offset, grain lines and dark joints. */
+function wood(c: readonly [number, number, number]) {
+  return canvasTex(512, 512, (g, w, h) => {
+    const r = rand(7),
+      ph = h / 4;
+    for (let row = 0; row < 4; row++) {
+      const off = (row % 2) * w * 0.5;
+      for (let k = -1; k < 2; k++) {
+        const x = k * w + off,
+          tone = r() * 30;
+        g.fillStyle = `rgb(${c[0] + tone},${c[1] + tone},${c[2] + tone})`;
+        g.fillRect(x, row * ph, w, ph);
+        for (let l = 0; l < 18; l++) {
+          g.strokeStyle = `rgba(60,38,20,${0.08 + r() * 0.12})`;
+          g.lineWidth = 1 + r() * 2;
+          const y = row * ph + r() * ph;
+          g.beginPath();
+          g.moveTo(x, y);
+          g.bezierCurveTo(x + w * 0.3, y + (r() - 0.5) * 10, x + w * 0.6, y + (r() - 0.5) * 10, x + w, y + (r() - 0.5) * 6);
+          g.stroke();
         }
         g.fillStyle = 'rgba(50,32,18,.55)';
-        g.fillRect(0, row * ph, w, 2);
+        g.fillRect(x, row * ph, 2, ph);
       }
-    }),
+      g.fillStyle = 'rgba(50,32,18,.55)';
+      g.fillRect(0, row * ph, w, 2);
+    }
+  });
+}
+
+// floors
+export type FloorKind = 'oak' | 'oak-light' | 'oak-grey' | 'oak-dark' | 'marble' | 'tile' | 'bathTile';
+export const TEX = {
+  oak: () => wood(WOOD.natural),
+  'oak-light': () => wood(WOOD.light),
+  'oak-grey': () => wood(WOOD.grey),
+  'oak-dark': () => wood(WOOD.dark),
   marble: () =>
     canvasTex(512, 512, (g, w, h) => {
       const r = rand(3);
@@ -222,15 +239,17 @@ export class Materials {
   }
 
   /** Floor material sized to a room; cached, so rebuilding the scene (every drag and swap) does not pile up textures. */
-  floor(kind: 'oak' | 'marble' | 'tile' | 'bathTile', w: number, d: number) {
+  floor(kind: FloorKind, w: number, d: number) {
     const key = `floor|${kind}|${w.toFixed(2)}|${d.toFixed(2)}`,
       hit = this.cache.get(key);
     if (hit) return hit as THREE.MeshStandardMaterial;
-    const size = { oak: [1.2, 0.8], marble: [0.6, 0.6], tile: [0.45, 0.45], bathTile: [0.3, 0.3] }[kind];
+    const size = kind.startsWith('oak')
+      ? [1.2, 0.8]
+      : { marble: [0.6, 0.6], tile: [0.45, 0.45], bathTile: [0.3, 0.3] }[kind as 'marble' | 'tile' | 'bathTile'];
     const t = this.t(kind).clone();
     t.needsUpdate = true;
     t.repeat.set(w / size[0], d / size[1]);
-    const m = new THREE.MeshStandardMaterial({ map: t, roughness: kind === 'marble' ? 0.22 : kind === 'oak' ? 0.5 : 0.45 });
+    const m = new THREE.MeshStandardMaterial({ map: t, roughness: kind === 'marble' ? 0.22 : kind.startsWith('oak') ? 0.5 : 0.45 });
     this.cache.set(key, m);
     return m;
   }

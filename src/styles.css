@@ -1514,3 +1514,13 @@ details.ai .note a {
   gap: 10px;
   pointer-events: auto;
 }
+.sw-btn.wide {
+  width: auto;
+  height: 34px;
+  border-radius: 8px;
+  padding: 0 10px;
+}
+.sw-btn.wide span {
+  font-size: 12px;
+  font-weight: 600;
+}
