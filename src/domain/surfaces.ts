@@ -1,5 +1,5 @@
 import type { Project, RoomType } from '../types';
-import { deriveWalls, edgeOf, roomArea } from './geometry';
+import { deriveWalls, edgeOf, mainId, roomArea } from './geometry';
 
 /**
  * Walls, ceilings and floors as quantities to buy: paint by the litre, laminate by the square metre with cutting
@@ -83,6 +83,14 @@ export function surfaces(p: Project): Surfaces {
       floor: lam ? r2(roomArea(r)) : 0,
       skirting: lam ? r2(skirting) : 0,
     });
+  }
+  // an L- or U-shaped room is one row: its extensions are added to the main rectangle
+  for (let i = rooms.length - 1; i >= 0; i--) {
+    const id = mainId(p, rooms[i].room);
+    if (id === rooms[i].room) continue;
+    const main = rooms.find(x => x.room === id)!;
+    for (const k of ['walls', 'ceiling', 'floor', 'skirting'] as const) main[k] = r2(main[k] + rooms[i][k]);
+    rooms.splice(i, 1);
   }
   const sum = (k: keyof Pick<RoomSurface, 'walls' | 'ceiling' | 'floor' | 'skirting'>) => r2(rooms.reduce((s, x) => s + x[k], 0));
   const w = sum('walls'),

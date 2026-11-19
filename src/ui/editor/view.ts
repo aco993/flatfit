@@ -1,6 +1,6 @@
 import type { OpeningKind, RoomType, Side, WallItemKind } from '../../types';
 import { t, type Key } from '../../i18n';
-import { bounds, deriveWalls, edgeOf, openingProblems, overlaps, roomArea } from '../../domain/geometry';
+import { bounds, deriveWalls, edgeOf, mainId, openingProblems, overlaps, roomArea, spaceArea } from '../../domain/geometry';
 import { r2, touches } from '../../domain/planedit';
 import { $, esc } from '../dom';
 import { fmtNum } from '../format';
@@ -46,14 +46,17 @@ export function draw(S: EditorState) {
   for (let z = Math.floor(vb[1]); z <= vb[1] + vb[3]; z += 0.5)
     g += `<line x1="${vb[0]}" y1="${z}" x2="${vb[0] + vb[2]}" y2="${z}" class="${z % 1 ? 'g2' : 'g1'}"/>`;
   const rooms = draft.rooms
-    .map(
-      r => `<g class="room ${r.id === S.selId ? 'sel' : ''}" data-id="${esc(r.id)}" tabindex="0" role="button" aria-pressed="${r.id === S.selId}" aria-label="${esc(roomLabel(r))}, ${fmtNum(r.w, 2)} × ${fmtNum(r.d, 2)} m">
-        <rect x="${r.x}" y="${r.z}" width="${r.w}" height="${r.d}" fill="${FILL[r.type]}"/>
-        <text x="${r.x + r.w / 2}" y="${r.z + r.d / 2 - 0.08}" class="t1">${esc(roomLabel(r))}</text>
-        <text x="${r.x + r.w / 2}" y="${r.z + r.d / 2 + 0.22}" class="t2">${fmtNum(roomArea(r), 2)} m² · ${fmtNum(r.w, 2)}×${fmtNum(r.d, 2)}</text>
+    .map(r => {
+      const main = draft.rooms.find(x => x.id === mainId(draft, r.id)) || r,
+        isPart = main !== r;
+      const label = isPart ? t('editor.partOf', { room: roomLabel(main) }) : roomLabel(r);
+      return `<g class="room ${r.id === S.selId ? 'sel' : ''} ${isPart ? 'part' : ''}" data-id="${esc(r.id)}" tabindex="0" role="button" aria-pressed="${r.id === S.selId}" aria-label="${esc(label)}, ${fmtNum(r.w, 2)} × ${fmtNum(r.d, 2)} m">
+        <rect x="${r.x}" y="${r.z}" width="${r.w}" height="${r.d}" fill="${FILL[main.type]}"/>
+        ${isPart ? '' : `<text x="${r.x + r.w / 2}" y="${r.z + r.d / 2 - 0.08}" class="t1">${esc(roomLabel(r))}</text>`}
+        <text x="${r.x + r.w / 2}" y="${r.z + r.d / 2 + (isPart ? 0.05 : 0.22)}" class="t2">${isPart ? '' : `${fmtNum(spaceArea(draft, r.id), 2)} m² · `}${fmtNum(r.w, 2)}×${fmtNum(r.d, 2)}</text>
         ${r.id === S.selId ? `<rect class="handle" data-h="br" x="${r.x + r.w - 0.12}" y="${r.z + r.d - 0.12}" width="0.24" height="0.24"/><rect class="handle" data-h="tl" x="${r.x - 0.12}" y="${r.z - 0.12}" width="0.24" height="0.24"/>` : ''}
-      </g>`,
-    )
+      </g>`;
+    })
     .join('');
   const walls = deriveWalls(draft)
     .map(w => {
@@ -125,12 +128,19 @@ export function side(S: EditorState) {
     host.innerHTML = '';
     return;
   }
-  const neigh = S.draft.rooms.filter(x => x.id !== r.id && touches(r, x));
+  const mainRoom = S.draft.rooms.find(x => x.id === mainId(S.draft, r.id)) || r,
+    isPart = mainRoom !== r;
+  // open-plan neighbours: rooms that share a wall, not the other rectangles of the same L- or U-shaped room
+  const neigh = S.draft.rooms.filter(x => x.id !== r.id && touches(r, x) && mainId(S.draft, x.id) !== mainId(S.draft, r.id));
   const ops = S.draft.openings.filter(o => o.room === r.id),
     wis = (S.draft.wallItems || []).filter(w => w.room === r.id);
-  host.innerHTML = `<fieldset><legend>${esc(roomLabel(r))}</legend>
-      <label class="field"><span>${esc(t('editor.type'))}</span><select data-f="type">${TYPES.map(x => `<option value="${x}" ${x === r.type ? 'selected' : ''}>${esc(t(('room.' + x) as Key))}</option>`).join('')}</select></label>
+  const head = isPart
+    ? `<p class="muted small">${esc(t('editor.partHint'))}</p><div class="row"><button type="button" class="btn ghost" id="ed-detach">${esc(t('editor.detach'))}</button></div>`
+    : `<label class="field"><span>${esc(t('editor.type'))}</span><select data-f="type">${TYPES.map(x => `<option value="${x}" ${x === r.type ? 'selected' : ''}>${esc(t(('room.' + x) as Key))}</option>`).join('')}</select></label>
       <label class="field"><span>${esc(t('editor.name'))}</span><input data-f="name" value="${esc(r.name || '')}" maxlength="40"></label>
+      <div class="row"><button type="button" class="btn ghost" id="ed-addpart">+ ${esc(t('editor.addPart'))}</button></div>`;
+  host.innerHTML = `<fieldset><legend>${esc(isPart ? t('editor.partOf', { room: roomLabel(mainRoom) }) : roomLabel(r))}</legend>
+      ${head}
       <div class="grid4">${(['x', 'z', 'w', 'd'] as const).map(k => `<label class="field"><span>${esc(t(('editor.' + k) as Key))}</span><input type="number" step="0.05" ${k === 'w' || k === 'd' ? 'min="0.5"' : ''} data-f="${k}" value="${r2(r[k])}"></label>`).join('')}</div>
       ${neigh.length ? `<div class="field"><span>${esc(t('editor.open'))}</span>${neigh.map(n => `<label class="check"><input type="checkbox" data-open="${esc(n.id)}" ${isOpenPair(S, r.id, n.id) ? 'checked' : ''}> ${esc(roomLabel(n))}</label>`).join('')}</div>` : ''}
       <h4>${esc(t('editor.openings'))}</h4>

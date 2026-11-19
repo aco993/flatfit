@@ -256,6 +256,11 @@ const en = {
   'editor.title': 'Floor plan',
   'editor.add': 'Add room',
   'editor.delete': 'Delete room',
+  'editor.addPart': 'Add an extension (L or U shape)',
+  'editor.partOf': 'Extension of {room}',
+  'editor.partHint':
+    'Part of the same room: no wall between them, one area, furnished as one room. Drag it or type its size to shape the L or U.',
+  'editor.detach': 'Make it a room of its own',
   'editor.type': 'Room type',
   'editor.name': 'Name (optional)',
   'editor.x': 'X (m)',

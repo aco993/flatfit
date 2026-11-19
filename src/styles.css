@@ -1535,3 +1535,8 @@ details.ai .note a {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
+
+/* an extension of an L- or U-shaped room: the same colour, a dashed edge where it joins */
+#ed-svg .room.part rect:first-child {
+  stroke-dasharray: 0.12 0.08;
+}

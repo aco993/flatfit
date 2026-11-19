@@ -104,6 +104,11 @@ const hr: Record<Key, string> = {
   'render.note': 'Svjetlo se računa zraku po zraku na tvojoj grafičkoj kartici (path tracing). Esc prekida u bilo kojem trenutku.',
   'editor.title': 'Tlocrt',
   'editor.delete': 'Izbriši prostoriju',
+  'editor.addPart': 'Dodaj produžetak (oblik L ili U)',
+  'editor.partOf': 'Produžetak: {room}',
+  'editor.partHint':
+    'Dio iste prostorije: bez zida između, jedna površina, oprema se kao jedna prostorija. Povuci ga ili upiši mjere da oblikuješ L ili U.',
+  'editor.detach': 'Napravi zasebnu prostoriju',
   'editor.at': 'Od kuta (m)',
   'editor.save': 'Spremi i prikaži u 3D-u',
   'editor.cancel': 'Odustani',

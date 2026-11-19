@@ -1,7 +1,7 @@
 import type { Opening, OpeningKind, RoomType, Side, WallItem, WallItemKind } from '../../types';
 import { t } from '../../i18n';
 import { bounds } from '../../domain/geometry';
-import { r2, snap, uid } from '../../domain/planedit';
+import { extensionSpot, r2, snap, uid } from '../../domain/planedit';
 import { fromTemplate, type TemplateId } from '../../data/templates';
 import { $ } from '../dom';
 import { openMeasureSheet } from '../measure';
@@ -68,8 +68,11 @@ export function bindInputs(S: EditorState) {
       return;
     }
     if (f) {
-      if (f === 'type') r.type = el.value as RoomType;
-      else if (f === 'name') r.name = el.value || undefined;
+      if (f === 'type') {
+        r.type = el.value as RoomType;
+        // the extensions of an L- or U-shaped room have its type
+        for (const x of draft.rooms) if (x.part === r.id) x.type = r.type;
+      } else if (f === 'name') r.name = el.value || undefined;
       else {
         const v = parseFloat(el.value);
         if (!Number.isFinite(v)) return;
@@ -186,13 +189,38 @@ export function bindClicks(S: EditorState) {
       S.redraw();
       return;
     }
+    if (el.closest('#ed-addpart')) {
+      const r = selRoom(S);
+      if (!r || r.part) return;
+      // a free place against one of its sides (right first); drag it or type its size to make the L or U
+      const spot = extensionSpot(draft.rooms, r) || {
+          x: r2(r.x + r.w),
+          z: r2(r.z + r.d - Math.min(1.5, r.d)),
+          w: 1.5,
+          d: Math.min(1.5, r.d),
+        },
+        id = uid('r', draft.rooms);
+      draft.rooms.push({ id, type: r.type, ...spot, part: r.id });
+      S.selId = id;
+      S.redraw();
+      return;
+    }
+    if (el.closest('#ed-detach')) {
+      const r = selRoom(S);
+      if (!r) return;
+      delete r.part;
+      S.redraw();
+      return;
+    }
     if (el.closest('#ed-del')) {
       const r = selRoom(S);
       if (!r) return;
-      draft.rooms = draft.rooms.filter(x => x.id !== r.id);
-      draft.openings = draft.openings.filter(o => o.room !== r.id);
-      draft.wallItems = (draft.wallItems || []).filter(w => w.room !== r.id);
-      draft.open = draft.open.filter(p => !p.includes(r.id));
+      // deleting a room deletes its extensions with it
+      const gone = new Set([r.id, ...draft.rooms.filter(x => x.part === r.id).map(x => x.id)]);
+      draft.rooms = draft.rooms.filter(x => !gone.has(x.id));
+      draft.openings = draft.openings.filter(o => !gone.has(o.room));
+      draft.wallItems = (draft.wallItems || []).filter(w => !gone.has(w.room));
+      draft.open = draft.open.filter(p => !p.some(id => gone.has(id)));
       S.selId = draft.rooms[0]?.id || null;
       S.redraw();
       return;

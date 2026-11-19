@@ -58,7 +58,9 @@ export function bindPointer(S: EditorState) {
     S.selId = g.dataset.id!;
     const r = selRoom(S)!;
     const p = pt(e);
-    S.drag = { id: r.id, mode: ((el as SVGElement).dataset.h as 'br' | 'tl') || 'move', sx: p.x, sz: p.z, r0: { ...r } };
+    // the extensions of an L- or U-shaped room follow its main rectangle
+    const parts = S.draft.rooms.filter(x => x.part === r.id).map(x => ({ ...x }));
+    S.drag = { id: r.id, mode: ((el as SVGElement).dataset.h as 'br' | 'tl') || 'move', sx: p.x, sz: p.z, r0: { ...r }, parts };
     svg.setPointerCapture(e.pointerId);
     S.redraw();
   };
@@ -83,6 +85,11 @@ export function bindPointer(S: EditorState) {
     const r = draft.rooms.find(x => x.id === drag.id)!;
     const p = pt(e);
     Object.assign(r, dragRoom(drag.r0, drag.mode, p.x - drag.sx, p.z - drag.sz));
+    if (drag.mode === 'move')
+      for (const q of drag.parts) {
+        const part = draft.rooms.find(x => x.id === q.id);
+        if (part) Object.assign(part, { x: r2(q.x + r.x - drag.r0.x), z: r2(q.z + r.z - drag.r0.z) });
+      }
     S.redraw();
   };
   svg.onpointerup = () => {

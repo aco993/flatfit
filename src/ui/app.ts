@@ -9,7 +9,7 @@ import { priceStats, type Series } from '../domain/history';
 import { activeSlots } from '../domain/slots';
 import { autoLayout, autoViews, type Layout } from '../domain/layout';
 import { MOVABLE, applyMoves, moveIssues, moveKey, snapPose, turnPose, type Pose } from '../domain/moves';
-import { bounds, roomArea } from '../domain/geometry';
+import { bounds, mainId, mainRooms, spaceArea } from '../domain/geometry';
 import { withinBudget } from '../domain/budget';
 import {
   decodeSelection,
@@ -451,8 +451,8 @@ export class App {
     this.viewer.setRoot(this.buildRoot(), new THREE.Box3(new THREE.Vector3(b.x1, 0, b.z1), new THREE.Vector3(b.x2, 3, b.z2)));
     const labels = this.views[this.viewIdx]?.interior
       ? []
-      : this.project.rooms.map(r => ({
-          text: `${this.roomName(r.id)} · ${t('misc.area', { a: fmtNum(roomArea(r), 1) })}`,
+      : mainRooms(this.project).map(r => ({
+          text: `${this.roomName(r.id)} · ${t('misc.area', { a: fmtNum(spaceArea(this.project, r.id), 1) })}`,
           x: r.x + r.w / 2,
           z: r.z + r.d / 2,
         }));
@@ -473,10 +473,11 @@ export class App {
     $('#viewer').classList.toggle('interior', this.views[i].interior);
   }
   roomName(id: string) {
-    const r = this.project.rooms.find(x => x.id === id);
+    // an extension of an L- or U-shaped room has the name of the room it extends
+    const r = this.project.rooms.find(x => x.id === mainId(this.project, id));
     if (!r) return id;
     if (r.name) return r.name;
-    const same = this.project.rooms.filter(x => x.type === r.type);
+    const same = mainRooms(this.project).filter(x => x.type === r.type);
     return t(('room.' + r.type) as Key) + (same.length > 1 ? ' ' + (same.indexOf(r) + 1) : '');
   }
   select(slot: SlotId | null, moveCam: boolean) {

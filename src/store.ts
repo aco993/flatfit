@@ -88,6 +88,7 @@ export function isProject(input: unknown): input is Project {
     x.rooms.every(
       r =>
         typeof r.id === 'string' &&
+        (r.part === undefined || typeof r.part === 'string') &&
         ['living', 'kitchen', 'dining', 'bedroom', 'bathroom', 'hall', 'terrace'].includes(r.type as string) &&
         [r.x, r.z, r.w, r.d].every(num) &&
         (r.w as number) > 0 &&

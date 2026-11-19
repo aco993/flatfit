@@ -259,6 +259,11 @@ const de: Record<Key, string> = {
   'editor.title': 'Grundriss',
   'editor.add': 'Raum hinzufügen',
   'editor.delete': 'Raum löschen',
+  'editor.addPart': 'Erweiterung hinzufügen (L- oder U-Form)',
+  'editor.partOf': 'Erweiterung von {room}',
+  'editor.partHint':
+    'Teil desselben Raums: keine Wand dazwischen, eine Fläche, wird als ein Raum eingerichtet. Ziehen oder Maße eingeben, um das L oder U zu formen.',
+  'editor.detach': 'Als eigenen Raum führen',
   'editor.type': 'Raumart',
   'editor.name': 'Name (optional)',
   'editor.x': 'X (m)',

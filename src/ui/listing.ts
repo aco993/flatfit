@@ -1,7 +1,7 @@
 import type { Project, Room } from '../types';
 import { t, type Key } from '../i18n';
 import { GROUPS, slotDef } from '../domain/slots';
-import { bounds, roomArea } from '../domain/geometry';
+import { bounds, mainId, mainRooms, spaceArea } from '../domain/geometry';
 import { lines, total, type Index, type Selection } from '../domain/selection';
 import type { App } from './app';
 import { esc, toast } from './dom';
@@ -30,7 +30,7 @@ export interface ListingData {
 
 /** Everything on the sheet except the photos; pure, so it is unit-tested. */
 export function listingData(p: Project, sel: Selection, ix: Index, roomName: (id: string) => string): ListingData {
-  const rooms = p.rooms.map(r => ({ name: roomName(r.id), area: roomArea(r), type: r.type }));
+  const rooms = mainRooms(p).map(r => ({ name: roomName(r.id), area: spaceArea(p, r.id), type: r.type }));
   const area = rooms.filter(r => r.type !== 'terrace').reduce((s, r) => s + r.area, 0);
   const terrace = rooms.filter(r => r.type === 'terrace').reduce((s, r) => s + r.area, 0);
   const ls = lines(p, sel, ix, today()).filter(l => l.product && l.units);
@@ -98,9 +98,14 @@ function planSvg(p: Project, names: (id: string) => string) {
           return `<line x1="${x1}" y1="${z1}" x2="${x2}" y2="${z2}" class="${o.kind === 'window' || o.kind === 'balcony' ? 'win' : 'door'}"/>`;
         })
         .join('');
-      return `<rect x="${r.x}" y="${r.z}" width="${r.w}" height="${r.d}" fill="${FILL[r.type] || '#eee'}" class="room"/>
-      <text x="${r.x + r.w / 2}" y="${r.z + r.d / 2}" class="name">${esc(names(r.id))}</text>
-      <text x="${r.x + r.w / 2}" y="${r.z + r.d / 2 + 0.3}" class="area">${fmtNum(roomArea(r), 1)} m²</text>${ops}`;
+      // an extension of an L- or U-shaped room is drawn in the room's colour, with the name and area on the main part
+      const main = mainId(p, r.id) === r.id;
+      return `<rect x="${r.x}" y="${r.z}" width="${r.w}" height="${r.d}" fill="${FILL[r.type] || '#eee'}" class="room"/>${
+        main
+          ? `<text x="${r.x + r.w / 2}" y="${r.z + r.d / 2}" class="name">${esc(names(r.id))}</text>
+      <text x="${r.x + r.w / 2}" y="${r.z + r.d / 2 + 0.3}" class="area">${fmtNum(spaceArea(p, r.id), 1)} m²</text>`
+          : ''
+      }${ops}`;
     })
     .join('');
   return `<svg viewBox="${vb}" role="img" aria-label="${esc(t('ad.plan'))}">${rooms}</svg>`;

@@ -67,3 +67,29 @@ export function dragRoom(r0: Room, mode: 'move' | 'br' | 'tl', dx: number, dz: n
     d = Math.max(0.5, r2(r0.z + r0.d - nz));
   return { x: r2(r0.x + r0.w - w), z: r2(r0.z + r0.d - d), w, d };
 }
+
+/**
+ * Where a new extension of a room can go: a size-by-size rectangle against one of its sides, flush with a corner,
+ * at the first place that overlaps no other room (right, bottom, left, top). Null when every side is taken.
+ */
+export function extensionSpot(rooms: Room[], r: Room, size = 1.5) {
+  const w = Math.min(size, r.w),
+    d = Math.min(size, r.d);
+  const spots = [
+    { x: r.x + r.w, z: r.z + r.d - d, w: size, d },
+    { x: r.x + r.w, z: r.z, w: size, d },
+    { x: r.x + r.w - w, z: r.z + r.d, w, d: size },
+    { x: r.x, z: r.z + r.d, w, d: size },
+    { x: r.x - size, z: r.z + r.d - d, w: size, d },
+    { x: r.x - size, z: r.z, w: size, d },
+    { x: r.x + r.w - w, z: r.z - size, w, d: size },
+    { x: r.x, z: r.z - size, w, d: size },
+  ].map(s => ({ x: r2(s.x), z: r2(s.z), w: r2(s.w), d: r2(s.d) }));
+  const free = (s: { x: number; z: number; w: number; d: number }) =>
+    rooms.every(o => {
+      const ox = Math.min(s.x + s.w, o.x + o.w) - Math.max(s.x, o.x),
+        oz = Math.min(s.z + s.d, o.z + o.d) - Math.max(s.z, o.z);
+      return !(ox > 0.01 && oz > 0.01);
+    });
+  return spots.find(free) || null;
+}

@@ -1,5 +1,5 @@
 import type { Opening, Placement, Project, Room, Side, SlotId, View } from '../types';
-import { WALL_T, deriveWalls, edgeOf, inward, openingSpan } from './geometry';
+import { WALL_T, deriveWalls, edgeOf, inward, mainId, mainRooms, openingSpan } from './geometry';
 
 export interface Dims {
   w: number;
@@ -458,6 +458,8 @@ export function autoLayout(p: Project, D: DimsFn): Layout {
     fixtures: Fixture[] = [];
   const hasDining = p.rooms.some(r => r.type === 'dining');
   for (const r of p.rooms) {
+    // an extension of an L- or U-shaped room is furnished with its main room, not as a room of its own
+    if (mainId(p, r.id) !== r.id) continue;
     const si = sideInfo(p, r, walls);
     if (r.type === 'living') living(p, r, si, D, out);
     else if (r.type === 'bedroom') bedroom(p, r, si, D, out);
@@ -507,7 +509,7 @@ export function autoViews(p: Project): View[] {
   const views: View[] = [
     { id: 'overview', label: 'overview', pos: [cx, span * 0.82, b.z2 + span * 0.62], target: [cx, 0, cz + span * 0.02], interior: false },
   ];
-  for (const r of p.rooms) {
+  for (const r of mainRooms(p)) {
     if (r.type === 'terrace') {
       views.push({
         id: r.id,

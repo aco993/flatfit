@@ -52,7 +52,19 @@ export function openingHeights(kind: OpeningKind, o?: Partial<Opening>) {
   }
 }
 
-const isOpen = (p: Project, a: string, b: string) => p.open.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+/** The room a rectangle belongs to: itself, or the main room it extends (L and U shapes). */
+export function mainId(p: Project, id: string) {
+  const r = p.rooms.find(x => x.id === id);
+  return r?.part && p.rooms.some(x => x.id === r.part && !x.part) ? r.part : id;
+}
+/** Rooms as people count them: main rectangles, each with its extensions folded in. */
+export const mainRooms = (p: Project) => p.rooms.filter(r => mainId(p, r.id) === r.id);
+/** The rectangles of one room: the main one and its extensions. */
+export const roomParts = (p: Project, id: string) => p.rooms.filter(r => mainId(p, r.id) === id);
+/** Floor area of a room with its extensions. */
+export const spaceArea = (p: Project, id: string) => roomParts(p, id).reduce((s, r) => s + roomArea(r), 0);
+const isOpen = (p: Project, a: string, b: string) =>
+  mainId(p, a) === mainId(p, b) || p.open.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
 
 /**
  * Turns room rectangles into wall segments. Edges shared by two rooms become one wall,

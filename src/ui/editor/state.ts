@@ -24,7 +24,7 @@ export interface EditorState {
   opKind: OpeningKind;
   rubber: { x0: number; z0: number; x1: number; z1: number } | null;
   calPts: { x: number; z: number }[];
-  drag: { id: string; mode: 'move' | 'br' | 'tl'; sx: number; sz: number; r0: Room } | null;
+  drag: { id: string; mode: 'move' | 'br' | 'tl'; sx: number; sz: number; r0: Room; parts: Room[] } | null;
   imgDrag: { sx: number; sz: number; x0: number; z0: number } | null;
   /** the picture the AI panel was drawn for (it is drawn once per picture, so typed text survives redraws) */
   aiFor: string | null;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Room } from '../../src/types';
-import { dragRoom, edgeSnap, nearestWall, snap, touches, uid } from '../../src/domain/planedit';
+import { dragRoom, edgeSnap, extensionSpot, nearestWall, snap, touches, uid } from '../../src/domain/planedit';
 
 const A: Room = { id: 'a', type: 'living', x: 0, z: 0, w: 4, d: 3 };
 const B: Room = { id: 'b', type: 'bedroom', x: 4, z: 0, w: 3, d: 3 };
@@ -35,5 +35,15 @@ describe('editing a plan by hand', () => {
     expect(uid('r', [{ id: 'r1' }, { id: 'r3' }])).toBe('r4');
     expect(uid('r', [{ id: 'r3' }, { id: 'r2' }])).toBe('r4');
     expect(uid('o', [])).toBe('o1');
+  });
+});
+
+describe('where an extension goes', () => {
+  it('takes the first free side of the room, right first', () => {
+    const r: Room = { id: 'a', type: 'living', x: 0, z: 0, w: 4, d: 3 };
+    expect(extensionSpot([r], r)).toEqual({ x: 4, z: 1.5, w: 1.5, d: 1.5 });
+    const right: Room = { id: 'b', type: 'kitchen', x: 4, z: 0, w: 2, d: 3 };
+    // the right side is taken: below the room, flush with its right edge
+    expect(extensionSpot([r, right], r)).toEqual({ x: 2.5, z: 3, w: 1.5, d: 1.5 });
   });
 });

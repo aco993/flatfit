@@ -11,6 +11,11 @@ export interface Room {
   z: number;
   w: number;
   d: number;
+  /**
+   * Id of the room this rectangle extends (an L- or U-shaped room is a main rectangle plus extensions): no wall
+   * between them, one label and one area, furnished as one room. Type follows the main room.
+   */
+  part?: string;
 }
 
 /** n = edge at z (top of plan), s = z + d, w = edge at x, e = x + w */

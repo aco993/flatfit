@@ -256,6 +256,11 @@ const sr: Record<Key, string> = {
   'editor.title': 'Osnova stana',
   'editor.add': 'Dodaj prostoriju',
   'editor.delete': 'Obriši prostoriju',
+  'editor.addPart': 'Dodaj produžetak (oblik L ili U)',
+  'editor.partOf': 'Produžetak: {room}',
+  'editor.partHint':
+    'Deo iste prostorije: bez zida između, jedna površina, oprema se kao jedna prostorija. Povuci ga ili upiši mere da oblikuješ L ili U.',
+  'editor.detach': 'Napravi zasebnu prostoriju',
   'editor.type': 'Vrsta prostorije',
   'editor.name': 'Naziv (nije obavezno)',
   'editor.x': 'X (m)',
