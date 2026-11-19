@@ -41,7 +41,8 @@ const QUERIES = {
     wardrobe: { q: 'Kleiderschrank', type: /Kleiderschrank/i, keep: 6, wMax: 200 },
     night: { q: 'Nachttisch', type: /Nachttisch|Ablagetisch/i, keep: 5 },
     lamps: { q: 'Tischleuchte', type: /Tischleuchte/i, keep: 3 },
-    washer: { q: 'Waschmaschine', type: /Waschmaschine/i, keep: 2 },
+    // the type alone, so the plinth ("Sockel für Waschmaschine/Trockner") is not taken for a washer
+    washer: { q: 'Waschmaschine', type: /^Waschmaschine$/i, keep: 2 },
     hall: { q: 'Schuhschrank', type: /Schuhschrank|Schuhbank/i, keep: 4 },
     hooks: { q: 'Hakenleiste', type: /Haken|Garderobe/i, keep: 3 },
     terrace: { q: 'Tisch und 2 Stühle für draußen', type: /Tisch.*Stühle|Stühle.*Tisch/i, nameMust: /außen|draußen|outdoor/i, keep: 3 },

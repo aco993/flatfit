@@ -1234,34 +1234,6 @@
    "checked": "2026-11-19"
   },
   {
-   "id": "de-ik-60523765",
-   "slot": "washer",
-   "store": "ikea",
-   "name": "UDDARP Waschmaschine, IKEA 300, 7 kg",
-   "url": "https://www.ikea.com/de/de/p/uddarp-waschmaschine-ikea-300-60523765/",
-   "price": 299,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 59.5,
-   "d": 57.2,
-   "h": 85.5,
-   "checked": "2026-11-19"
-  },
-  {
-   "id": "de-ik-30622984",
-   "slot": "washer",
-   "store": "ikea",
-   "name": "ENHET Sockel für Waschmaschine/Trockner, weiß, 60x62x45 cm",
-   "url": "https://www.ikea.com/de/de/p/enhet-sockel-fuer-waschmaschine-trockner-weiss-30622984/",
-   "price": 99.99,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 60,
-   "d": 61.6,
-   "h": 45,
-   "checked": "2026-11-19"
-  },
-  {
    "id": "de-ik-10530259",
    "slot": "hall",
    "store": "ikea",
@@ -1534,6 +1506,32 @@
    "w": 38,
    "h": 29,
    "checked": "2026-11-19"
+  },
+  {
+   "id": "de-ik-60523765",
+   "slot": "washer",
+   "store": "ikea",
+   "name": "UDDARP Waschmaschine, IKEA 300, 7 kg",
+   "url": "https://www.ikea.com/de/de/p/uddarp-waschmaschine-ikea-300-60523765/",
+   "price": 299,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 59.5,
+   "d": 57.2,
+   "h": 85.5
+  },
+  {
+   "id": "de-ik-70525467",
+   "slot": "washer",
+   "store": "ikea",
+   "name": "UDDARP Waschmaschine, IKEA 500, 8 kg",
+   "url": "https://www.ikea.com/de/de/p/uddarp-waschmaschine-ikea-500-70525467/",
+   "price": 429,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 59.5,
+   "d": 62.8,
+   "h": 85.5
   },
   {
    "id": "de-est-tv43",

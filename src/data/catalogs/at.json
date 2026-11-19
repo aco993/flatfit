@@ -1218,34 +1218,6 @@
    "checked": "2026-11-19"
   },
   {
-   "id": "at-ik-60523765",
-   "slot": "washer",
-   "store": "ikea",
-   "name": "UDDARP Waschmaschine, IKEA 300, 7 kg",
-   "url": "https://www.ikea.com/at/de/p/uddarp-waschmaschine-ikea-300-60523765/",
-   "price": 299,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 59.5,
-   "d": 57.2,
-   "h": 85.5,
-   "checked": "2026-11-19"
-  },
-  {
-   "id": "at-ik-30622984",
-   "slot": "washer",
-   "store": "ikea",
-   "name": "ENHET Sockel für Waschmaschine/Trockner, weiß, 60x62x45 cm",
-   "url": "https://www.ikea.com/at/de/p/enhet-sockel-fuer-waschmaschine-trockner-weiss-30622984/",
-   "price": 99,
-   "color": "weiß",
-   "hex": "#ffffff",
-   "w": 60,
-   "d": 61.6,
-   "h": 45,
-   "checked": "2026-11-19"
-  },
-  {
    "id": "at-ik-10530259",
    "slot": "hall",
    "store": "ikea",
@@ -1524,6 +1496,32 @@
    "checked": "2026-11-19"
   },
   {
+   "id": "at-ik-60523765",
+   "slot": "washer",
+   "store": "ikea",
+   "name": "UDDARP Waschmaschine, IKEA 300, 7 kg",
+   "url": "https://www.ikea.com/at/de/p/uddarp-waschmaschine-ikea-300-60523765/",
+   "price": 299,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 59.5,
+   "d": 57.2,
+   "h": 85.5
+  },
+  {
+   "id": "at-ik-70525467",
+   "slot": "washer",
+   "store": "ikea",
+   "name": "UDDARP Waschmaschine, IKEA 500, 8 kg",
+   "url": "https://www.ikea.com/at/de/p/uddarp-waschmaschine-ikea-500-70525467/",
+   "price": 449,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 59.5,
+   "d": 62.8,
+   "h": 85.5
+  },
+  {
    "id": "at-est-tv43",
    "slot": "tv",
    "store": "est",
@@ -1612,6 +1610,21 @@
    "d": 8.7,
    "h": 56.4,
    "model": "43PFS5500",
+   "checked": "2026-11-19"
+  },
+  {
+   "id": "at-koeck-kgc270",
+   "slot": "fridge",
+   "store": "koeck",
+   "name": "Exquisit KGC270-45-040E Kühl-/Gefrierkombination, weiß, 169/37 l",
+   "url": "https://www.elektrokoeck.com/at/KGC270-45-040E/149151",
+   "price": 227.41,
+   "color": "weiß",
+   "hex": "#ffffff",
+   "w": 54.5,
+   "d": 55.5,
+   "h": 142.6,
+   "model": "KGC270-45-040E",
    "checked": "2026-11-19"
   }
  ]

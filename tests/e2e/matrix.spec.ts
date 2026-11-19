@@ -42,7 +42,8 @@ const CASES: Case[] = [
     name: 'Bosnia and Herzegovina · Bosnian',
     hash: 'c=ba&l=bs',
     lang: 'bs',
-    currency: /\d\.\d{3},\d{2}\sKM/,
+    // Bosnian grouping and the mark; cents only when the total has them (whole totals show none)
+    currency: /\d\.\d{3}(,\d{2})?\sKM/,
     country: 'ba',
     extra: async page => {
       await expect(page.locator('#slots .flag.est').first()).toBeVisible();
