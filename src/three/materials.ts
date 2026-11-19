@@ -22,6 +22,38 @@ function canvasTex(w: number, h: number, draw: (g: CanvasRenderingContext2D, w: 
   return t;
 }
 
+/**
+ * A normal map made from a height map drawn on a canvas (white = high): the light then catches the weave of a
+ * fabric or the joints of a floor, instead of the surface looking printed on.
+ */
+function normalTex(size: number, drawHeight: (g: CanvasRenderingContext2D, w: number, h: number) => void, strength: number) {
+  if (!isBrowser) return new THREE.Texture();
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const g = c.getContext('2d', { willReadFrequently: true })!;
+  drawHeight(g, size, size);
+  const src = g.getImageData(0, 0, size, size).data,
+    out = g.createImageData(size, size),
+    o = out.data;
+  const hAt = (x: number, y: number) => src[(((y + size) % size) * size + ((x + size) % size)) * 4] / 255;
+  for (let y = 0; y < size; y++)
+    for (let x = 0; x < size; x++) {
+      const dx = (hAt(x + 1, y) - hAt(x - 1, y)) * strength,
+        dy = (hAt(x, y + 1) - hAt(x, y - 1)) * strength,
+        len = Math.hypot(dx, dy, 1),
+        i = (y * size + x) * 4;
+      o[i] = ((-dx / len) * 0.5 + 0.5) * 255;
+      o[i + 1] = ((dy / len) * 0.5 + 0.5) * 255;
+      o[i + 2] = ((1 / len) * 0.5 + 0.5) * 255;
+      o[i + 3] = 255;
+    }
+  g.putImageData(out, 0, 0);
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.colorSpace = THREE.NoColorSpace;
+  return t;
+}
+
 /** Wood floor tones: the darkest plank colour; each plank adds up to 30 to it. */
 export const WOOD = {
   light: [196, 170, 132],
@@ -118,6 +150,39 @@ export const TEX = {
       g.strokeRect(0, 0, w, h);
     }),
   // grey detail maps; colour comes from the material
+  /** threads crossing every 4 px: raised over, sunk under, like a plain weave */
+  fabricNormal: () =>
+    normalTex(
+      256,
+      (g, w, h) => {
+        g.fillStyle = '#808080';
+        g.fillRect(0, 0, w, h);
+        for (let y = 0; y < h; y += 4)
+          for (let x = 0; x < w; x += 4) {
+            const over = ((x + y) / 4) % 2 === 0;
+            g.fillStyle = over ? '#d0d0d0' : '#404040';
+            g.fillRect(x, y, 3, 3);
+          }
+      },
+      2.2,
+    ),
+  /** the joints between the floor boards, laid out exactly like wood() so the grooves sit on the board edges */
+  oakNormal: () =>
+    normalTex(
+      512,
+      (g, w, h) => {
+        g.fillStyle = '#ffffff';
+        g.fillRect(0, 0, w, h);
+        g.fillStyle = '#000000';
+        const ph = h / 4;
+        for (let row = 0; row < 4; row++) {
+          const off = (row % 2) * w * 0.5;
+          for (let k = -1; k < 2; k++) g.fillRect(k * w + off, row * ph, 2, ph);
+          g.fillRect(0, row * ph, w, 2);
+        }
+      },
+      3,
+    ),
   fabric: () =>
     canvasTex(256, 256, (g, w, h) => {
       const r = rand(5);
@@ -198,6 +263,10 @@ export class Materials {
       const m = this.t('fabric').clone();
       m.repeat.set(3, 3);
       o.map = m;
+      const n = this.t('fabricNormal').clone();
+      n.repeat.set(10, 10);
+      o.normalMap = n;
+      o.normalScale = new THREE.Vector2(0.55, 0.55);
       o.roughness = 0.95;
     } else if (kind === 'drape') {
       const m = this.t('fabric').clone();
@@ -250,6 +319,13 @@ export class Materials {
     t.needsUpdate = true;
     t.repeat.set(w / size[0], d / size[1]);
     const m = new THREE.MeshStandardMaterial({ map: t, roughness: kind === 'marble' ? 0.22 : kind.startsWith('oak') ? 0.5 : 0.45 });
+    if (kind.startsWith('oak')) {
+      const n = this.t('oakNormal').clone();
+      n.needsUpdate = true;
+      n.repeat.copy(t.repeat);
+      m.normalMap = n;
+      m.normalScale = new THREE.Vector2(0.8, 0.8);
+    }
     this.cache.set(key, m);
     return m;
   }

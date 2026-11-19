@@ -23,12 +23,12 @@ export function living(C: FurnishCtx) {
       cw = inner / n;
     for (let i = 0; i < n; i++) {
       const x = -inner / 2 + cw * (i + 0.5);
-      b.B(g, cw - 0.015, 0.13, d - 0.26, x, seat - 0.03, 0.1, F);
-      b.B(g, cw - 0.03, Math.max(0.3, h - seat - 0.06), 0.2, x, seat + 0.06, -d / 2 + 0.32, F, { rx: -0.12 });
+      b.P(g, cw - 0.02, 0.14, d - 0.26, x, seat - 0.04, 0.1, F);
+      b.P(g, cw - 0.03, Math.max(0.3, h - seat - 0.06), 0.2, x, seat + 0.06, -d / 2 + 0.32, F, { rx: -0.12 });
     }
     const acc = M.get(accentFor(p.hex), 'fabric');
-    b.B(g, 0.4, 0.36, 0.13, -inner / 2 + 0.3, seat + 0.08, -d / 2 + 0.3, acc, { ry: 0.18 });
-    b.B(g, 0.38, 0.34, 0.13, inner / 2 - 0.3, seat + 0.08, -d / 2 + 0.3, acc, { ry: -0.12 });
+    b.P(g, 0.4, 0.33, 0.14, -inner / 2 + 0.3, seat + 0.08, -d / 2 + 0.3, acc, { ry: 0.18, rx: -0.15, puff: 0.04 });
+    b.P(g, 0.38, 0.32, 0.14, inner / 2 - 0.3, seat + 0.08, -d / 2 + 0.3, acc, { ry: -0.12, rx: -0.15, puff: 0.04 });
     [
       [-1, -1],
       [1, -1],
@@ -50,8 +50,8 @@ export function living(C: FurnishCtx) {
     const g = b.group(root, pl.x, pl.z, pl.rot);
     const F = mat(p, '#c6c5c1', 'fabric');
     if (models.fit(g, 'modern_arm_chair_01', D.w, D.h, D.d, 0, 0, 0, hexOf(p, '#c6c5c1'), 'armchair')) return;
-    b.B(g, D.w, 0.26, D.d, 0, 0.16, 0, F);
-    b.B(g, D.w, Math.max(0.25, D.h - 0.4), 0.12, 0, 0.4, -D.d / 2 + 0.06, F);
+    b.P(g, D.w, 0.26, D.d, 0, 0.16, 0, F);
+    b.P(g, D.w, Math.max(0.25, D.h - 0.4), 0.12, 0, 0.4, -D.d / 2 + 0.06, F);
     b.B(g, 0.08, 0.2, D.d - 0.1, -D.w / 2 + 0.04, 0.42, 0.02, F);
     b.B(g, 0.08, 0.2, D.d - 0.1, D.w / 2 - 0.04, 0.42, 0.02, F);
     [

@@ -90,6 +90,56 @@ export class Builder {
     g.add(m);
     return m;
   }
+  /**
+   * A cushion: a rounded box whose top and bottom swell towards the middle, the way a filled cushion does.
+   * Used for seat and back cushions, pillows, mattresses and duvets.
+   */
+  P(
+    g: THREE.Object3D,
+    w: number,
+    h: number,
+    d: number,
+    x: number,
+    y: number,
+    z: number,
+    mat: THREE.Material,
+    o: { ry?: number; rx?: number; puff?: number } = {},
+  ) {
+    if (w <= 0 || h <= 0 || d <= 0) return null;
+    const puff = o.puff ?? Math.min(0.035, Math.min(w, h, d) * 0.22);
+    const key = `P|${w.toFixed(3)}|${h.toFixed(3)}|${d.toFixed(3)}|${puff.toFixed(3)}|${this.lowPoly ? 1 : 0}`;
+    let geo = GEO.get(key);
+    if (!geo) {
+      geo = new RoundedBoxGeometry(w, h, d, this.lowPoly ? 2 : 5, Math.min(h * 0.45, 0.06, w / 2 - 0.002, d / 2 - 0.002));
+      // swell along the thinnest side: up for a seat cushion, forward for a back cushion
+      const p = geo.attributes.position,
+        half = [w / 2, h / 2, d / 2],
+        axis = h <= w && h <= d ? 1 : d <= w ? 2 : 0,
+        [u, v] = [0, 1, 2].filter(k => k !== axis);
+      for (let i = 0; i < p.count; i++) {
+        const q = [p.getX(i), p.getY(i), p.getZ(i)],
+          n = q[axis] / half[axis];
+        if (Math.abs(n) < 0.2) continue;
+        const a = q[u] / half[u],
+          c = q[v] / half[v];
+        const k = Math.max(0, 1 - a * a) * Math.max(0, 1 - c * c);
+        q[axis] += Math.sign(n) * puff * k * Math.min(1, (Math.abs(n) - 0.2) / 0.8);
+        p.setXYZ(i, q[0], q[1], q[2]);
+      }
+      geo.computeVertexNormals();
+      geo.userData.shared = true;
+      GEO.set(key, geo);
+    }
+    const m = new THREE.Mesh(geo, mat);
+    m.position.set(x, y + h / 2, z);
+    if (o.ry) m.rotation.y = o.ry;
+    if (o.rx) m.rotation.x = o.rx;
+    m.castShadow = true;
+    m.receiveShadow = true;
+    m.userData.slot = this.tag;
+    g.add(m);
+    return m;
+  }
   C(g: THREE.Object3D, rt: number, rb: number, h: number, x: number, y: number, z: number, mat: THREE.Material, seg = 24) {
     const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, this.lowPoly ? Math.min(seg, 16) : seg), mat);
     m.position.set(x, y + h / 2, z);

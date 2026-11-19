@@ -13,13 +13,16 @@ export function bedroom(C: FurnishCtx) {
       F = mat(bed, '#d8ccb9');
     b.B(g, D.w, frameH, D.d - 0.06, 0, 0.04, 0.03, F);
     b.tag = has('mattress') ? 'mattress' : 'bed';
-    b.B(g, Math.min(MD.w, D.w - 0.04), MD.h, Math.min(MD.d, D.d - 0.08), 0, 0.04 + frameH - 0.02, 0.02, M.get('#f7f6f2', 'fabric'));
+    b.P(g, Math.min(MD.w, D.w - 0.04), MD.h, Math.min(MD.d, D.d - 0.08), 0, 0.04 + frameH - 0.02, 0.02, M.get('#f7f6f2', 'fabric'), {
+      puff: 0.012,
+    });
     b.tag = 'bed';
     const top = 0.04 + frameH - 0.02 + MD.h;
-    b.B(g, D.w - 0.04, 0.07, 1.4, 0, top, D.d / 2 - 0.72, M.get('#f4f2ec', 'fabric'));
+    // duvet over the lower part of the bed, folded over its top edge
+    b.P(g, D.w - 0.02, 0.08, 1.45, 0, top - 0.01, D.d / 2 - 0.74, M.get('#f4f2ec', 'fabric'), { puff: 0.03 });
     b.B(g, D.w - 0.02, 0.03, 0.45, 0, top + 0.06, D.d / 2 - 0.45, M.get(accentFor(bed.hex), 'fabric'));
-    b.B(g, 0.62, 0.14, 0.36, -0.38, top, -D.d / 2 + 0.3, M.get('#fbfaf7', 'fabric'));
-    b.B(g, 0.62, 0.14, 0.36, 0.38, top, -D.d / 2 + 0.3, M.get('#fbfaf7', 'fabric'));
+    b.P(g, 0.62, 0.14, 0.38, -0.38, top, -D.d / 2 + 0.3, M.get('#fbfaf7', 'fabric'), { rx: -0.12, puff: 0.045 });
+    b.P(g, 0.62, 0.14, 0.38, 0.38, top, -D.d / 2 + 0.3, M.get('#fbfaf7', 'fabric'), { rx: -0.12, puff: 0.045 });
     b.B(g, D.w, Math.max(0.6, D.h), 0.07, 0, 0.02, -D.d / 2 + 0.035, mat(bed, '#d8ccb9', undefined, true));
   });
   each('night', pl => {
@@ -48,13 +51,23 @@ export function bedroom(C: FurnishCtx) {
     if (!w) return;
     const D = f.dims('wardrobe');
     const g = at(pl, D.d);
-    b.B(g, D.w, D.h, D.d, 0, 0, 0, mat(w, '#f2f1ec'));
-    const nd = Math.max(2, Math.round(D.w / 0.48));
-    for (let i = 1; i < nd; i++)
-      b.B(g, 0.006, D.h - 0.08, 0.006, -D.w / 2 + (D.w * i) / nd, 0.04, D.d / 2 + 0.002, M.get('#8a8680', 'plain'));
-    if (w.hex2 && w.hex2 !== w.hex)
-      b.B(g, D.w / nd - 0.02, D.h - 0.06, 0.01, D.w / 2 - D.w / nd / 2, 0.03, D.d / 2 + 0.004, mat(w, '#f2f1ec', undefined, true));
-    for (let i = 0; i < nd; i++)
-      b.B(g, 0.015, 0.28, 0.02, -D.w / 2 + (D.w * (i + 0.5)) / nd + 0.1, 1.0, D.d / 2 + 0.012, M.get('#c4c4c1', 'metal'));
+    // carcass on a recessed plinth, then the doors as separate panels with 3 mm gaps between them
+    const body = mat(w, '#f2f1ec'),
+      plinth = 0.06,
+      doorD = 0.018;
+    b.B(g, D.w - 0.04, plinth, D.d - 0.06, 0, 0, -0.02, M.get('#2e2d2b', 'plain'));
+    b.B(g, D.w, D.h - plinth, D.d - doorD, 0, plinth, -doorD / 2, body);
+    const nd = Math.max(2, Math.round(D.w / 0.48)),
+      dw = D.w / nd,
+      gap = 0.003;
+    for (let i = 0; i < nd; i++) {
+      // a two-colour wardrobe (body and fronts) shows its second colour on the outer door
+      const front = w.hex2 && w.hex2 !== w.hex && i === nd - 1 ? mat(w, '#f2f1ec', undefined, true) : body;
+      const x = -D.w / 2 + dw * (i + 0.5);
+      b.B(g, dw - gap, D.h - plinth - gap, doorD, x, plinth + gap / 2, D.d / 2 - doorD / 2, front);
+      // handles on the edges where two doors meet
+      const side = i % 2 === 0 ? 1 : -1;
+      b.B(g, 0.012, 0.3, 0.02, x + side * (dw / 2 - 0.04), 0.95, D.d / 2 + 0.01, M.get('#c4c4c1', 'metal'));
+    }
   });
 }

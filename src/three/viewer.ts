@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import type { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import type { SlotId, View } from '../types';
 
 export interface Label {
@@ -63,6 +64,9 @@ export class Viewer {
   private ro: ResizeObserver;
   private raf = 0;
   soft = false;
+  /** ambient occlusion and MSAA through a composer; on by default where a real GPU draws a desktop-sized view */
+  private composer: EffectComposer | null = null;
+  private aoWanted = false;
   static software(r: THREE.WebGLRenderer) {
     try {
       const gl = r.getContext(),
@@ -103,6 +107,9 @@ export class Viewer {
     // soft image-based light; generated after the first frames so it does not hold up the page
     this.scene.environmentIntensity = 0.55;
     setTimeout(() => this.makeEnv(), 300);
+    // contact shadows under furniture and in corners: a desktop GPU only; phones and software rendering keep the plain path
+    this.aoWanted = !this.soft && !lowEnd;
+    if (this.aoWanted) setTimeout(() => this.setAO(true), 1500);
     this.scene.background = new THREE.Color('#dfe6ec');
     const hemi = new THREE.HemisphereLight(0xffffff, 0xcfc6ba, 0.55);
     this.scene.add(hemi);
@@ -227,6 +234,51 @@ export class Viewer {
     pm.dispose();
     this.recompile();
   }
+  /**
+   * Ambient occlusion (three's GTAO): the soft darkening where furniture meets the floor and walls meet each other,
+   * the cue that makes a box read as standing in a room. Rendered through a composer with a multisampled target,
+   * so edges stay smooth; loaded on demand.
+   */
+  async setAO(on: boolean) {
+    this.aoWanted = on;
+    if (!on) {
+      this.composer?.dispose();
+      this.composer = null;
+      this.dirty = true;
+      return;
+    }
+    if (this.composer) return;
+    const [{ EffectComposer }, { RenderPass }, { GTAOPass }, { OutputPass }] = await Promise.all([
+      import('three/addons/postprocessing/EffectComposer.js'),
+      import('three/addons/postprocessing/RenderPass.js'),
+      import('three/addons/postprocessing/GTAOPass.js'),
+      import('three/addons/postprocessing/OutputPass.js'),
+    ]);
+    if (!this.aoWanted || this.composer) return;
+    const { w, h } = this.size,
+      pr = this.renderer.getPixelRatio();
+    const target = new THREE.WebGLRenderTarget(Math.max(1, w * pr), Math.max(1, h * pr), { type: THREE.HalfFloatType, samples: 4 });
+    const composer = new EffectComposer(this.renderer, target);
+    composer.addPass(new RenderPass(this.scene, this.camera));
+    const ao = new GTAOPass(this.scene, this.camera, Math.max(1, w), Math.max(1, h));
+    ao.updateGtaoMaterial({ radius: 0.5, distanceExponent: 1, thickness: 1, scale: 1.5 });
+    ao.blendIntensity = 1;
+    composer.addPass(ao);
+    composer.addPass(new OutputPass());
+    composer.setPixelRatio(pr);
+    composer.setSize(Math.max(1, w), Math.max(1, h));
+    this.composer = composer;
+    this.dirty = true;
+  }
+  get aoOn() {
+    return !!this.composer;
+  }
+  /** Draw the scene once, through the composer when ambient occlusion is on. */
+  private draw() {
+    if (this.composer) this.composer.render();
+    else this.renderer.render(this.scene, this.camera);
+  }
+
   /** Prepare the shaders of objects that will be added later (decorative models), without drawing them. */
   warm(obj: THREE.Object3D) {
     return this.renderer.compileAsync(obj, this.camera, this.scene).catch(() => undefined);
@@ -607,6 +659,7 @@ export class Viewer {
     if (!r.width || !r.height) return;
     this.size = { w: r.width, h: r.height };
     this.renderer.setSize(r.width, r.height, false);
+    this.composer?.setSize(r.width, r.height);
     this.camera.aspect = r.width / r.height;
     this.camera.updateProjectionMatrix();
     this.dirty = true;
@@ -619,7 +672,7 @@ export class Viewer {
     const src = this.renderer.domElement;
     if (!src.width) return;
     if (this.sel) this.sel.visible = false;
-    this.renderer.render(this.scene, this.camera);
+    this.draw();
     target.width = src.width;
     target.height = src.height;
     target.getContext('2d')!.drawImage(src, 0, 0);
@@ -643,7 +696,7 @@ export class Viewer {
     } else if (!this.interior && this.controls.update()) this.dirty = true;
     if (!this.dirty || document.hidden || this.compiling) return;
     this.dirty = false;
-    this.renderer.render(this.scene, this.camera);
+    this.draw();
     this.placeLabels();
   }
 
