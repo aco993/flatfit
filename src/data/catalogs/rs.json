@@ -1,7 +1,7 @@
 {
  "country": "rs",
  "currency": "RSD",
- "checked": "2026-11-18",
+ "checked": "2026-11-19",
  "stores": [
   {
    "id": "fi",
@@ -58,7 +58,7 @@
    "w": 190,
    "d": 83,
    "h": 91,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-quatro",
@@ -72,7 +72,7 @@
    "w": 200,
    "d": 88,
    "h": 77,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-enco",
@@ -86,7 +86,7 @@
    "w": 220,
    "d": 88,
    "h": 77,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-mirello",
@@ -100,7 +100,7 @@
    "w": 198,
    "d": 95,
    "h": 78,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 52488
   },
   {
@@ -116,7 +116,7 @@
    "d": 152,
    "h": 80,
    "corner": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "les-krem",
@@ -175,7 +175,7 @@
    "w": 200,
    "d": 95,
    "h": 90,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-alvdalen",
@@ -189,7 +189,7 @@
    "w": 194,
    "d": 82,
    "h": 81,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-friheten",
@@ -203,7 +203,7 @@
    "w": 225,
    "d": 105,
    "h": 83,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-teddy",
@@ -217,7 +217,7 @@
    "w": 57.5,
    "d": 57,
    "h": 69,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-zora",
@@ -231,7 +231,7 @@
    "w": 59,
    "d": 64,
    "h": 83,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "les-fot",
@@ -261,7 +261,7 @@
    "w": 110,
    "d": 60,
    "h": 44,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-clent",
@@ -275,7 +275,7 @@
    "w": 90,
    "d": 49.5,
    "h": 45.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-seaford",
@@ -290,7 +290,7 @@
    "w": 80,
    "d": 80,
    "h": 45,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-belfort-k",
@@ -305,7 +305,7 @@
    "w": 101,
    "d": 54.5,
    "h": 46,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-lack",
@@ -319,7 +319,7 @@
    "w": 90,
    "d": 55,
    "h": 45,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-vittsjo",
@@ -334,7 +334,7 @@
    "d": 75,
    "h": 40,
    "round": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "les-xora-k",
@@ -365,7 +365,7 @@
    "w": 162,
    "d": 41.5,
    "h": 43.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-essex",
@@ -380,7 +380,7 @@
    "w": 154,
    "d": 41.5,
    "h": 50.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-laval",
@@ -395,7 +395,7 @@
    "w": 131.5,
    "d": 40,
    "h": 52,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-valencia",
@@ -410,7 +410,7 @@
    "w": 147,
    "d": 41,
    "h": 47.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-kallax",
@@ -424,7 +424,7 @@
    "w": 147,
    "d": 39,
    "h": 78,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 11999,
    "until": "2027-03-03"
   },
@@ -470,7 +470,7 @@
    "w": 159.6,
    "d": 34.8,
    "h": 49.7,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-sam43",
@@ -484,7 +484,7 @@
    "w": 96.5,
    "d": 8,
    "h": 56,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "UE43U8072"
   },
   {
@@ -499,7 +499,7 @@
    "w": 96.5,
    "d": 8,
    "h": 56,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "43E6ST"
   },
   {
@@ -514,7 +514,7 @@
    "w": 122.5,
    "d": 8,
    "h": 71,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "55E6ST"
   },
   {
@@ -529,7 +529,7 @@
    "w": 140,
    "d": 200,
    "storeOnly": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-lingon-p",
@@ -543,7 +543,7 @@
    "w": 140,
    "d": 200,
    "storeOnly": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-storrapp",
@@ -558,7 +558,7 @@
    "d": 200,
    "regular": 11999,
    "storeOnly": true,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "until": "2026-11-29"
   },
   {
@@ -574,7 +574,7 @@
    "d": 230,
    "regular": 9999,
    "storeOnly": true,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "until": "2026-11-29"
   },
   {
@@ -616,7 +616,7 @@
    "w": 120,
    "d": 75,
    "h": 75,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-domus",
@@ -631,7 +631,7 @@
    "w": 135,
    "d": 80.5,
    "h": 74.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-adrian",
@@ -646,7 +646,7 @@
    "w": 80,
    "d": 80,
    "h": 76,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-coburg",
@@ -661,7 +661,7 @@
    "w": 80,
    "d": 80,
    "h": 76.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-yale",
@@ -676,7 +676,7 @@
    "d": 120,
    "h": 75,
    "round": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "moe-crni",
@@ -737,7 +737,7 @@
    "h": 75,
    "includesChairs": "bela",
    "round": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-hagernas",
@@ -752,7 +752,7 @@
    "d": 74,
    "h": 75,
    "includesChairs": "borovina",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-htc118",
@@ -766,7 +766,7 @@
    "w": 46,
    "d": 54,
    "h": 83,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-kjc29",
@@ -780,7 +780,7 @@
    "w": 45,
    "d": 57.5,
    "h": 88,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-helena",
@@ -794,7 +794,7 @@
    "w": 46.5,
    "d": 55.5,
    "h": 85.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-asama",
@@ -808,7 +808,7 @@
    "w": 56,
    "d": 44,
    "h": 95,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "moe-svsiva",
@@ -868,7 +868,7 @@
    "h": 200,
    "needsWorktop": true,
    "note": "cijena je bez radne ploče",
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 37488
   },
   {
@@ -886,7 +886,7 @@
    "h": 200,
    "needsWorktop": true,
    "note": "cijena je bez radne ploče",
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 49987
   },
   {
@@ -904,7 +904,7 @@
    "h": 200,
    "needsWorktop": true,
    "note": "cijena je bez radne ploče",
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 46238
   },
   {
@@ -922,7 +922,7 @@
    "h": 200,
    "needsWorktop": true,
    "note": "cijena je bez radne ploče i ugradnih elemenata",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-diva",
@@ -938,7 +938,7 @@
    "h": 200,
    "needsWorktop": true,
    "note": "cijena je bez radne ploče i sudopere",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "les-xora-kuh",
@@ -970,7 +970,7 @@
    "d": 60,
    "h": 200,
    "note": "provjeriti u radnji da li je radna ploča uključena",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-knoxhult",
@@ -999,7 +999,7 @@
    "w": 202,
    "d": 60,
    "h": 2.8,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-wt-pesak",
@@ -1013,7 +1013,7 @@
    "w": 200,
    "d": 60,
    "h": 3.8,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-wt-hrast",
@@ -1027,7 +1027,7 @@
    "w": 100,
    "d": 60,
    "h": 3.8,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-nera",
@@ -1040,7 +1040,7 @@
    "hex": "#b9bcbe",
    "w": 79,
    "d": 50,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-atos",
@@ -1053,7 +1053,7 @@
    "hex": "#1d1e20",
    "w": 50,
    "d": 50,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-xvenera",
@@ -1066,7 +1066,7 @@
    "hex": "#1d1e20",
    "w": 51,
    "d": 51,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-eco",
@@ -1077,7 +1077,7 @@
    "price": 6238,
    "color": "inox",
    "hex": "#b9bcbe",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-mamba",
@@ -1088,7 +1088,7 @@
    "price": 8737,
    "color": "crna",
    "hex": "#1d1e20",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-lux",
@@ -1099,7 +1099,7 @@
    "price": 9988,
    "color": "inox",
    "hex": "#b9bcbe",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-hic",
@@ -1112,7 +1112,7 @@
    "hex": "#1d1e20",
    "w": 59,
    "d": 52,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "HIC 64404 T"
   },
   {
@@ -1126,7 +1126,7 @@
    "hex": "#1d1e20",
    "w": 59,
    "d": 52,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "HII 64400 TO"
   },
   {
@@ -1140,7 +1140,7 @@
    "hex": "#1d1e20",
    "w": 59,
    "d": 51,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "WS Q2160 NE"
   },
   {
@@ -1155,7 +1155,7 @@
    "w": 59.5,
    "d": 56.5,
    "h": 59.5,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "7NM30E0B"
   },
   {
@@ -1170,7 +1170,7 @@
    "w": 59.5,
    "d": 31,
    "h": 25.5,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "PIO6L07W"
   },
   {
@@ -1185,7 +1185,7 @@
    "w": 52,
    "d": 28.5,
    "h": 30,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "MH52BI3200X"
   },
   {
@@ -1200,7 +1200,7 @@
    "w": 60,
    "d": 28,
    "h": 18,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "CTB 6250 B"
   },
   {
@@ -1216,7 +1216,7 @@
    "d": 20.5,
    "h": 48,
    "chimney": true,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "CGL6V17BL"
   },
   {
@@ -1231,7 +1231,7 @@
    "w": 54,
    "d": 55,
    "h": 177,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "B1RCSO264W"
   },
   {
@@ -1246,7 +1246,7 @@
    "w": 54,
    "d": 57.5,
    "h": 180,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "B1RCNO254S"
   },
   {
@@ -1262,7 +1262,7 @@
    "d": 55,
    "h": 145,
    "note": "dimenzije približne, provjeriti na stranici",
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "CNDQ2S514EW"
   },
   {
@@ -1271,14 +1271,14 @@
    "store": "giga",
    "name": "GORENJE RK4182PS4 kombinovani frižider, srebrni",
    "url": "https://gigatron.rs/proizvod/gorenje-rk4182ps4-kombinovani-frizider-3838782408465",
-   "price": 33299,
+   "price": 35799,
    "color": "inox",
    "hex": "#b9bcbe",
    "w": 55,
    "d": 56,
    "h": 180,
    "note": "dimenzije približne, provjeriti na stranici",
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "RK4182PS4"
   },
   {
@@ -1293,7 +1293,7 @@
    "w": 58,
    "d": 60,
    "h": 84.5,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "B3WFU410415WW"
   },
   {
@@ -1308,7 +1308,7 @@
    "w": 59.5,
    "d": 47,
    "h": 85,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "model": "MF200W80WB"
   },
   {
@@ -1325,7 +1325,7 @@
    "h": 92,
    "needsBase": true,
    "note": "cijena je bez podnice i dušeka",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-salona",
@@ -1341,7 +1341,7 @@
    "h": 102,
    "needsBase": true,
    "note": "cijena je bez podnice i dušeka",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-belfort-b",
@@ -1358,7 +1358,7 @@
    "h": 115.5,
    "needsBase": true,
    "note": "cijena je bez dodatne opreme",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-astor",
@@ -1374,7 +1374,7 @@
    "h": 100.5,
    "needsBase": true,
    "note": "cijena je bez podnice i dušeka",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-aberdeen",
@@ -1390,7 +1390,7 @@
    "h": 115,
    "needsBase": true,
    "note": "cijena je bez podnice i dušeka",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-tarva",
@@ -1405,7 +1405,7 @@
    "d": 209,
    "h": 92,
    "note": "podnica LURÖY uključena; IKEA Family cijena 16.999",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-slattum",
@@ -1420,7 +1420,7 @@
    "d": 206,
    "h": 85,
    "note": "podnica uključena",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-fagel",
@@ -1435,7 +1435,7 @@
    "d": 207,
    "h": 101,
    "note": "podnica LURÖY uključena",
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 24999,
    "until": "2026-11-30"
   },
@@ -1452,7 +1452,7 @@
    "d": 210,
    "h": 100,
    "note": "podnica LINDBÅDEN uključena",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "moe-madrid",
@@ -1510,7 +1510,7 @@
    "price": 11238,
    "color": "",
    "hex": "#d9d6d0",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-cloud",
@@ -1524,7 +1524,7 @@
    "w": 160,
    "d": 200,
    "h": 20,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-fortuna",
@@ -1538,7 +1538,7 @@
    "w": 160,
    "d": 200,
    "h": 21,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 32488
   },
   {
@@ -1553,7 +1553,7 @@
    "w": 160,
    "d": 200,
    "h": 26,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-vesteroy",
@@ -1567,7 +1567,7 @@
    "w": 160,
    "d": 200,
    "h": 20,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 24999,
    "until": "2027-03-03"
   },
@@ -1583,7 +1583,7 @@
    "w": 160,
    "d": 200,
    "h": 18,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "moe-star",
@@ -1639,7 +1639,7 @@
    "w": 145,
    "d": 53,
    "h": 200,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-charlotta",
@@ -1653,7 +1653,7 @@
    "w": 120,
    "d": 54,
    "h": 196,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-mont",
@@ -1668,7 +1668,7 @@
    "w": 158,
    "d": 55,
    "h": 207,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-varadero-o",
@@ -1683,7 +1683,7 @@
    "w": 157.5,
    "d": 53,
    "h": 203.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-kleppstad",
@@ -1697,7 +1697,7 @@
    "w": 117,
    "d": 55,
    "h": 176,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-brimnes",
@@ -1711,7 +1711,7 @@
    "w": 117,
    "d": 50,
    "h": 190,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "moe-olli",
@@ -1787,7 +1787,7 @@
    "w": 40,
    "d": 40.5,
    "h": 42.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-salona-n",
@@ -1801,7 +1801,7 @@
    "w": 48,
    "d": 40,
    "h": 52,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-marron",
@@ -1816,7 +1816,7 @@
    "w": 48,
    "d": 40,
    "h": 55,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-varadero-n",
@@ -1832,7 +1832,7 @@
    "d": 33,
    "h": 42,
    "pack": 2,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-kronoren",
@@ -1846,7 +1846,7 @@
    "w": 39,
    "d": 32,
    "h": 55,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ik-grafjallet",
@@ -1860,7 +1860,7 @@
    "w": 45,
    "d": 36,
    "h": 59,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "moe-pepe",
@@ -1905,7 +1905,7 @@
    "w": 50,
    "d": 32,
    "h": 182,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-neo",
@@ -1919,7 +1919,7 @@
    "w": 60,
    "d": 33,
    "h": 191.5,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-magic",
@@ -1933,7 +1933,7 @@
    "w": 63,
    "d": 35,
    "h": 116,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "moe-rudi",
@@ -1973,7 +1973,7 @@
    "price": 3738,
    "color": "sonoma",
    "hex": "#d0b48a",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "fi-zoom",
@@ -1984,7 +1984,7 @@
    "price": 7488,
    "color": "bela",
    "hex": "#f2f1ec",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-stad-b",
@@ -1997,7 +1997,7 @@
    "hex": "#d6c8b0",
    "storeOnly": true,
    "pack": 1,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-stad-s",
@@ -2010,7 +2010,7 @@
    "hex": "#9a9b9c",
    "storeOnly": true,
    "pack": 1,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-amungen",
@@ -2024,7 +2024,7 @@
    "storeOnly": true,
    "pack": 1,
    "note": "treba skratiti",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-madrid",
@@ -2036,7 +2036,7 @@
    "color": "bela",
    "hex": "#f2f1ec",
    "storeOnly": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-ball",
@@ -2048,7 +2048,7 @@
    "color": "crna",
    "hex": "#1d1e20",
    "storeOnly": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-eivin",
@@ -2060,7 +2060,7 @@
    "color": "bela",
    "hex": "#f2f1ec",
    "storeOnly": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-markus",
@@ -2073,7 +2073,7 @@
    "hex": "#9a9b9c",
    "regular": 3999,
    "storeOnly": true,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "until": "2026-11-29"
   },
   {
@@ -2086,7 +2086,7 @@
    "color": "inox",
    "hex": "#b9bcbe",
    "storeOnly": true,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "regular": 4499,
    "until": "2026-11-29"
   },
@@ -2101,7 +2101,7 @@
    "hex": "#d6c8b0",
    "regular": 5999,
    "storeOnly": true,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "until": "2026-11-29"
   },
   {
@@ -2115,7 +2115,7 @@
    "hex": "#1d1e20",
    "regular": 5999,
    "storeOnly": true,
-   "checked": "2026-11-18",
+   "checked": "2026-11-19",
    "until": "2026-11-29"
   },
   {
@@ -2127,7 +2127,7 @@
    "price": 9500,
    "color": "pesak",
    "hex": "#cdbb9b",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-aborg-z",
@@ -2139,7 +2139,7 @@
    "color": "zelena",
    "hex": "#6f8f6f",
    "storeOnly": true,
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "jysk-aborg-c",
@@ -2150,7 +2150,7 @@
    "price": 9500,
    "color": "patlidžan",
    "hex": "#5b3a4a",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ww-vox-kg2730e",
@@ -2165,7 +2165,7 @@
    "d": 55,
    "h": 143,
    "model": "KG2730E",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ww-indesit-ima762b",
@@ -2180,7 +2180,7 @@
    "d": 47.4,
    "h": 85,
    "model": "IMA 762B MY TIME EE",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ww-beko-bbie11100b",
@@ -2195,7 +2195,7 @@
    "d": 56.7,
    "h": 59.5,
    "model": "BBIE11100B",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ww-candy-ch64ccb",
@@ -2210,7 +2210,7 @@
    "d": 52,
    "h": 4.5,
    "model": "CH64CCB/4U2",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ww-vox-pio6l03w",
@@ -2225,7 +2225,7 @@
    "d": 30.8,
    "h": 17.5,
    "model": "PIO6L03W",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   },
   {
    "id": "ww-tcl-43v6c",
@@ -2240,7 +2240,7 @@
    "d": 7.2,
    "h": 55.8,
    "model": "43V6C",
-   "checked": "2026-11-18"
+   "checked": "2026-11-19"
   }
  ]
 }
