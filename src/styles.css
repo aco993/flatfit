@@ -1261,6 +1261,11 @@ details.ai fieldset.prov legend {
 details.ai .note a {
   white-space: nowrap;
 }
+/* the accent on its own soft tint is 4.3:1; links there take the text colour */
+.note a {
+  color: var(--ink);
+  font-weight: 600;
+}
 
 /* first visit: what FlatFit does and how to start (hidden before first paint once closed, so nothing shifts) */
 .intro {
@@ -1539,4 +1544,26 @@ details.ai .note a {
 /* an extension of an L- or U-shaped room: the same colour, a dashed edge where it joins */
 #ed-svg .room.part rect:first-child {
   stroke-dasharray: 0.12 0.08;
+}
+
+/* AI stylist */
+.stylist-btn {
+  margin-top: 8px;
+  width: 100%;
+}
+.sty-form {
+  display: grid;
+  gap: 10px;
+}
+.sty-form textarea {
+  font: inherit;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  resize: vertical;
+}
+.sty-form p {
+  margin: 0;
 }

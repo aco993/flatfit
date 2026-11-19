@@ -65,7 +65,8 @@
 
     <aside class="panel" id="list" tabindex="-1" aria-label="Shopping list">
       <div class="presets"><h2 data-i18n="preset.label">Ready-made looks</h2><div id="presets" class="chips"></div>
-        <form id="budget" class="budget"><label for="budget-in" data-i18n="budget.label">Budget</label><span class="budget-in"><input id="budget-in" type="number" min="0" step="50" inputmode="numeric" required><span id="budget-cur"></span></span><button type="submit" class="btn" data-i18n="budget.go">Furnish for this</button></form></div>
+        <form id="budget" class="budget"><label for="budget-in" data-i18n="budget.label">Budget</label><span class="budget-in"><input id="budget-in" type="number" min="0" step="50" inputmode="numeric" required><span id="budget-cur"></span></span><button type="submit" class="btn" data-i18n="budget.go">Furnish for this</button></form>
+        <button type="button" class="btn ghost stylist-btn" id="stylist" data-i18n="sty.btn">✨ Describe what you want (AI)</button></div>
       <div class="summary" id="summary" aria-live="polite"></div>
       <div id="slots"></div>
       <div class="actions">
@@ -106,6 +107,7 @@
   <dialog id="own-dlg" class="dlg" aria-labelledby="own-title"></dialog>
   <dialog id="payback-dlg" class="dlg" aria-labelledby="payback-title"></dialog>
   <dialog id="finish-dlg" class="dlg" aria-labelledby="finish-title"></dialog>
+  <dialog id="stylist-dlg" class="dlg" aria-labelledby="stylist-title"></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <script type="module" src="/src/main.ts"></script>
 </body>

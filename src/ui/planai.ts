@@ -14,7 +14,7 @@ export type Provider = 'gemini' | 'claude';
 export const PROVIDERS: Provider[] = ['gemini', 'claude'];
 export const MODEL = 'claude-opus-5-5';
 export const GEMINI_MODEL = 'gemini-3.8-flash';
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+export const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const KEY: Record<Provider, string> = { gemini: 'flatfit.geminiKey', claude: 'flatfit.claudeKey' };
 const PROVIDER = 'flatfit.aiProvider';
 /** Long edge the models see images at without downscaling them themselves. */

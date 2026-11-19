@@ -46,6 +46,7 @@ import { openListing } from './listing';
 import { openShopping } from './shopping';
 import { openPayback } from './payback';
 import { openFinish } from './finish';
+import { openStylist } from './stylist';
 import { openOwn, removeOwn } from './own';
 
 export { fmtNum, fmtDate, dimTxt, localeOf } from './format';
@@ -280,6 +281,14 @@ export class App {
     this.preset = r.reached ? 'budget' : 'cheap';
     this.budget = amount;
     toast(r.reached ? t('budget.done', { v: this.fmt(r.total), b: this.fmt(amount) }) : t('budget.min', { v: this.fmt(r.minimum) }));
+    this.afterChange();
+  }
+  /** A whole setup chosen elsewhere (the AI stylist): undoable like any other change. */
+  applySelection(sel: Selection) {
+    if (!this.ix) return;
+    this.remember();
+    this.sel = fixDeps(sel, this.ix);
+    this.preset = 'custom';
     this.afterChange();
   }
   setSlot(slot: SlotId, id: string) {
@@ -665,6 +674,7 @@ export class App {
     $('#shop').addEventListener('click', () => openShopping(this));
     $('#payback').addEventListener('click', () => openPayback(this));
     $('#finish').addEventListener('click', () => openFinish(this));
+    $('#stylist').addEventListener('click', () => openStylist(this));
     $('#listing').addEventListener('click', () => openListing(this));
     $('#render-btn').addEventListener('click', () => this.render.open());
     document.querySelectorAll<HTMLElement>('[data-turn]').forEach(b => {
