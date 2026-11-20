@@ -72,3 +72,14 @@ describe('AI stylist within a budget', () => {
     expect(ix.byId.get(r.sel.sofa!)!.name).toMatch(/razvla|ležaj|lezaj/i);
   });
 });
+
+describe('narrow balcony', () => {
+  it('a bistro set fits a terrace 1.35 m wide', () => {
+    const p = {
+      ...DEMO,
+      rooms: DEMO.rooms.map(r => (r.type === 'terrace' ? { ...r, w: 1.35, d: 3.4, z: -3.4 } : r)),
+    };
+    const sel = generate('cheap', p, ix, TODAY);
+    expect(fitIssues(p, sel, ix).filter(i => i.slot === 'terrace')).toEqual([]);
+  });
+});

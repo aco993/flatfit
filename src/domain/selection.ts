@@ -44,7 +44,8 @@ const DEFAULT_CM: Partial<Record<SlotId, [number, number, number]>> = {
   washer: [60, 57, 85],
   hall: [60, 30, 100],
   hooks: [50, 8, 15],
-  terrace: [120, 120, 75],
+  // a bistro set as it stands on a narrow balcony: a 60 cm table with a chair at each end
+  terrace: [150, 60, 75],
   curtains: [140, 2, 250],
   rods: [210, 3, 3],
   pendant: [40, 40, 30],
