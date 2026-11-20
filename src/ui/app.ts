@@ -8,7 +8,7 @@ import { feedUrl, loadHistory } from '../data/history';
 import { priceStats, type Series } from '../domain/history';
 import { activeSlots } from '../domain/slots';
 import { autoLayout, autoViews, type Layout } from '../domain/layout';
-import { MOVABLE, applyMoves, moveIssues, moveKey, snapPose, turnPose, type Pose } from '../domain/moves';
+import { MOVABLE, applyMoves, footprints, moveIssues, moveKey, snapPose, turnPose, type Pose } from '../domain/moves';
 import { bounds, mainId, mainRooms, spaceArea } from '../domain/geometry';
 import { withinBudget } from '../domain/budget';
 import {
@@ -309,7 +309,9 @@ export class App {
     this.baseLayout = autoLayout(this.project, this.D);
     this.layout = applyMoves(this.baseLayout, this.project.moves);
     if (newViews) {
-      this.views = autoViews(this.project);
+      // the camera does not stand inside a wardrobe or a fridge
+      const tall = this.layout.placements.filter(pl => this.D(pl.slot).h > 1.1).flatMap(pl => footprints(pl, this.D));
+      this.views = autoViews(this.project, (x, z) => tall.some(r => x > r.x1 - 0.2 && x < r.x2 + 0.2 && z > r.z1 - 0.2 && z < r.z2 + 0.2));
       this.viewIdx = Math.min(this.viewIdx, this.views.length - 1);
       this.renderViews();
     }

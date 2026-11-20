@@ -495,8 +495,11 @@ export function autoLayout(p: Project, D: DimsFn): Layout {
   return { placements, fixtures, curtains };
 }
 
-/** Camera views: an overview plus one view per room from the corner nearest its door. */
-export function autoViews(p: Project): View[] {
+/**
+ * Camera views: an overview plus one view per room from the corner nearest its door. `blocked` says where a tall
+ * piece of furniture stands (a wardrobe in that corner); such a corner is skipped for the next best one.
+ */
+export function autoViews(p: Project, blocked: (x: number, z: number) => boolean = () => false): View[] {
   const b = {
     x1: Math.min(...p.rooms.map(r => r.x)),
     z1: Math.min(...p.rooms.map(r => r.z)),
@@ -531,6 +534,13 @@ export function autoViews(p: Project): View[] {
       [r.x + r.w, r.z + r.d],
     ];
     let pick = corners[3];
+    // where the camera would stand in a corner, and whether that spot is free
+    const spot = (c: [number, number]) => {
+      const small = Math.min(r.w, r.d) < 1.2,
+        inset = small ? 0.2 : 0.35;
+      return [c[0] + (c[0] === r.x ? 1 : -1) * inset, c[1] + (c[1] === r.z ? 1 : -1) * inset] as const;
+    };
+    const free = (c: [number, number]) => !blocked(...spot(c));
     if (door) {
       // stand on the door's wall, but away from the door leaf that swings into the room
       const s = openingSpan(door, p.rooms)!;
@@ -538,17 +548,20 @@ export function autoViews(p: Project): View[] {
       const dist = (c: [number, number]) => Math.hypot(c[0] - dp[0], c[1] - dp[1]);
       const onWall = (c: [number, number]) => Math.abs((s.axis === 'x' ? c[1] : c[0]) - s.c) < 1e-3;
       const clear = corners.filter(c => dist(c) >= 1.0);
-      pick =
-        clear.filter(onWall).sort((a, b) => dist(a) - dist(b))[0] ||
-        clear.sort((a, b) => dist(a) - dist(b))[0] ||
-        corners.slice().sort((a, b) => dist(a) - dist(b))[0];
+      const order = [
+        ...clear.filter(onWall).sort((a, b) => dist(a) - dist(b)),
+        ...clear.filter(c => !onWall(c)).sort((a, b) => dist(a) - dist(b)),
+        ...corners.slice().sort((a, b) => dist(a) - dist(b)),
+      ];
+      pick = order.find(free) || order[0];
     } else {
       // open-plan room: look from the open side toward the windows
       const win = p.openings.find(o => o.room === r.id && (o.kind === 'window' || o.kind === 'balcony'));
       if (win) {
         const s = openingSpan(win, p.rooms)!;
         const wp: [number, number] = s.axis === 'x' ? [(s.a + s.b) / 2, s.c] : [s.c, (s.a + s.b) / 2];
-        pick = corners.slice().sort((a, b) => Math.hypot(b[0] - wp[0], b[1] - wp[1]) - Math.hypot(a[0] - wp[0], a[1] - wp[1]))[0];
+        const order = corners.slice().sort((a, b) => Math.hypot(b[0] - wp[0], b[1] - wp[1]) - Math.hypot(a[0] - wp[0], a[1] - wp[1]));
+        pick = order.find(free) || order[0];
       }
     }
     // a small open-plan room (kitchen niche): look at it from the room it opens into
