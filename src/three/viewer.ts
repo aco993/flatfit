@@ -272,7 +272,10 @@ export class Viewer {
     const composer = new EffectComposer(this.renderer, target);
     composer.addPass(new RenderPass(this.scene, this.camera));
     const ao = new GTAOPass(this.scene, this.camera, Math.max(1, w), Math.max(1, h));
-    ao.updateGtaoMaterial({ radius: 0.5, distanceExponent: 1, thickness: 1, scale: 1.5 });
+    // a short radius and thin occluders: soft shade in corners and under cabinets, no dark halo behind a fridge or
+    // a chair; more samples and a wider denoise, or Intel GPUs show it as grain (compared frame by frame, 21.11.)
+    ao.updateGtaoMaterial({ radius: 0.25, distanceExponent: 2, thickness: 0.3, scale: 1, samples: 32 });
+    ao.updatePdMaterial({ radius: 12, samples: 24, rings: 3, lumaPhi: 10, depthPhi: 2, normalPhi: 3 });
     ao.blendIntensity = 1;
     composer.addPass(ao);
     composer.addPass(new OutputPass());
