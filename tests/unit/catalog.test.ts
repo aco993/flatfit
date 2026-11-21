@@ -43,10 +43,14 @@ describe.each(Object.entries(CATS))('catalogue %s', (id, cat) => {
         }
     }
   });
-  it('furniture that stands on the floor has sizes (needed for fit checks)', () => {
+  it('furniture that stands on the floor has width, depth and height (fit checks and the 3D view use them)', () => {
+    // a terrace set is a table and folding chairs, placed as the balcony allows; it has a size of its own in selection.ts
     for (const p of cat.products)
-      if (['sofa', 'bed', 'wardrobe', 'tvunit', 'kitchen', 'table', 'coffee', 'night', 'hall'].includes(p.slot))
-        expect(p.w, p.id).toBeGreaterThan(0);
+      if (['sofa', 'bed', 'wardrobe', 'tvunit', 'kitchen', 'table', 'coffee', 'night', 'hall', 'washer', 'fridge'].includes(p.slot)) {
+        expect(p.w, `${p.id} width`).toBeGreaterThan(0);
+        if (!p.round) expect(p.d, `${p.id} depth`).toBeGreaterThan(0);
+        expect(p.h, `${p.id} height`).toBeGreaterThan(0);
+      }
   });
   it('stores without a reader of their own name a known one, and model codes are plain text', () => {
     for (const s of cat.stores) if (s.reader) expect(['page'], s.id).toContain(s.reader);

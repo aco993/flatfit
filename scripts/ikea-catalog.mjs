@@ -93,7 +93,8 @@ const WORDS = {
     accept: 'de-DE,de;q=0.9',
     width: ['Breite', 'Länge', 'Durchmesser', 'Bildschirmdiagonale'],
     depth: ['Tiefe', 'Länge'],
-    height: ['Höhe', 'Max. Höhe', 'Gesamthöhe'],
+    // sofas give the height with the back cushions, beds the headboard, mattresses and slatted bases their thickness
+    height: ['Höhe', 'Max. Höhe', 'Gesamthöhe', 'Höhe inkl. Rückenpolster', 'Kopfteilhöhe', 'Stärke'],
     len: 'Länge',
     wid: 'Breite',
     dia: 'Durchmesser',
@@ -107,7 +108,7 @@ const WORDS = {
     accept: 'hr-HR,hr;q=0.9',
     width: ['Širina', 'Duljina', 'Promjer', 'Dijagonala zaslona'],
     depth: ['Dubina', 'Duljina'],
-    height: ['Visina', 'Maks. visina', 'Ukupna visina'],
+    height: ['Visina', 'Maks. visina', 'Ukupna visina', 'Visina uključujući jastuke za leđa', 'Visina uzglavlja', 'Debljina'],
     len: 'Duljina',
     wid: 'Širina',
     dia: 'Promjer',
