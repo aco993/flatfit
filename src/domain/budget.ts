@@ -27,8 +27,10 @@ export function withinBudget(
   ix: Index,
   today: string,
   style: Exclude<Style, 'cheap'> = 'light',
+  /** pieces that stay as they are (a product id), or stay out (''): the budget is spent around them */
+  pinned: Partial<Record<SlotId, string>> = {},
 ): BudgetResult {
-  const base = generate('cheap', proj, ix, today);
+  const base = pin(generate('cheap', proj, ix, today), pinned, ix);
   const minimum = total(lines(proj, base, ix, today));
   if (budget <= minimum) return { sel: base, total: minimum, minimum, reached: budget >= minimum };
   const hardOf = (s: Selection) =>
@@ -46,13 +48,19 @@ export function withinBudget(
   const groups: { slot: SlotId; opts: Opt[] }[] = [];
   for (const sd of activeSlots(proj)) {
     if (sd.dependent) continue;
-    const cands = (ix.bySlot.get(sd.id) || []).filter(p => p.price > 0);
+    const pinnedId = pinned[sd.id];
+    const cands = (ix.bySlot.get(sd.id) || []).filter(p => p.price > 0 && (pinnedId === undefined || p.id === pinnedId));
+    if (pinnedId === '') {
+      groups.push({ slot: sd.id, opts: [{ id: null, cost: 0, value: 0 }] });
+      continue;
+    }
     if (!cands.length) continue;
     const opts: Opt[] = [];
     const raw: { p: Product; cost: number }[] = [];
     for (const p of cands) {
       const trial = fixDeps({ ...base, [sd.id]: p.id }, ix);
-      if ([...hardOf(trial)].some(k => !baseHard.has(k))) continue; // does not fit this flat
+      // does not fit this flat (a piece the person keeps stays anyway; its warning shows in the list)
+      if (pinnedId === undefined && [...hardOf(trial)].some(k => !baseHard.has(k))) continue;
       const cost = costIn(trial, sd.id);
       if (cost > 0) raw.push({ p, cost });
     }
@@ -118,6 +126,16 @@ export function withinBudget(
     cap -= sum - budget + step; // quantities interact (rods follow curtains); try again a little lower
   }
   return { sel: best, total: total(lines(proj, best, ix, today)), minimum, reached: false };
+}
+
+/** A selection with the pinned pieces put in (or taken out), and what depends on them fixed. */
+export function pin(sel: Selection, pinned: Partial<Record<SlotId, string>>, ix: Index): Selection {
+  const out: Selection = { ...sel };
+  for (const [slot, id] of Object.entries(pinned) as [SlotId, string][]) {
+    if (id) out[slot] = id;
+    else delete out[slot];
+  }
+  return fixDeps(out, ix);
 }
 
 /** dependent slots and the main piece they follow */

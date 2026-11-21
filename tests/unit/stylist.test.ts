@@ -3,11 +3,23 @@ import rs from '../../src/data/catalogs/rs.json';
 import type { Catalog } from '../../src/types';
 import { DEMO } from '../../src/data/demo';
 import { fitIssues, generate, indexCatalog, lines, total } from '../../src/domain/selection';
-import { applyBrief, briefPrompt, parseBrief, type Brief } from '../../src/domain/stylist';
+import { pin } from '../../src/domain/budget';
+import { applyBrief, briefPrompt, changes, parseBrief, type Brief } from '../../src/domain/stylist';
 
 const ix = indexCatalog(rs as Catalog);
 const TODAY = '2026-11-20';
-const brief = (b: Partial<Brief>): Brief => ({ style: 'warm', budget: null, include: [], exclude: [], sofaBed: false, note: '', ...b });
+const brief = (b: Partial<Brief>): Brief => ({
+  style: 'warm',
+  budget: null,
+  include: [],
+  exclude: [],
+  sofaBed: false,
+  keep: [],
+  only: [],
+  direction: 'other',
+  note: '',
+  ...b,
+});
 
 describe('AI stylist', () => {
   it('accepts only the fields and values the planner knows', () => {
@@ -19,15 +31,31 @@ describe('AI stylist', () => {
       include: ['tv', 'tv', 'sofa', 'pony'],
       exclude: ['tv', 'hooks'],
       sofaBed: 'yes',
+      keep: ['sofa', 'bed', 'worktop', 'hooks'],
+      only: ['bed', 'unicorn'],
+      direction: 'sideways',
       note: 'x',
     })!;
-    expect(b).toEqual({ style: 'dark', budget: 250000, include: ['tv'], exclude: ['hooks'], sofaBed: false, note: 'x' });
+    expect(b).toEqual({
+      style: 'dark',
+      budget: 250000,
+      include: ['tv'],
+      exclude: ['hooks'],
+      sofaBed: false,
+      keep: ['sofa'],
+      only: ['bed'],
+      direction: 'other',
+      note: 'x',
+    });
     expect(parseBrief({ style: 'light', budget: -5, include: 'tv', exclude: null, sofaBed: true, note: 3 })).toEqual({
       style: 'light',
       budget: null,
       include: [],
       exclude: [],
       sofaBed: true,
+      keep: [],
+      only: [],
+      direction: 'other',
       note: '',
     });
   });
@@ -81,5 +109,54 @@ describe('narrow balcony', () => {
     };
     const sel = generate('cheap', p, ix, TODAY);
     expect(fitIssues(p, sel, ix).filter(i => i.slot === 'terrace')).toEqual([]);
+  });
+});
+
+describe('AI stylist as a conversation', () => {
+  const first = applyBrief(brief({ style: 'warm', include: ['tv'] }), DEMO, ix, TODAY);
+  const price = (id?: string) => ix.byId.get(id!)!.price;
+
+  it('changes only the piece the follow-up is about', () => {
+    const r = applyBrief(brief({ style: 'warm', include: ['tv'], only: ['sofa'], direction: 'other' }), DEMO, ix, TODAY, first.sel);
+    const diff = changes(first.sel, r.sel, ix);
+    expect(diff.map(d => d.slot)).toEqual(['sofa']);
+    expect(r.sel.sofa).not.toBe(first.sel.sofa);
+  });
+  it('finds a cheaper one when asked, and leaves it as it is when there is none', () => {
+    const tvs = ix.bySlot
+      .get('tv')!
+      .filter(p => p.price > 0)
+      .sort((x, y) => x.price - y.price);
+    const dear = { ...first.sel, tv: tvs.at(-1)!.id };
+    const ask = brief({ style: 'warm', include: ['tv'], only: ['tv'], direction: 'cheaper' });
+    const r = applyBrief(ask, DEMO, ix, TODAY, dear);
+    expect(changes(dear, r.sel, ix).map(d => d.slot)).toEqual(['tv']);
+    expect(price(r.sel.tv)).toBeLessThan(price(dear.tv));
+    const cheapest = { ...first.sel, tv: tvs[0].id };
+    expect(applyBrief(ask, DEMO, ix, TODAY, cheapest).sel.tv).toBe(tvs[0].id);
+  });
+  it('keeps the pieces named, even when the whole look or the budget changes', () => {
+    const kept = { sofa: first.sel.sofa!, bed: first.sel.bed! };
+    const least = total(lines(DEMO, pin(generate('cheap', DEMO, ix, TODAY), kept, ix), ix, TODAY));
+    const budget = Math.round(least * 1.1);
+    const r = applyBrief(brief({ style: 'dark', budget, keep: ['sofa', 'bed'] }), DEMO, ix, TODAY, first.sel);
+    expect(r.sel.sofa).toBe(first.sel.sofa);
+    expect(r.sel.bed).toBe(first.sel.bed);
+    expect(r.total).toBeLessThanOrEqual(budget);
+  });
+  it('tells the model what was asked before and what the list holds now', () => {
+    const p = briefPrompt('a cheaper TV', {
+      currency: 'RSD',
+      lang: 'sr',
+      rooms: 'living 15.6 m²',
+      cheapest: 1,
+      current: 2,
+      earlier: [{ wish: 'warm, with a TV', brief: brief({ include: ['tv'] }) }],
+      setup: 'tv: Samsung 43, RSD 39,999',
+    });
+    expect(p).toContain('This is a follow-up');
+    expect(p).toContain('warm, with a TV');
+    expect(p).toContain('Samsung 43');
+    expect(p).toContain('"include":["tv"]');
   });
 });

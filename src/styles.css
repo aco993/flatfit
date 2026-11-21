@@ -1587,3 +1587,36 @@ details.ai .note a {
   margin: 0;
   color: var(--ink-2);
 }
+
+/* the stylist as a conversation: earlier wishes and what each one changed */
+.sty-log {
+  max-height: 38vh;
+  overflow: auto;
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.sty-log[hidden] {
+  display: none;
+}
+.sty-turn p {
+  margin: 0 0 4px;
+}
+.sty-note {
+  font-weight: 600;
+}
+.sty-diff {
+  margin: 4px 0;
+  padding-left: 18px;
+  font-size: 13px;
+}
+.sty-key summary {
+  cursor: pointer;
+  color: var(--ink-2);
+  font-size: 13px;
+  margin: 6px 0;
+}
