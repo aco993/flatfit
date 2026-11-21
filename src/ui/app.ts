@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import type { Lang, Moves, Product, Project, SlotId, View } from '../types';
 import { LANGS, detectLang, getLang, t, tt, useLang, type Key } from '../i18n';
 import { COUNTRIES, country, loadCatalog, money } from '../data/countries';
@@ -27,13 +26,14 @@ import {
 } from '../domain/selection';
 import { deleteProject, loadOwn, loadPrefs, loadPriceUpdates, loadProjects, savePrefs, saveProject, type Prefs } from '../store';
 import { validOwn, withOwn } from '../domain/own';
-import { Viewer } from '../three/viewer';
-import { Materials, type WoodTone } from '../three/materials';
-import { Models } from '../three/models';
-import { buildApartment } from '../three/build';
+import type { Viewer } from '../three/viewer';
+import type { Materials } from '../three/materials';
+import type { Models } from '../three/models';
+import type { WoodTone } from '../data/wood';
 import { RenderDialog } from './render';
 import { openEditor } from './editor';
 import { $, esc, toast } from './dom';
+import { softwareGL } from './gl';
 import { fmtNum, localeOf, today } from './format';
 import { makeLink, readLink } from './share';
 import { History } from './history';
@@ -90,8 +90,13 @@ export class App {
   viewIdx = 0;
   selected: SlotId | null = null;
   viewer: Viewer | null = null;
-  M = new Materials();
-  models = new Models();
+  /** made with the 3D view, which loads after the list (see load3D) */
+  M!: Materials;
+  models!: Models;
+  private kit: typeof import('../three/kit') | null = null;
+  private kitLoading: Promise<boolean> | null = null;
+  /** the 3D view is settled: drawn, or not coming (no WebGL), or waiting for the person to ask for it */
+  private settled3D = false;
   render = new RenderDialog(this);
   prices = new PriceRefresh(this);
   /** price changes per product id, from the git history of the catalogue (data/history.ts) */
@@ -119,21 +124,72 @@ export class App {
     this.hashSel = link.selection || null;
     this.prefs.country ||= this.project.country;
 
-    try {
-      this.viewer = new Viewer($('#viewer'), $('#labels'));
-      this.viewer.onPick = s => this.select(s, false);
-      this.viewer.drag = this.dragHandler();
-    } catch (e) {
-      // no WebGL (old GPU, blocked, headless browser): the list and prices still work without the 3D view
-      console.warn('3D view unavailable:', e);
-      $('#nogl').hidden = false;
-      $('#render-btn').hidden = true;
-    }
     this.bindChrome();
     this.applyLang();
     await this.loadCountry(this.prefs.country!, this.hashSel);
-    this.loadModelsLater();
+    // the list is on screen; three.js and the 3D view come next, when the browser has a moment
+    const go = () => void this.ensure3D();
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 600 });
+    else setTimeout(go, 50);
     window.addEventListener('keydown', e => onKey(this, e));
+  }
+
+  /**
+   * Loads three.js and makes the 3D view. Where the browser draws without a graphics card (software rendering:
+   * some virtual machines, remote desktops, blocked drivers) the first frame compiles every shader on the CPU and
+   * freezes the page for seconds, so there the view waits for the person to ask for it (`force`), and from then on
+   * starts by itself. Returns whether the view is drawn.
+   */
+  ensure3D(force = false): Promise<boolean> {
+    if (this.viewer && !$('#start-3d').hidden && force) return Promise.resolve(this.begin3D());
+    // a CPU-drawn browser is recognised without three.js, so it does not even load three.js until asked
+    if (!force && !this.kitLoading && this.prefs.gl3d !== 'always' && softwareGL()) {
+      $('#start-3d').hidden = false;
+      this.markSettled();
+      return Promise.resolve(false);
+    }
+    this.kitLoading ||= import('../three/kit').then(
+      kit => {
+        this.kit = kit;
+        this.M = new kit.Materials();
+        this.models = new kit.Models();
+        try {
+          this.viewer = new kit.Viewer($('#viewer'), $('#labels'));
+          this.viewer.onPick = s => this.select(s, false);
+          this.viewer.drag = this.dragHandler();
+        } catch (e) {
+          // no WebGL (old GPU, blocked, headless browser): the list and prices still work without the 3D view
+          console.warn('3D view unavailable:', e);
+          $('#nogl').hidden = false;
+          $('#render-btn').hidden = true;
+          this.markSettled();
+          return false;
+        }
+        if (this.viewer.soft && !force && this.prefs.gl3d !== 'always') {
+          $('#start-3d').hidden = false;
+          this.markSettled();
+          return false;
+        }
+        return this.begin3D();
+      },
+      e => {
+        console.warn('3D view did not load:', e);
+        this.kitLoading = null;
+        return false;
+      },
+    );
+    return this.kitLoading.then(ok => ok || (force && !!this.viewer && this.begin3D()));
+  }
+  private begin3D() {
+    if (!this.viewer) return false;
+    if (!$('#start-3d').hidden || this.viewer.soft) {
+      $('#start-3d').hidden = true;
+      this.prefs.gl3d = 'always';
+      savePrefs(this.prefs);
+    }
+    if (this.ix) this.setView(this.viewIdx, true, true);
+    this.loadModelsLater();
+    // "see it in your room" needs three.js too, so it is checked once the 3D view is there
     import('../three/ar')
       .then(m => m.arSupport())
       .then(mode => {
@@ -141,6 +197,12 @@ export class App {
         if (mode && this.selected) renderCard(this);
       })
       .catch(() => undefined);
+    this.markSettled();
+    return true;
+  }
+  private markSettled() {
+    this.settled3D = true;
+    if (this.ix) document.body.dataset.ready = '1';
   }
 
   /**
@@ -320,7 +382,7 @@ export class App {
     this.rebuildTimer = window.setTimeout(() => {
       if (newViews) this.setView(this.viewIdx, true, true);
       else this.rebuild();
-      document.body.dataset.ready = '1';
+      if (this.settled3D) document.body.dataset.ready = '1';
     }, 20);
     this.renderHistory();
   }
@@ -429,15 +491,13 @@ export class App {
       this.movePiece(key, turnPose(key, p, this.D));
       return true;
     }
-    const dir = new THREE.Vector3();
-    this.viewer?.camera.getWorldDirection(dir);
-    dir.y = 0;
-    if (dir.lengthSq() < 1e-6) dir.set(0, 0, -1);
-    dir.normalize();
-    const v = new THREE.Vector3(-dir.z, 0, dir.x).multiplyScalar(dx).add(dir.clone().multiplyScalar(-dz)),
+    const [fx, fz] = this.viewer && this.kit ? this.kit.groundDir(this.viewer.camera) : [0, -1];
+    // right of the camera times dx, minus forward times dz
+    const vx = -fz * dx - fx * dz,
+      vz = fx * dx - fz * dz,
       step = 0.05;
     // step along the world axis closest to that direction, so the piece stays on the grid
-    const [sx, sz] = Math.abs(v.x) >= Math.abs(v.z) ? [Math.sign(v.x) * step, 0] : [0, Math.sign(v.z) * step];
+    const [sx, sz] = Math.abs(vx) >= Math.abs(vz) ? [Math.sign(vx) * step, 0] : [0, Math.sign(vz) * step];
     this.movePiece(key, { x: round3(p.x + sx), z: round3(p.z + sz), rot: p.rot });
     return true;
   }
@@ -448,7 +508,7 @@ export class App {
   }
   buildRoot(lowPoly = false, wallH = this.wallH()) {
     const f = this.layout && this.ix ? { product: this.product, dims: this.D, layout: this.layout } : null;
-    return buildApartment(
+    return this.kit!.buildApartment(
       this.project,
       f,
       { wallH, lowPoly: lowPoly || !!this.viewer?.soft, wallHex: this.wall || undefined, floor: this.floor || undefined },
@@ -457,9 +517,8 @@ export class App {
     );
   }
   rebuild() {
-    if (!this.viewer) return;
-    const b = bounds(this.project.rooms);
-    this.viewer.setRoot(this.buildRoot(), new THREE.Box3(new THREE.Vector3(b.x1, 0, b.z1), new THREE.Vector3(b.x2, 3, b.z2)));
+    if (!this.viewer || !this.kit || !$('#start-3d').hidden) return;
+    this.viewer.setRoot(this.buildRoot(), this.kit.flatBox(bounds(this.project.rooms)));
     const labels = this.views[this.viewIdx]?.interior
       ? []
       : mainRooms(this.project).map(r => ({
@@ -679,6 +738,7 @@ export class App {
     $('#stylist').addEventListener('click', () => openStylist(this));
     $('#listing').addEventListener('click', () => openListing(this));
     $('#render-btn').addEventListener('click', () => this.render.open());
+    $('#start-3d').addEventListener('click', () => void this.ensure3D(true));
     document.querySelectorAll<HTMLElement>('[data-turn]').forEach(b => {
       b.addEventListener('click', () => this.viewer?.turn(b.dataset.turn === 'left' ? 0.35 : -0.35, 0));
     });

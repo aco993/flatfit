@@ -1567,3 +1567,23 @@ details.ai .note a {
 .sty-form p {
   margin: 0;
 }
+
+/* software rendering: the 3D view waits for the person to ask for it */
+.start3d {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+}
+.start3d[hidden] {
+  display: none;
+}
+.start3d p {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--ink-2);
+}

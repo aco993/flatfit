@@ -1,35 +1,8 @@
 import * as THREE from 'three';
 import type { WebGLPathTracer as PT } from 'three-gpu-pathtracer';
+import { Cancelled, QUALITY, outputSize, type Progress, type Quality } from './quality';
 
-export type Quality = 'fast' | 'balanced' | 'high';
-export const QUALITY: Record<Quality, { maxW: number; samples: number }> = {
-  fast: { maxW: 640, samples: 16 },
-  balanced: { maxW: 960, samples: 40 },
-  high: { maxW: 1440, samples: 128 },
-};
-
-/** Weak or unknown GPUs start at "fast"; the user can always pick another level. */
-export function suggestQuality(): Quality {
-  try {
-    const gl = document.createElement('canvas').getContext('webgl2');
-    if (!gl) return 'fast';
-    const ext = gl.getExtension('WEBGL_debug_renderer_info');
-    const name = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
-    gl.getExtension('WEBGL_lose_context')?.loseContext();
-    if (/Mobile|Android|iPhone|iPad/i.test(navigator.userAgent) || /SwiftShader|llvmpipe|Mali|Adreno|PowerVR/i.test(name)) return 'fast';
-    if (/Intel|UHD|Iris|Apple GPU/i.test(name)) return 'fast';
-    if (/RTX|Radeon RX|Apple M[2-9]|Arc/i.test(name)) return 'high';
-    return 'balanced';
-  } catch {
-    return 'fast';
-  }
-}
-
-export type Progress =
-  | { phase: 'scene' }
-  | { phase: 'compile'; seconds: number }
-  | { phase: 'samples'; samples: number; target: number; eta: number | null; tiles: number }
-  | { phase: 'recover'; attempt: number };
+export { Cancelled, QUALITY, outputSize, suggestQuality, type Progress, type Quality } from './quality';
 
 export interface TraceInput {
   root: THREE.Object3D;
@@ -44,12 +17,6 @@ export interface TraceInput {
   finish: () => boolean;
   /** abandon completely */
   cancel: () => boolean;
-}
-
-export class Cancelled extends Error {
-  constructor() {
-    super('cancelled');
-  }
 }
 
 interface Engine {
@@ -122,11 +89,6 @@ function skyTexture() {
   t.needsUpdate = true;
   return t;
 }
-
-export const outputSize = (cssW: number, cssH: number, q: Quality) => {
-  const k = Math.min(1, QUALITY[q].maxW / Math.max(1, cssW));
-  return { w: Math.max(64, Math.round(cssW * k)), h: Math.max(48, Math.round(cssH * k)) };
-};
 
 /**
  * Path traces the scene. Each call to the GPU covers one tile; the next tile is only queued after the GPU

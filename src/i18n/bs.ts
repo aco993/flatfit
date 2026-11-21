@@ -357,6 +357,8 @@ const bs: Record<Key, string> = {
   'misc.loading': 'Učitavam…',
   'misc.catalogFail': 'Katalog proizvoda se nije mogao učitati.',
   'misc.noWebgl': 'Ovaj preglednik ne može prikazati 3D (WebGL je isključen).',
+  'misc.start3d': 'Prikaži 3D',
+  'misc.start3dNote': 'Ovaj uređaj crta bez grafičke kartice, pa se 3D prikaz pokreće tek kad ga zatražiš.',
   'misc.area': '{a} m²',
   'misc.feedback': 'Pošalji utisak',
   'intro.title': 'Opremi pravi stan namještajem koji zaista možeš kupiti.',

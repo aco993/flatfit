@@ -3,7 +3,7 @@ import { COATS, LAMINATE_WASTE, PAINT_L_PER_M2, packs, surfaces } from '../domai
 import type { App } from './app';
 import { $, esc } from './dom';
 import { fmtNum } from './format';
-import { WOOD, type WoodTone } from '../three/materials';
+import { WOOD, type WoodTone } from '../data/wood';
 
 const TONES = Object.keys(WOOD) as WoodTone[];
 const toneHex = (t: WoodTone) => `rgb(${WOOD[t].map(v => v + 15).join(',')})`;

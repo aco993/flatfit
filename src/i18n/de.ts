@@ -360,6 +360,8 @@ const de: Record<Key, string> = {
   'misc.loading': 'Lädt…',
   'misc.catalogFail': 'Der Produktkatalog konnte nicht geladen werden.',
   'misc.noWebgl': 'Dieser Browser kann kein 3D anzeigen (WebGL ist aus).',
+  'misc.start3d': '3D-Ansicht zeigen',
+  'misc.start3dNote': 'Dieses Gerät zeichnet ohne Grafikkarte, deshalb startet die 3D-Ansicht erst, wenn du sie anforderst.',
   'misc.area': '{a} m²',
   'misc.feedback': 'Feedback geben',
   'intro.title': 'Eine echte Wohnung mit Möbeln einrichten, die man wirklich kaufen kann.',

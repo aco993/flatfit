@@ -1,5 +1,5 @@
 import type { Lang, Product, Project } from './types';
-import type { Quality } from './three/pathtrace';
+import type { Quality } from './three/quality';
 import { DEMO } from './data/demo';
 import type { Updates } from './data/refresh';
 
@@ -10,6 +10,8 @@ export interface Prefs {
   project?: string;
   theme?: 'light' | 'dark' | 'auto';
   quality?: Quality;
+  /** draw the 3D view even where the device has no graphics card (software rendering), as the person asked once */
+  gl3d?: 'always';
   /** the first-visit introduction was closed */
   intro?: boolean;
 }

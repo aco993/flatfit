@@ -104,14 +104,12 @@ export class Viewer {
     }
     host.appendChild(this.renderer.domElement);
 
-    // soft image-based light; generated after the first frames so it does not hold up the page
     this.scene.environmentIntensity = 0.55;
-    setTimeout(() => this.makeEnv(), 300);
     // contact shadows under furniture and in corners: a desktop GPU only; phones and software rendering keep the plain path
     this.aoWanted = !this.soft && !lowEnd;
-    if (this.aoWanted) setTimeout(() => this.setAO(true), 1500);
     this.scene.background = new THREE.Color('#dfe6ec');
-    const hemi = new THREE.HemisphereLight(0xffffff, 0xcfc6ba, 0.55);
+    // without the image-based light (software rendering) the sky light makes up for it
+    const hemi = new THREE.HemisphereLight(0xffffff, 0xcfc6ba, this.soft ? 1.1 : 0.55);
     this.scene.add(hemi);
     const sun = new THREE.DirectionalLight(0xfff3e2, 1.6);
     sun.position.set(-3, 10, -7);
@@ -144,7 +142,20 @@ export class Viewer {
     loop();
   }
 
+  private started = false;
+  /**
+   * The parts that cost seconds of shader compiling, once the flat is to be drawn: the soft image-based light
+   * (skipped where the CPU draws, since PMREM alone takes seconds there) and, on a desktop GPU, ambient occlusion.
+   */
+  start() {
+    if (this.started) return;
+    this.started = true;
+    if (!this.soft) setTimeout(() => this.makeEnv(), 300);
+    if (this.aoWanted) setTimeout(() => this.setAO(true), 1500);
+  }
+
   setRoot(root: THREE.Object3D, bounds?: THREE.Box3) {
+    this.start();
     if (this.root) {
       this.scene.remove(this.root);
       this.root.traverse(o => {

@@ -1,18 +1,7 @@
 import type { App } from './app';
 import { t, type Key } from '../i18n';
 import { $, esc } from './dom';
-import {
-  Cancelled,
-  QUALITY,
-  denoiseFilter,
-  denoiseOIDN,
-  outputSize,
-  previewInto,
-  suggestQuality,
-  trace,
-  type Progress,
-  type Quality,
-} from '../three/pathtrace';
+import { Cancelled, QUALITY, outputSize, suggestQuality, type Progress, type Quality } from '../three/quality';
 import { savePrefs } from '../store';
 
 /** The "Photoreal render" dialog: pick quality, watch progress, finish early or cancel at any time. */
@@ -42,8 +31,9 @@ export class RenderDialog {
         .join('');
   }
 
-  open() {
-    if (!this.app.viewer) return;
+  async open() {
+    // on a device without a graphics card the 3D view may still be waiting to be asked for
+    if (!(await this.app.ensure3D(true))) return;
     const d = this.dlg;
     if (!d.open) d.showModal();
     this.applyLang();
@@ -134,6 +124,9 @@ export class RenderDialog {
           poll = window.setInterval(() => this.cancelled && res(), 100);
         }),
       ]).finally(() => clearInterval(poll));
+      if (this.cancelled) throw new Cancelled();
+      // the path tracer and the denoisers load only when someone renders
+      const { denoiseFilter, denoiseOIDN, previewInto, trace } = await import('../three/pathtrace');
       if (this.cancelled) throw new Cancelled();
       const root = app.buildRoot(true, interior ? app.project.wallHeight : 1.05);
       await breathe();

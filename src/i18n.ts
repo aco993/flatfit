@@ -356,6 +356,8 @@ const en = {
   'misc.loading': 'Loading…',
   'misc.catalogFail': 'The product catalogue could not be loaded.',
   'misc.noWebgl': 'This browser cannot show 3D (WebGL is off).',
+  'misc.start3d': 'Show the 3D view',
+  'misc.start3dNote': 'This device draws without a graphics card, so the 3D view starts only when you ask for it.',
   'misc.area': '{a} m²',
   'misc.feedback': 'Send feedback',
   'intro.title': 'Furnish a real flat with furniture you can actually buy.',

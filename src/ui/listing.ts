@@ -51,8 +51,8 @@ export function listingData(p: Project, sel: Selection, ix: Index, roomName: (id
 
 /** Snapshots of the interior views, living room first; the 3D view is put back where it was. */
 async function photos(app: App, max: number) {
-  const v = app.viewer;
-  if (!v) return [];
+  if (!(await app.ensure3D(true))) return [];
+  const v = app.viewer!;
   await app.models.load(import.meta.env.BASE_URL);
   const order: Room['type'][] = ['living', 'bedroom', 'dining', 'kitchen', 'bathroom', 'terrace'];
   const room = (i: number) => app.project.rooms.find(r => r.id === app.views[i].room);

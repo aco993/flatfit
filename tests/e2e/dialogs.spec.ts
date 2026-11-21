@@ -46,3 +46,27 @@ test.describe('Mira · opens every dialog with a screen reader', () => {
     await expect(page.locator('#own-dlg')).toBeHidden();
   });
 });
+
+test.describe('Ivo · an old laptop without a graphics card', () => {
+  test.use({ locale: 'en-GB', storageState: { cookies: [], origins: [] } });
+  test('the list comes first, the 3D view starts when he asks for it, and next time by itself', async ({ page }) => {
+    await page.goto('./#c=rs&l=en');
+    await ready(page);
+    await expect(page.locator('#summary')).toContainText('RSD');
+    const start = page.getByRole('button', { name: 'Show the 3D view' });
+    await expect(start).toBeVisible();
+    // three.js is not even downloaded until he asks
+    const threeLoaded = () => page.evaluate(() => performance.getEntriesByType('resource').some(e => /\/three-[\w-]+\.js$/.test(e.name)));
+    expect(await threeLoaded()).toBe(false);
+    expect(await page.evaluate(() => window.flatfit.viewer)).toBeNull();
+    await start.click();
+    await expect(start).toBeHidden();
+    expect(await threeLoaded()).toBe(true);
+    expect(await page.evaluate(() => window.flatfit.viewer?.soft)).toBe(true);
+    await expect.poll(() => page.evaluate(() => !!window.flatfit.viewer?.slotCenter('sofa'))).toBe(true);
+    await page.reload();
+    await ready(page);
+    await expect(page.getByRole('button', { name: 'Show the 3D view' })).toBeHidden();
+    await expect.poll(() => page.evaluate(() => !!window.flatfit.viewer?.slotCenter('sofa'))).toBe(true);
+  });
+});
