@@ -1,5 +1,5 @@
-import type { Room, Side } from '../types';
-import { edgeOf } from './geometry';
+import type { Project, Room, Side } from '../types';
+import { deriveWalls, edgeOf } from './geometry';
 
 /**
  * Geometry of editing a floor plan by hand: grid and edge snapping, the wall nearest to a click, rooms that touch.
@@ -92,4 +92,27 @@ export function extensionSpot(rooms: Room[], r: Room, size = 1.5) {
       return !(ox > 0.01 && oz > 0.01);
     });
   return spots.find(free) || null;
+}
+
+/**
+ * Where a door or window clicked on a wall goes. It is centred on the click and may run past the clicked room's
+ * corner along the same straight wall, as an entrance does where a hall opens into the dining room: it only has to
+ * stay on the wall. It belongs to the room in which it starts, on the clicked side.
+ */
+export function placeOpening(p: Pick<Project, 'rooms' | 'open'>, hit: { r: Room; side: Side; along: number }, want: number) {
+  const e = edgeOf(hit.r, hit.side),
+    click = e.a1 + hit.along;
+  const wall = deriveWalls({ ...p, openings: [] } as unknown as Project).find(
+    w => w.axis === e.axis && Math.abs(w.c - e.c) < 1e-3 && click >= w.a1 - 1e-3 && click <= w.a2 + 1e-3,
+  );
+  // no wall here (an open-plan edge): keep to the clicked room's edge, as before
+  const [lo, hi] = wall ? [wall.a1, wall.a2] : [e.a1, e.a2];
+  const width = r2(Math.min(want, hi - lo - 0.1));
+  const a = r2(Math.min(Math.max(lo + 0.05, snap(click - width / 2)), hi - width - 0.05));
+  const owner =
+    p.rooms.find(r => {
+      const x = edgeOf(r, hit.side);
+      return x.axis === e.axis && Math.abs(x.c - e.c) < 1e-3 && a >= x.a1 - 1e-3 && a < x.a2 - 1e-3;
+    }) || hit.r;
+  return { room: owner.id, side: hit.side, at: r2(a - edgeOf(owner, hit.side).a1), width };
 }

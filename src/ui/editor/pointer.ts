@@ -1,5 +1,5 @@
 import type { OpeningKind } from '../../types';
-import { SNAP, dragRoom, edgeSnap, nearestWall, r2, snap, uid } from '../../domain/planedit';
+import { SNAP, dragRoom, edgeSnap, nearestWall, placeOpening, r2, uid } from '../../domain/planedit';
 import { side } from './view';
 import { type EditorState, selRoom } from './state';
 
@@ -33,10 +33,10 @@ export function bindPointer(S: EditorState) {
     if (S.mode === 'op') {
       const hit = nearestWall(draft.rooms, pt(e));
       if (!hit || hit.len < 0.6) return;
-      const width = Math.min(DEFAULT_W[S.opKind], r2(hit.len - 0.1)),
-        at = Math.min(Math.max(0.05, snap(hit.along - width / 2)), r2(hit.len - width - 0.05));
-      draft.openings.push({ id: uid('o', draft.openings), kind: S.opKind, room: hit.r.id, side: hit.side, at, width });
-      S.selId = hit.r.id;
+      const o = placeOpening(draft, hit, DEFAULT_W[S.opKind]);
+      if (o.width < 0.4) return;
+      draft.openings.push({ id: uid('o', draft.openings), kind: S.opKind, ...o });
+      S.selId = o.room;
       S.redraw();
       return;
     }
