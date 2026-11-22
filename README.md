@@ -9,7 +9,7 @@
 
 **[Live demo](https://aco993.github.io/flatfit/)** · English · Deutsch · Srpski · Bosanski · Hrvatski · 🇷🇸 🇧🇦 🇭🇷 🇩🇪 🇦🇹
 
-![FlatFit: a wish in one sentence furnishes the flat from the Serbian catalogue within the budget; a follow-up changes only the coffee table and the rug; the living room in 3D; a bedroom made L-shaped in the floor-plan editor](docs/demo.gif)
+![FlatFit: a wish in one sentence furnishes the flat from the Serbian catalogue within the budget; a follow-up changes only the coffee table and the rug; the living room in 3D; the bedroom with an upholstered bed and a wardrobe with long handles; the bedroom made L-shaped in the floor-plan editor](docs/demo.gif)
 
 <sub>Recorded on the built site with an Intel laptop GPU. The AI stylist's two answers come from a stand-in here; with your own Gemini or Claude key the model answers the same way, with settings only, and FlatFit picks the products.</sub>
 
@@ -59,7 +59,7 @@ They are better at what they do: huge model libraries, realistic renders, scanni
 
 | Desktop | Phone | Floor-plan editor | Photoreal render |
 |---|---|---|---|
-| ![The living room in 3D with a sofa bed, coffee table and rug, next to the shopping list](docs/screenshot-desktop.jpg) | ![](docs/screenshot-phone.jpg) | ![The floor-plan editor with the bedroom extended into an L shape](docs/screenshot-editor.jpg) | ![](docs/screenshot-render.jpg) |
+| ![The living room in 3D with a sofa bed, coffee table and rug, next to the shopping list](docs/screenshot-desktop.jpg) | ![The living room on a phone, in Serbian, with the sofa and its cushions on slim legs](docs/screenshot-phone.jpg) | ![The floor-plan editor with the bedroom extended into an L shape](docs/screenshot-editor.jpg) | ![The living room path-traced on the GPU and denoised](docs/screenshot-render.jpg) |
 
 | Price history | Shopping list by store | Payback for landlords | Walls and floor |
 |---|---|---|---|
