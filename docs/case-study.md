@@ -1,7 +1,7 @@
 # FlatFit: case study
 
 **What:** a browser app that furnishes any flat in 3D with real products from local stores, checks that everything fits, totals the shopping list per country, and renders a photoreal image on the GPU.
-**Live:** https://aco993.github.io/flatfit/ · **Code:** this repository · **Stack:** TypeScript, three.js, three-gpu-pathtracer, Intel Open Image Denoise (WebGPU), Vite, Vitest, Playwright, GitHub Actions.
+**Live:** https://aco993.github.io/flatfit/ · **Code:** this repository · **Stack:** TypeScript, three.js, three-gpu-pathtracer, Intel Open Image Denoise (WebGPU), Gemini and Claude APIs with the visitor's own key, Vite, Vitest, Playwright, GitHub Actions.
 
 ## The problem
 
@@ -56,6 +56,9 @@ Unit tests (Vitest) cover the geometry, planner, quantities, promotions, moves, 
 | Nina, only a picture of her plan | loads it, sets the scale from a known wall, draws a room to it |
 | Sara, rearranging | drags the sofa with a real mouse, sees the collision, turns it, undoes and redoes |
 | Petra, old laptop | starts a render and cancels it; the page stays usable |
+| Ivo, laptop without a graphics card | reads the list first, starts the 3D view when he asks for it, and next time it starts by itself |
+| Vesna, knows what she wants, not what to buy | describes it in a sentence, then asks for another coffee table and sees that nothing else moved |
+| Dario and Lea, a picture of a plan and an API key | let Claude or the free Gemini tier read the rooms; Lea is told clearly when the free quota is used up |
 
 A second spec runs ten URL and device combinations (every market and language, a phone, dark mode, links with moved furniture or a whole floor plan, a broken link) in Chromium, Firefox and WebKit. It found that a link with moved furniture but no flat id dropped the moves.
 
@@ -85,22 +88,43 @@ Final Lighthouse numbers on the same laptop:
 
 A second round, on the throttled mobile profile, took total blocking time from 9.2 s to 1.6 s and desktop to 94–96. The profile pointed at work that a small scene does not need: three.js tested every mesh's bounding sphere against the camera on every frame (the flat is always on screen, so culling is off), the shadow map was redrawn on every camera frame although only a rebuild or a drag changes it, the room labels read the canvas size from the DOM on every frame and so forced a layout after each list update, and 5 MB of decorative models (plants, a vase, the terrace set) were downloaded and parsed before anyone looked. They now load on the first interaction or when the page is idle, with textures at 512 px. The last layout shift came from the scrollbar appearing once the list rendered; reserving its gutter fixed it.
 
+A third round looked at phones and machines without a GPU, which the desktop numbers hid. On a browser that draws WebGL on the CPU (SwiftShader in virtual machines and in the headless Chrome that CI uses), compiling a dozen shaders froze the page for 4–8 seconds, and the shopping list, which is what most visitors come for, waited behind it. three.js, the viewer and the furniture builder now load as one module after the list is on screen. Such browsers are recognised from a throwaway canvas without loading three.js, and there the 3D view waits behind a *Show the 3D view* button; once someone asks for it, it starts by itself on later visits. The profile then showed a 7-second task while the page sat idle: the environment light was being baked for a scene nobody was looking at. It now waits until the 3D view starts, and is skipped on software rendering, where a hemisphere light does the job. On an emulated Pixel 7 with 4× CPU throttling and software WebGL, old and new build side by side: the list is readable after about 2 s instead of 5 s, total blocking time fell from 4–11 s to 1–2.5 s, and 233 KB of JavaScript loads instead of 919 KB. Lighthouse in CI went from 0.42–0.47 to 0.67–0.77.
+
 ### 6. A budget as a knapsack
 
 "Furnish this for 9,000 KM" is a multiple-choice knapsack: every slot picks one product (optional slots may stay empty), a pick costs what it adds to the shopping list including its dependents (a bed frame with its slatted base), and its value is the slot's typical price × log(cost), so the money goes where it shows and each extra mark on a slot is worth a little less. Dynamic programming over the budget in 600 steps solves it in milliseconds. Pieces chosen one by one can still clash (a wide fridge next to a long kitchen), so the result is run through the fit checks and any piece that breaks the plan falls back to the cheapest one that fits; if quantities push the real total over the budget, it solves again a little lower.
 
 ### 7. Features from the shopping trip, not from a wish list
 
-The second round of features came from furnishing the flat for real. The questions in the store were: *is this a real sale?* (the git history of the daily price check now answers it: a 30-day low on the product card, an RSS feed of drops), *what have I bought and what is left to pay?* (a shopping list by store with ticks), *the sofa at the market is not in any catalogue* (add any product with its size and price, and it goes through the same fit checks), *the store has no signal* (a service worker), and for a landlord *does furnishing pay?* (furniture and wear against the extra rent). Paint and laminate quantities come from the wall and floor areas the plan already knows.
+The second round of features came from furnishing the flat for real. The questions in the store were: *is this a real sale?* (the git history of the daily price check now answers it: a 30-day low on the product card, an RSS feed of drops), *what have I bought and what is left to pay?* (a shopping list by store with ticks), *the sofa at the market is not in any catalogue* (add any product with its size and price, and it goes through the same fit checks), *the store has no signal* (a service worker), and for a landlord *does furnishing pay?* (furniture and wear against the extra rent). Paint and laminate quantities come from the wall and floor areas the plan already knows. Assembly came later, store by store, and follows the same rule as delivery: where a store publishes a price (IKEA in Serbia, Croatia, Germany and Austria; connecting a washer or an oven at Neckermann) the list shows "from" that amount, checked on a known date; where a store gives prices only on request, the list says so and links to its page instead of guessing.
 
 ### 8. Refactoring without changing a pixel
 
 The floor-plan editor had grown into one function of 787 lines and the furniture builder into one of 464. The editor is now a state object and modules by concern (view, pointer, typing and buttons, the plan picture, AI reading), with the geometry of editing (snapping, the wall nearest a click, resizing) moved into pure, unit-tested functions. The builder makes one context and calls one module per part of the flat. To prove the 3D scene did not change, a fingerprint of every mesh (slot, geometry, world matrix rounded to a millimetre, colour) was compared before and after for three looks and both wall heights: identical.
 
+### 9. An AI stylist that cannot invent a product
+
+"Calm and warm, for renting to couples, under 2,500 €, guests can sleep on the sofa" is easy for a language model to understand and risky to let it answer: it would happily name a sofa that no store in Bosnia sells. So the model never chooses products. It answers with settings only (a look, a budget, the optional pieces wanted or not, a sofa bed or not), constrained by a JSON schema, and every field is checked again against the known values. FlatFit's own planner and the budget solver from section 6 then pick real products that fit the flat, and add back each wish while the budget allows it.
+
+It became a conversation once I used it: "cheaper, but keep the bed" or "another TV" should change one thing, not the whole flat. The schema got three more fields (the pieces to keep, the only pieces to change, and which way to go: cheaper, better or just different), and the follow-up prompt carries the earlier wish and the current list. Kept pieces are pinned before the knapsack runs, so the budget is spent around them, and the dialog lists exactly what changed with the new total.
+
+The key is the visitor's own: a free Google AI Studio key for Gemini, or a Claude key, in which case the stylist asks Claude Haiku, the small model, for the settings with low effort, at well under a cent per wish. The key stays in the browser, goes to the provider in a header and never into a URL or a share link, and the tests check exactly that. An answer that is refused or does not match the schema changes nothing and says why. The same pattern reads a picture of a floor plan: the model returns rooms, doors and windows, the app lines them up and lays them over the picture, and the person corrects what it got wrong. The end-to-end tests stub both providers and check the requests they would receive.
+
+### 10. Checking what the 3D view shows
+
+Refactoring the builder (section 8) was proved with a one-off fingerprint. That check is now permanent: a unit test builds the scene in Node without a GPU from made-up products with fixed sizes, so the daily price changes cannot move it, and snapshots every piece's mesh count and bounding box to the centimetre. A change to how anything is built or placed shows up as a readable diff ("bed: 6 meshes" becomes "17 meshes").
+
+Geometry does not catch a wrong material or a black canvas, so a second test looks at the picture. Pixel screenshots of WebGL differ between my laptop's GPU and CI's software renderer, so the test reduces three camera views to a 32 × 20 grid of average colours and compares it with a stored grid: it fails when more than 2 % of the cells change clearly. The same baseline passes on both machines. Removing the sofa changed 5.9 % of the cells when the test was written, and the test removes it on every run to make sure the limit still catches that.
+
+### 11. Furniture that looks like the product
+
+The 3D pieces always had the product's width, depth, height and colour, but every wardrobe was a white box with a door every 48 cm and every bed the same frame. There are free CC0 models for chairs and small tables, but none for a modern sofa, bed or wardrobe, and a period piece would misrepresent what the store sells. The product names turned out to carry the rest: Serbian stores write "3V2F" for three doors and two drawers and "4K1F1O" for four doors, a drawer and a mirror; JYSK writes "2 vrata 3 ladice", IKEA "3-türig" or "s kliznim vratima". A small parser, unit-tested against every wardrobe and bed in the five catalogues, turns that into door columns, drawers, a row of short doors where six would not fit side by side, a mirror door or sliding panels. Upholstered beds get a padded headboard in channels, beds with storage get drawers down to the floor, and the others stand on legs. The sofa got slim legs, padded arms and a chaise cushion on corner sofas. Where a name says nothing, the old rule by width still applies.
+
 ## What I would do next
 
-- L-shaped rooms as one room instead of two connected rectangles.
-- Assembly costs per store, and delivery prices read from the stores that only show them in the basket.
+- Measure on a real mid-range phone, not only an emulated one, and run the stylist against the live Gemini free tier on a schedule.
+- Sloped ceilings and walls that are not at right angles; the plan model is axis-aligned today.
+- Delivery prices read from the stores that only show them in the basket.
 - Real user sessions: the feedback form in the app goes to GitHub issues.
 - Paint and laminate as real products with prices; "when to buy" advice once the price history covers a few sales cycles.
 
