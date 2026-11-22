@@ -35,6 +35,9 @@ const hr: Record<Key, string> = {
   'ad.hint': 'Klikni na naslov ili tekst da ih promijeniš. U prozoru za ispis odaberi „Spremi kao PDF“.',
   'del.unknown': '{stores}: cijena dostave u košarici',
   'del.total': 's dostavom ≈ {v}',
+  'asm.unknown': '{stores}: cijena montaže na upit',
+  'asm.total': 's dostavom i montažom od {v}',
+  'shop.connectAsk': 'priključivanje na upit: {n} {n:uređaj|uređaja|uređaja}',
   'budget.min': 'Najjeftinije opremanje koje stane košta {v}; prikazujem njega.',
   'ms.intro':
     'Izmjeri svaku prostoriju od zida do zida, pri podu iznad lajsne. Upiši izmjereno pored vrijednosti iz plana, pa to unesi u uređivač tlocrta: sve provjere stane li namještaj koriste ove brojeve.',

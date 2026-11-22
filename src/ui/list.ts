@@ -4,6 +4,8 @@ import { compareLink, country, money } from '../data/countries';
 import { DELIVERY } from '../data/delivery';
 import { GROUPS, activeSlots, slotDef } from '../domain/slots';
 import { deliveryFor } from '../domain/delivery';
+import { assemblyFor } from '../domain/assembly';
+import { ASSEMBLY } from '../data/assembly';
 import { effectivePrice, fitIssues, lines, total, type Issue, type Line } from '../domain/selection';
 import type { PriceStats } from '../domain/history';
 import type { App } from './app';
@@ -158,5 +160,19 @@ function deliveryHtml(app: App, ls: Line[], sum: number) {
     .map(s => `${app.storeName(s.store)}: ${s.unknown ? '?' : s.free ? '0' : (s.from ? '≥ ' : '') + app.fmt(s.cost)}`)
     .join(' · ');
   const withDelivery = d.total > 0 ? ` · <b>${esc(t('del.total', { v: app.fmt(sum + d.total) }))}</b>` : '';
-  return `<p class="muted small delivery" title="${esc(title)}">${esc(parts.join(' · '))}${withDelivery}</p>`;
+  return `<p class="muted small delivery" title="${esc(title)}">${esc(parts.join(' · '))}${withDelivery}</p>${assemblyHtml(app, ls, sum + d.total)}`;
+}
+
+/** Assembly store by store: the least it costs where a store publishes it, "on request" where it does not (data/assembly.ts). */
+function assemblyHtml(app: App, ls: Line[], withDelivery: number) {
+  const a = assemblyFor(ls, ASSEMBLY[app.prefs.country!]);
+  if (!a.stores.length) return '';
+  const parts: string[] = [];
+  if (a.total > 0) parts.push(t(a.from ? 'asm.from' : 'asm.line', { v: app.fmt(a.total) }));
+  if (a.unknown.length) parts.push(t('asm.unknown', { stores: a.unknown.map(s => app.storeName(s.store)).join(', ') }));
+  const title = a.stores
+    .map(s => `${app.storeName(s.store)}: ${s.unknown ? '?' : (s.from ? '≥ ' : '') + app.fmt(s.cost)}${s.note ? ' (' + s.note + ')' : ''}`)
+    .join(' · ');
+  const both = a.total > 0 ? ` · <b>${esc(t('asm.total', { v: app.fmt(withDelivery + a.total) }))}</b>` : '';
+  return `<p class="muted small assembly" title="${esc(title)}">${esc(parts.join(' · '))}${both}</p>`;
 }

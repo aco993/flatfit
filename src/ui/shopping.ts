@@ -1,6 +1,8 @@
 import { t, type Key } from '../i18n';
 import { DELIVERY } from '../data/delivery';
 import { deliveryFor } from '../domain/delivery';
+import { assemblyFor } from '../domain/assembly';
+import { ASSEMBLY } from '../data/assembly';
 import { lines } from '../domain/selection';
 import { keepTicks, shoppingList, tickKey } from '../domain/shopping';
 import type { App } from './app';
@@ -29,12 +31,31 @@ function draw(app: App, d: HTMLDialogElement) {
     if (s.unknown) return t('shop.deliveryBasket');
     return t('shop.delivery', { v: s.free ? app.fmt(0) : (s.from ? '≥ ' : '') + app.fmt(s.cost) });
   };
+  const asm = new Map(assemblyFor(ls, ASSEMBLY[app.prefs.country!]).stores.map(s => [s.store, s]));
+  const asmText = (store: string) => {
+    const s = asm.get(store);
+    if (!s) return '';
+    if (s.unknown)
+      return s.pieces
+        ? t('shop.assemblyAsk', { n: s.pieces })
+        : s.kitchen
+          ? t('shop.assemblyKitchen')
+          : s.appliances
+            ? t('shop.connectAsk', { n: s.appliances })
+            : '';
+    return t('shop.assembly', { v: app.fmt(s.cost) });
+  };
+  const extra = (store: string) =>
+    [delText(store), asmText(store)]
+      .filter(Boolean)
+      .map(x => ' · ' + esc(x))
+      .join('');
   const scroll = d.querySelector('.shop')?.scrollTop || 0;
   d.innerHTML = `<div class="dlg-head"><h2 id="shop-title">${esc(t('shop.title'))}</h2><button type="button" class="icon" data-close aria-label="${esc(t('item.close'))}">✕</button></div>
     <p class="shop-progress" aria-live="polite"><b>${esc(t('shop.progress', { n: list.boughtCount, m: list.count, v: app.fmt(list.left) }))}</b></p>
     <div class="shop">${list.stores
       .map(
-        s => `<section><h3><span>${esc(app.storeName(s.store))}</span><span class="muted small">${esc(t('shop.store', { v: app.fmt(s.left) }))}${delText(s.store) ? ' · ' + esc(delText(s.store)) : ''}</span></h3>
+        s => `<section><h3><span>${esc(app.storeName(s.store))}</span><span class="muted small">${esc(t('shop.store', { v: app.fmt(s.left) }))}${extra(s.store)}</span></h3>
       <ul>${s.items
         .map(i => {
           const key = tickKey(i.slot, i.product);
