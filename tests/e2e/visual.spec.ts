@@ -7,7 +7,7 @@ import { expect, test, type Page } from '@playwright/test';
  * rounding), but a missing sofa, a wrong colour, a camera in the wrong place or a black view changes many cells.
  * The HTML labels are left out: the image comes from the WebGL canvas itself.
  *
- * After a change to the 3D view that is meant: FLATFIT_UPDATE_VISUAL=1 npx playwright test visual
+ * After a change to the 3D view that is meant: FLATFIT_UPDATE_VISUAL=1 npx playwright test visual, then npx biome format --write tests/e2e/fixtures
  */
 const BASELINE = 'tests/e2e/fixtures/scene-grid.json';
 const W = 32,
