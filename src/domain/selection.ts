@@ -1,6 +1,6 @@
 import LZString from 'lz-string';
 import type { Catalog, Product, Project, SlotId } from '../types';
-import { activeSlots, curtainWindows, roomsOfType, slotDef } from './slots';
+import { type SlotDef, activeSlots, curtainWindows, roomsOfType, slotDef } from './slots';
 import { autoLayout, type Dims, type Layout } from './layout';
 import { applyMoves, moveIssues } from './moves';
 
@@ -280,25 +280,28 @@ export function fitIssues(proj: Project, sel: Selection, ix: Index, layout?: Lay
 }
 
 // ---- automatic proposals ----
+/** How much more a piece without a fit warning may cost before the generator takes the one with the warning. */
+export const SOFT = 2;
+
 export function generate(style: Style, proj: Project, ix: Index, today: string): Selection {
   let sel: Selection = {};
   const want = style === 'cheap' ? null : style;
-  const hardKeys = (sl: Selection) =>
-    new Set(
-      fitIssues(proj, sl, ix)
-        .filter(i => i.hard && !/needs/.test(i.code))
-        .map(i => i.slot + ':' + i.code),
-    );
-  for (const sd of activeSlots(proj)) {
-    if (sd.dependent) continue;
-    const before = hardKeys(sel);
-    const cands = (ix.bySlot.get(sd.id) || []).filter(p => p.price > 0);
-    if (!cands.length) continue;
-    if (sd.optional && style === 'cheap') continue;
+  // misfits by weight: hard ones ("does not fit") rule a piece out, soft ones ("measure first", a tight walkway)
+  // make it the second choice, so a piece without a warning wins unless it costs over SOFT times as much
+  const issueKeys = (sl: Selection) => {
+    const hard = new Set<string>(),
+      soft = new Set<string>();
+    for (const i of fitIssues(proj, sl, ix)) if (!/needs/.test(i.code)) (i.hard ? hard : soft).add(i.slot + ':' + i.code);
+    return { hard, soft };
+  };
+  const added = (now: Set<string>, before: Set<string>, slot: SlotId) => [...now].some(k => !before.has(k) || k.startsWith(slot + ':'));
+  // the cheapest piece in the look for one slot, next to the pieces already in `base`
+  const choose = (sd: SlotDef, base: Selection) => {
+    const before = issueKeys(base);
     let best: Product | null = null,
       bs = Infinity;
-    for (const p of cands) {
-      const trial = fixDeps({ ...sel, [sd.id]: p.id }, ix);
+    for (const p of (ix.bySlot.get(sd.id) || []).filter(p => p.price > 0)) {
+      const trial = fixDeps({ ...base, [sd.id]: p.id }, ix);
       const ls = lines(proj, trial, ix, today);
       let sc = total(ls.filter(l => l.slot === sd.id || slotDef(l.slot).dependent));
       if (want) {
@@ -306,14 +309,29 @@ export function generate(style: Style, proj: Project, ix: Index, today: string):
         if (f !== want) sc *= f === '' ? 1.25 : (f === 'warm' && want === 'light') || (f === 'light' && want === 'warm') ? 1.2 : 1.6;
       }
       // a candidate is out if it causes a misfit that was not there before (the fridge can break the kitchen run)
-      const hard = [...hardKeys(trial)].some(k => !before.has(k) || k.startsWith(sd.id + ':'));
-      if (hard) sc += 1e9;
+      const now = issueKeys(trial);
+      if (added(now.hard, before.hard, sd.id)) sc += 1e9;
+      else if (added(now.soft, before.soft, sd.id)) sc *= SOFT;
       if (sc < bs) {
         bs = sc;
         best = p;
       }
     }
+    return best;
+  };
+  const slots = activeSlots(proj).filter(sd => !sd.dependent && !(sd.optional && style === 'cheap'));
+  for (const sd of slots) {
+    const best = choose(sd, sel);
     if (best) sel = fixDeps({ ...sel, [sd.id]: best.id }, ix);
+  }
+  // pieces are picked one after another, so a warning can come from a later piece (the fridge makes the kitchen
+  // run too long): pick each piece a warning is about once more, now that the others are known
+  const warned = new Set([...issueKeys(sel).soft].map(k => k.split(':')[0]));
+  for (const sd of slots.filter(sd => warned.has(sd.id))) {
+    const base = { ...sel };
+    delete base[sd.id];
+    const best = choose(sd, fixDeps(base, ix));
+    if (best && best.id !== sel[sd.id]) sel = fixDeps({ ...sel, [sd.id]: best.id }, ix);
   }
   return sel;
 }

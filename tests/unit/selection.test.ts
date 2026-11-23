@@ -114,6 +114,23 @@ describe('generated proposals', () => {
       });
     }
   }
+  const soft = (p: Project, sel: ReturnType<typeof generate>, ix: typeof ixRS) =>
+    fitIssues(p, sel, ix)
+      .filter(i => !i.hard && !/needs/.test(i.code))
+      .map(i => i.slot + ':' + i.code);
+  it('takes a piece without a fit warning over a cheaper one with a warning, even when a later piece causes it', () => {
+    // the kitchen is picked before the fridge; every fridge makes a 2 m kitchen too long for the niche
+    expect(soft(DEMO, generate('light', DEMO, ixRS, TODAY), ixRS)).not.toContain('kitchen:kitchenRun');
+    // in Austria a wardrobe that leaves 60 cm in front of the bed exists, in every look
+    for (const st of ['cheap', 'light', 'warm', 'dark', 'color'] as const)
+      expect(soft(DEMO, generate(st, DEMO, ixAT, TODAY), ixAT), st).not.toContain('wardrobe:passage');
+  });
+  it('keeps a warning only where no piece avoids it, and says so', () => {
+    const sel = generate('cheap', DEMO, ixRS, TODAY);
+    expect(soft(DEMO, sel, ixRS)).toContain('wardrobe:passage');
+    // with this bed, every wardrobe sold in Serbia leaves less than 60 cm in the demo bedroom
+    for (const w of ixRS.bySlot.get('wardrobe')!) expect(soft(DEMO, { ...sel, wardrobe: w.id }, ixRS), w.id).toContain('wardrobe:passage');
+  });
   it('"dark" prefers dark colours more often than "light"', () => {
     const dark = generate('dark', DEMO, ixRS, TODAY),
       light = generate('light', DEMO, ixRS, TODAY);
