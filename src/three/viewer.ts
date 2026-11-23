@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import type { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import type { SlotId, View } from '../types';
+import { interiorFov } from './camera';
 
 export interface Label {
   text: string;
@@ -313,7 +314,8 @@ export class Viewer {
       const d = tt.clone().sub(to);
       this.look.yaw = Math.atan2(d.x, d.z);
       this.look.pitch = Math.atan2(d.y, Math.hypot(d.x, d.z));
-      this.camera.fov = 62;
+      this.fovScale = 1;
+      this.camera.fov = interiorFov(this.camera.aspect);
     } else this.camera.fov = 45;
     this.camera.updateProjectionMatrix();
     if (instant || matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -374,7 +376,9 @@ export class Viewer {
   }
   zoom(f: number) {
     if (this.interior) {
-      this.camera.fov = Math.max(35, Math.min(90, this.camera.fov * f));
+      const base = interiorFov(this.camera.aspect);
+      this.fovScale = Math.max(35 / base, Math.min(90 / base, this.fovScale * f));
+      this.camera.fov = base * this.fovScale;
       this.camera.updateProjectionMatrix();
     } else {
       const d = this.camera.position.clone().sub(this.controls.target).multiplyScalar(f);
@@ -667,6 +671,8 @@ export class Viewer {
     }
   }
   private size = { w: 0, h: 0 };
+  /** zoom inside a room, relative to the field of view that suits the screen's shape */
+  private fovScale = 1;
 
   resize() {
     const r = this.host.getBoundingClientRect();
@@ -675,6 +681,8 @@ export class Viewer {
     this.renderer.setSize(r.width, r.height, false);
     this.composer?.setSize(r.width, r.height);
     this.camera.aspect = r.width / r.height;
+    // turning a phone or resizing the window: inside a room the angle follows the new shape, keeping the zoom
+    if (this.interior) this.camera.fov = interiorFov(this.camera.aspect) * this.fovScale;
     this.camera.updateProjectionMatrix();
     this.dirty = true;
   }
