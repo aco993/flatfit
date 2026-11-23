@@ -1,7 +1,7 @@
 {
  "country": "hr",
  "currency": "EUR",
- "checked": "2026-11-22",
+ "checked": "2026-11-23",
  "stores": [
   {
    "id": "ikea",
@@ -29,7 +29,7 @@
    "d": 61,
    "h": 220,
    "needsWorktop": false,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-39581432",
@@ -44,7 +44,7 @@
    "d": 61,
    "h": 220,
    "needsWorktop": false,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-89614944",
@@ -59,7 +59,7 @@
    "d": 61,
    "h": 220,
    "needsWorktop": false,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-99581127",
@@ -74,7 +74,7 @@
    "d": 61,
    "h": 220,
    "needsWorktop": false,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-59158003",
@@ -87,7 +87,7 @@
    "hex": "#949494",
    "w": 46,
    "d": 40,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-99157501",
@@ -101,35 +101,20 @@
    "w": 46.6,
    "d": 30,
    "h": 16,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-00455161",
+   "id": "hr-ik-60488781",
    "slot": "faucet",
    "store": "ikea",
-   "name": "ÄLMAREN Kuhinjska miješalica za vodu, boja nehrđajućeg čelika",
-   "url": "https://www.ikea.com/hr/hr/p/aelmaren-kuhinjska-mijesalica-za-vodu-boja-nehrdajuceg-celika-00455161/",
-   "price": 99,
-   "color": "siva",
-   "hex": "#949494",
-   "w": 21,
-   "d": 21,
-   "h": 36,
-   "checked": "2026-11-20",
-   "unavailable": true
-  },
-  {
-   "id": "hr-ik-40488796",
-   "slot": "faucet",
-   "store": "ikea",
-   "name": "DELSJÖN Kuhinjska miješalica za vodu, brušeni crni metal",
-   "url": "https://www.ikea.com/hr/hr/p/delsjoen-kuhinjska-mijesalica-za-vodu-bruseni-crni-metal-40488796/",
+   "name": "DELSJÖN Kuhinjska miješalica za vodu, efekt kositra",
+   "url": "https://www.ikea.com/hr/hr/p/delsjoen-kuhinjska-mijesalica-za-vodu-efekt-kositra-60488781/",
    "price": 79.99,
-   "color": "brušeni crni metal",
+   "color": "efekt kositra",
    "w": 26,
    "d": 26,
    "h": 36,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-90602025",
@@ -140,7 +125,19 @@
    "price": 69.99,
    "color": "boja nehrđajućeg čelika",
    "h": 26.7,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-90519936",
+   "slot": "faucet",
+   "store": "ikea",
+   "name": "GLITTRAN Kuhinjska miješalica za vodu, brušeni crni metal",
+   "url": "https://www.ikea.com/hr/hr/p/glittran-kuhinjska-mijesalica-za-vodu-bruseni-crni-metal-90519936/",
+   "price": 149,
+   "color": "crna",
+   "hex": "#000000",
+   "h": 28,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-90557725",
@@ -154,7 +151,7 @@
    "w": 59,
    "d": 52,
    "h": 5.3,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-20467592",
@@ -168,7 +165,7 @@
    "w": 29,
    "d": 52,
    "h": 5.8,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10467093",
@@ -182,7 +179,7 @@
    "w": 59,
    "d": 52,
    "h": 4.9,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10600054",
@@ -196,7 +193,21 @@
    "w": 59.4,
    "d": 56.7,
    "h": 59.5,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-10600247",
+   "slot": "oven",
+   "store": "ikea",
+   "name": "FRILLESBO Pr pećn s ventil, dodana funkcija kuhanja na pari funkcija pečenja/boja nehrđajućeg čelika IKEA 500",
+   "url": "https://www.ikea.com/hr/hr/p/frillesbo-pr-pecn-s-ventil-dodana-funkcija-kuhanja-na-pari-funkcija-pecenja-boja-nehrdajuceg-celika-ikea-500-10600247/",
+   "price": 429,
+   "color": "siva",
+   "hex": "#949494",
+   "w": 59.4,
+   "d": 54.7,
+   "h": 58.9,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-80600244",
@@ -210,21 +221,7 @@
    "w": 59.4,
    "d": 56.7,
    "h": 59.5,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-00600281",
-   "slot": "oven",
-   "store": "ikea",
-   "name": "STENABY Pećnica s ventilatorom, gril funkcija boja nehrđajućeg čelika/IKEA 300",
-   "url": "https://www.ikea.com/hr/hr/p/stenaby-pecnica-s-ventilatorom-gril-funkcija-boja-nehrdajuceg-celika-ikea-300-00600281/",
-   "price": 299,
-   "color": "siva",
-   "hex": "#949494",
-   "w": 59.5,
-   "d": 54.6,
-   "h": 59,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10602369",
@@ -238,21 +235,7 @@
    "w": 59.8,
    "d": 45,
    "h": 27,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-50401383",
-   "slot": "hood",
-   "store": "ikea",
-   "name": "LAGAN Zidna napa, bijela, 60 cm",
-   "url": "https://www.ikea.com/hr/hr/p/lagan-zidna-napa-bijela-50401383/",
-   "price": 49.99,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 60,
-   "d": 51,
-   "h": 13,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-70602371",
@@ -266,7 +249,20 @@
    "w": 54.5,
    "d": 35.9,
    "h": 34,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-80388969",
+   "slot": "hood",
+   "store": "ikea",
+   "name": "RYTMISK Zidna napa, nehrđajući čelik, 60 cm",
+   "url": "https://www.ikea.com/hr/hr/p/rytmisk-zidna-napa-nehrdajuci-celik-80388969/",
+   "price": 139,
+   "color": "siva",
+   "hex": "#949494",
+   "w": 59.8,
+   "d": 47.1,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-30578801",
@@ -280,7 +276,7 @@
    "w": 55,
    "d": 57,
    "h": 83.2,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-00572867",
@@ -293,7 +289,22 @@
    "w": 54,
    "d": 55,
    "h": 125.5,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-70563237",
+   "slot": "table",
+   "store": "ikea",
+   "name": "SKANSNÄS Produljivi stol, smeđa bukva/furnir, 115/170 cm",
+   "url": "https://www.ikea.com/hr/hr/p/skansnaes-produljivi-stol-smeda-bukva-furnir-70563237/",
+   "price": 649,
+   "color": "bež / smeđa",
+   "hex": "#f4f3d7",
+   "w": 115,
+   "d": 115,
+   "h": 75,
+   "round": true,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10562504",
@@ -307,7 +318,7 @@
    "w": 80,
    "d": 70,
    "h": 75,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-39578509",
@@ -321,7 +332,21 @@
    "w": 125,
    "d": 74,
    "h": 75,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-00587492",
+   "slot": "table",
+   "store": "ikea",
+   "name": "NÄSINGE Produljivi stol, bijela, 130/190x80 cm",
+   "url": "https://www.ikea.com/hr/hr/p/naesinge-produljivi-stol-bijela-00587492/",
+   "price": 199,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "w": 130,
+   "d": 80,
+   "h": 75,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-40416498",
@@ -336,36 +361,7 @@
    "d": 105,
    "h": 74,
    "round": true,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-00587492",
-   "slot": "table",
-   "store": "ikea",
-   "name": "NÄSINGE Produljivi stol, bijela, 130/190x80 cm",
-   "url": "https://www.ikea.com/hr/hr/p/naesinge-produljivi-stol-bijela-00587492/",
-   "price": 199,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 130,
-   "d": 80,
-   "h": 75,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-00620566",
-   "slot": "table",
-   "store": "ikea",
-   "name": "NORRMJÖLE Stol, efekt hrasta/crna, 105 cm",
-   "url": "https://www.ikea.com/hr/hr/p/norrmjoele-stol-efekt-hrasta-crna-00620566/",
-   "price": 179,
-   "color": "smeđa / crna",
-   "hex": "#814820",
-   "w": 105,
-   "d": 105,
-   "h": 75,
-   "round": true,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-30605423",
@@ -380,22 +376,7 @@
    "d": 47,
    "h": 77,
    "qty": 1,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-80569998",
-   "slot": "chairs",
-   "store": "ikea",
-   "name": "ROSENTORP Stolica, bijela",
-   "url": "https://www.ikea.com/hr/hr/p/rosentorp-stolica-bijela-80569998/",
-   "price": 44.99,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 44,
-   "d": 53,
-   "h": 91,
-   "qty": 1,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-60566745",
@@ -410,7 +391,22 @@
    "d": 51,
    "h": 75,
    "qty": 1,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-80569998",
+   "slot": "chairs",
+   "store": "ikea",
+   "name": "ROSENTORP Stolica, bijela",
+   "url": "https://www.ikea.com/hr/hr/p/rosentorp-stolica-bijela-80569998/",
+   "price": 44.99,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "w": 44,
+   "d": 53,
+   "h": 91,
+   "qty": 1,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-30635175",
@@ -425,22 +421,22 @@
    "d": 49,
    "h": 90,
    "qty": 1,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-20530621",
+   "id": "hr-ik-70544866",
    "slot": "chairs",
    "store": "ikea",
-   "name": "TEODORES Stolica, crna",
-   "url": "https://www.ikea.com/hr/hr/p/teodores-stolica-crna-20530621/",
-   "price": 29.99,
-   "color": "crna",
-   "hex": "#000000",
+   "name": "SKOGSTA Stolica, akacija",
+   "url": "https://www.ikea.com/hr/hr/p/skogsta-stolica-akacija-70544866/",
+   "price": 69.99,
+   "color": "bež / smeđa",
+   "hex": "#f4f3d7",
    "w": 46,
-   "d": 54,
-   "h": 80,
+   "d": 55,
+   "h": 94,
    "qty": 1,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-49440597",
@@ -456,7 +452,21 @@
    "w": 228,
    "d": 95,
    "h": 83,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-10618501",
+   "slot": "sofa",
+   "store": "ikea",
+   "name": "GULLVALLA Trosjed, Silkeryd tamno siva-bež",
+   "url": "https://www.ikea.com/hr/hr/p/gullvalla-trosjed-silkeryd-tamno-siva-bez-10618501/",
+   "price": 229,
+   "color": "bež / siva",
+   "hex": "#f4f3d7",
+   "w": 182,
+   "d": 83,
+   "h": 78,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-40618514",
@@ -469,22 +479,22 @@
    "hex": "#f4f3d7",
    "w": 187,
    "d": 79,
-   "checked": "2026-11-22",
-   "h": 77
+   "h": 77,
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-80618499",
+   "id": "hr-ik-39508998",
    "slot": "sofa",
    "store": "ikea",
-   "name": "GULLVALLA Trosjed, Silkeryd sivo-zelena",
-   "url": "https://www.ikea.com/hr/hr/p/gullvalla-trosjed-silkeryd-sivo-zelena-80618499/",
-   "price": 229,
-   "color": "zelena",
-   "hex": "#3b7d22",
-   "w": 182,
-   "d": 83,
-   "checked": "2026-11-22",
-   "h": 78
+   "name": "EKTORP Trosjed, Hakebo tamno siva",
+   "url": "https://www.ikea.com/hr/hr/p/ektorp-trosjed-hakebo-tamno-siva-s39508998/",
+   "price": 399,
+   "color": "siva",
+   "hex": "#949494",
+   "w": 218,
+   "d": 88,
+   "h": 88,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-50530648",
@@ -498,21 +508,7 @@
    "w": 194,
    "d": 82,
    "h": 81,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-60551225",
-   "slot": "sofa",
-   "store": "ikea",
-   "name": "FRIHETEN Trosjed na razvlačenje, Faringe svijetlo siva",
-   "url": "https://www.ikea.com/hr/hr/p/friheten-trosjed-na-razvlacenje-faringe-svijetlo-siva-60551225/",
-   "price": 449,
-   "color": "siva",
-   "hex": "#949494",
-   "w": 225,
-   "d": 105,
-   "h": 83,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-20572461",
@@ -526,7 +522,7 @@
    "w": 222,
    "d": 96,
    "h": 78,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-00613165",
@@ -541,23 +537,20 @@
    "w": 82,
    "d": 96,
    "h": 101,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-39240787",
+   "id": "hr-ik-80624344",
    "slot": "armchair",
    "store": "ikea",
-   "name": "POÄNG Fotelja, brezov furnir/Knisa svijetlo bež",
-   "url": "https://www.ikea.com/hr/hr/p/poaeng-fotelja-brezov-furnir-knisa-svijetlo-bez-s39240787/",
-   "price": 64.99,
-   "color": "bež",
-   "hex": "#f4f3d7",
-   "regular": 79,
-   "until": "2027-03-03",
-   "w": 68,
-   "d": 82,
-   "h": 100,
-   "checked": "2026-11-22"
+   "name": "EKENÄSET Fotelja, efekt oraha/Kilanda svijetlo bež",
+   "url": "https://www.ikea.com/hr/hr/p/ekenaeset-fotelja-efekt-oraha-kilanda-svijetlo-bez-80624344/",
+   "price": 179,
+   "color": "efekt oraha/Kilanda svijetlo bež",
+   "w": 65,
+   "d": 74,
+   "h": 75,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-00535894",
@@ -571,20 +564,36 @@
    "w": 66.2,
    "d": 72.3,
    "h": 99.6,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-80624344",
+   "id": "hr-ik-89625018",
    "slot": "armchair",
    "store": "ikea",
-   "name": "EKENÄSET Fotelja, efekt oraha/Kilanda svijetlo bež",
-   "url": "https://www.ikea.com/hr/hr/p/ekenaeset-fotelja-efekt-oraha-kilanda-svijetlo-bez-80624344/",
-   "price": 179,
-   "color": "efekt oraha/Kilanda svijetlo bež",
-   "w": 65,
-   "d": 74,
-   "h": 75,
-   "checked": "2026-11-22"
+   "name": "POÄNG Fotelja, hrast/Vissle zagasito zelena",
+   "url": "https://www.ikea.com/hr/hr/p/poaeng-fotelja-hrast-vissle-zagasito-zelena-s89625018/",
+   "price": 109.99,
+   "color": "hrast/Vissle zagasito zelena",
+   "regular": 129,
+   "until": "2027-03-03",
+   "w": 68,
+   "d": 82,
+   "h": 100,
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-90449905",
+   "slot": "coffee",
+   "store": "ikea",
+   "name": "LACK Stolić, bijela, 90x55 cm",
+   "url": "https://www.ikea.com/hr/hr/p/lack-stolic-bijela-90449905/",
+   "price": 19.99,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "w": 90,
+   "d": 55,
+   "h": 45,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-80213309",
@@ -599,64 +608,50 @@
    "d": 75,
    "h": 45,
    "round": true,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-90449905",
+   "id": "hr-ik-70389356",
    "slot": "coffee",
    "store": "ikea",
-   "name": "LACK Stolić, bijela, 90x55 cm",
-   "url": "https://www.ikea.com/hr/hr/p/lack-stolic-bijela-90449905/",
-   "price": 19.99,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 90,
-   "d": 55,
-   "h": 45,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-30500355",
-   "slot": "coffee",
-   "store": "ikea",
-   "name": "BORGEBY Stolić, crna, 70 cm",
-   "url": "https://www.ikea.com/hr/hr/p/borgeby-stolic-crna-30500355/",
+   "name": "BORGEBY Stolić, brezov furnir, 70 cm",
+   "url": "https://www.ikea.com/hr/hr/p/borgeby-stolic-brezov-furnir-70389356/",
    "price": 129,
-   "color": "crna",
-   "hex": "#000000",
+   "color": "bež",
+   "hex": "#f4f3d7",
    "w": 70,
    "d": 70,
    "h": 42,
    "round": true,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-90491560",
+   "id": "hr-ik-20586552",
    "slot": "coffee",
    "store": "ikea",
-   "name": "TONSTAD Stolić, krem, 84x82 cm",
-   "url": "https://www.ikea.com/hr/hr/p/tonstad-stolic-krem-90491560/",
-   "price": 149,
+   "name": "STOCKHOLM 2025 Stolić, hrastov furnir staklo",
+   "url": "https://www.ikea.com/hr/hr/p/stockholm-2025-stolic-hrastov-furnir-staklo-20586552/",
+   "price": 199,
+   "color": "hrastov furnir staklo",
+   "w": 97,
+   "d": 97,
+   "h": 38,
+   "round": true,
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-40500005",
+   "slot": "coffee",
+   "store": "ikea",
+   "name": "IDANÄS Stolić, bijela, 80x80 cm",
+   "url": "https://www.ikea.com/hr/hr/p/idanaes-stolic-bijela-40500005/",
+   "price": 219,
    "color": "bijela",
    "hex": "#ffffff",
-   "w": 84,
-   "d": 82,
-   "h": 35,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-90540706",
-   "slot": "coffee",
-   "store": "ikea",
-   "name": "HOLMERUD Stolić, efekt hrasta, 90x55 cm",
-   "url": "https://www.ikea.com/hr/hr/p/holmerud-stolic-efekt-hrasta-90540706/",
-   "price": 59.99,
-   "color": "bež / smeđa",
-   "hex": "#f4f3d7",
-   "w": 90,
-   "d": 55,
-   "h": 40,
-   "checked": "2026-11-22"
+   "w": 80,
+   "d": 80,
+   "h": 49,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-90339290",
@@ -670,7 +665,7 @@
    "w": 150,
    "d": 36,
    "h": 54,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-89330691",
@@ -685,23 +680,7 @@
    "w": 180,
    "d": 42,
    "h": 38,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-69419439",
-   "slot": "tvunit",
-   "store": "ikea",
-   "name": "BESTÅ TV klupa s vratima, bijela Hedeviken/Stubbarp/hrastov furnir, 120x42x48 cm",
-   "url": "https://www.ikea.com/hr/hr/p/besta-tv-klupa-s-vratima-bijela-hedeviken-stubbarp-hrastov-furnir-s69419439/",
-   "price": 144,
-   "color": "smeđa / bijela",
-   "hex": "#814820",
-   "regular": 159,
-   "until": "2027-03-03",
-   "w": 120,
-   "d": 42,
-   "h": 48,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-00625521",
@@ -714,7 +693,7 @@
    "w": 90,
    "d": 36,
    "h": 45,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-40586508",
@@ -728,21 +707,23 @@
    "w": 178.8,
    "d": 42,
    "h": 56.2,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-10638716",
-   "slot": "rug",
+   "id": "hr-ik-09419437",
+   "slot": "tvunit",
    "store": "ikea",
-   "name": "VÄXELFEL Tepih, niski flor, žuto-smeđa, 160x230 cm",
-   "url": "https://www.ikea.com/hr/hr/p/vaexelfel-tepih-niski-flor-zuto-smeda-10638716/",
-   "price": 59.99,
-   "color": "bež / žuta",
-   "hex": "#f4f3d7",
-   "w": 230,
-   "d": 160,
-   "h": 1,
-   "checked": "2026-11-22"
+   "name": "BESTÅ TV klupa s vratima, bijela Hanviken/Stubbarp/bijela, 120x42x48 cm",
+   "url": "https://www.ikea.com/hr/hr/p/besta-tv-klupa-s-vratima-bijela-hanviken-stubbarp-bijela-s09419437/",
+   "price": 114,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "regular": 129,
+   "until": "2027-03-03",
+   "w": 120,
+   "d": 42,
+   "h": 48,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-20630376",
@@ -756,7 +737,21 @@
    "w": 230,
    "d": 160,
    "h": 1,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-10638716",
+   "slot": "rug",
+   "store": "ikea",
+   "name": "VÄXELFEL Tepih, niski flor, žuto-smeđa, 160x230 cm",
+   "url": "https://www.ikea.com/hr/hr/p/vaexelfel-tepih-niski-flor-zuto-smeda-10638716/",
+   "price": 59.99,
+   "color": "bež / žuta",
+   "hex": "#f4f3d7",
+   "w": 230,
+   "d": 160,
+   "h": 1,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10623220",
@@ -770,7 +765,7 @@
    "w": 230,
    "d": 160,
    "h": 1,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-20595698",
@@ -784,7 +779,7 @@
    "w": 230,
    "d": 160,
    "h": 1,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-60561936",
@@ -799,7 +794,7 @@
    "until": "2026-11-30",
    "w": 40,
    "h": 140,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-59385958",
@@ -811,7 +806,7 @@
    "color": "žuta / bijela",
    "hex": "#ffdb00",
    "h": 153,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-30543835",
@@ -823,7 +818,7 @@
    "color": "siva / zelena / žuta",
    "hex": "#949494",
    "h": 143,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-50607157",
@@ -838,7 +833,7 @@
    "d": 207,
    "h": 101,
    "needsBase": true,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-60602442",
@@ -853,7 +848,7 @@
    "d": 206,
    "h": 66,
    "needsBase": true,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-40571248",
@@ -866,9 +861,9 @@
    "hex": "#949494",
    "w": 164,
    "d": 206,
+   "h": 85,
    "needsBase": true,
-   "checked": "2026-11-22",
-   "h": 85
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10492672",
@@ -883,7 +878,24 @@
    "d": 207,
    "h": 86,
    "needsBase": true,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-30615549",
+   "slot": "bed",
+   "store": "ikea",
+   "name": "STORKLINTA Okvir kreveta, bijela, 160x200 cm",
+   "url": "https://www.ikea.com/hr/hr/p/storklinta-okvir-kreveta-bijela-30615549/",
+   "price": 129,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "regular": 159,
+   "until": "2026-11-30",
+   "w": 169,
+   "d": 209,
+   "h": 101,
+   "needsBase": true,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-90608126",
@@ -898,22 +910,7 @@
    "d": 208,
    "h": 113,
    "needsBase": true,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-69929233",
-   "slot": "bed",
-   "store": "ikea",
-   "name": "TARVA Okvir kreveta, bor, 160x200 cm",
-   "url": "https://www.ikea.com/hr/hr/p/tarva-okvir-kreveta-bor-s69929233/",
-   "price": 99.99,
-   "color": "bež",
-   "hex": "#f4f3d7",
-   "w": 168,
-   "d": 209,
-   "needsBase": true,
-   "checked": "2026-11-22",
-   "h": 92
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-39481357",
@@ -926,8 +923,8 @@
    "hex": "#f4f3d7",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-22",
-   "h": 4
+   "h": 4,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-90160211",
@@ -941,7 +938,7 @@
    "w": 90,
    "d": 200,
    "h": 4,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-40450680",
@@ -956,8 +953,8 @@
    "until": "2027-03-03",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-22",
-   "h": 24
+   "h": 24,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-40450618",
@@ -972,22 +969,8 @@
    "until": "2027-03-03",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-22",
-   "h": 20
-  },
-  {
-   "id": "hr-ik-10451290",
-   "slot": "mattress",
-   "store": "ikea",
-   "name": "VESTMARKA Opružni madrac, tvrdi/svijetlo plava, 160x200 cm",
-   "url": "https://www.ikea.com/hr/hr/p/vestmarka-opruzni-madrac-tvrdi-svijetlo-plava-10451290/",
-   "price": 159,
-   "color": "plava / bijela",
-   "hex": "#0058a3",
-   "w": 160,
-   "d": 200,
-   "checked": "2026-11-22",
-   "h": 18
+   "h": 20,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-20481710",
@@ -1000,8 +983,8 @@
    "hex": "#ffffff",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-22",
-   "h": 24
+   "h": 24,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-50481469",
@@ -1014,22 +997,22 @@
    "hex": "#ffffff",
    "w": 160,
    "d": 200,
-   "checked": "2026-11-22",
-   "h": 16
+   "h": 16,
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-80437234",
-   "slot": "wardrobe",
+   "id": "hr-ik-30450751",
+   "slot": "mattress",
    "store": "ikea",
-   "name": "KLEPPSTAD Ormar+2 vrata, bijela, 79x55x176 cm",
-   "url": "https://www.ikea.com/hr/hr/p/kleppstad-ormar-2-vrata-bijela-80437234/",
-   "price": 99.99,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 79,
-   "d": 55,
-   "h": 176,
-   "checked": "2026-11-22"
+   "name": "VÅGSTRANDA Madrac s džepičastim oprugama, tvrdi/svijetlo plava, 160x200 cm",
+   "url": "https://www.ikea.com/hr/hr/p/vagstranda-madrac-s-dzepicastim-oprugama-tvrdi-svijetlo-plava-30450751/",
+   "price": 499,
+   "color": "plava / bijela",
+   "hex": "#0058a3",
+   "w": 160,
+   "d": 200,
+   "h": 28,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-00441758",
@@ -1043,21 +1026,21 @@
    "w": 117,
    "d": 55,
    "h": 176,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-90437238",
+   "id": "hr-ik-80437234",
    "slot": "wardrobe",
    "store": "ikea",
-   "name": "KLEPPSTAD Ormar s kliznim vratima, bijela, 117x55x176 cm",
-   "url": "https://www.ikea.com/hr/hr/p/kleppstad-ormar-s-kliznim-vratima-bijela-90437238/",
-   "price": 149,
+   "name": "KLEPPSTAD Ormar+2 vrata, bijela, 79x55x176 cm",
+   "url": "https://www.ikea.com/hr/hr/p/kleppstad-ormar-2-vrata-bijela-80437234/",
+   "price": 99.99,
    "color": "bijela",
    "hex": "#ffffff",
-   "w": 117,
+   "w": 79,
    "d": 55,
    "h": 176,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-40407922",
@@ -1071,7 +1054,21 @@
    "w": 117,
    "d": 50,
    "h": 190,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-90437238",
+   "slot": "wardrobe",
+   "store": "ikea",
+   "name": "KLEPPSTAD Ormar s kliznim vratima, bijela, 117x55x176 cm",
+   "url": "https://www.ikea.com/hr/hr/p/kleppstad-ormar-s-kliznim-vratima-bijela-90437238/",
+   "price": 149,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "w": 117,
+   "d": 55,
+   "h": 176,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-09500296",
@@ -1085,7 +1082,7 @@
    "w": 150,
    "d": 66,
    "h": 236.4,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-29502647",
@@ -1099,7 +1096,7 @@
    "w": 150,
    "d": 66,
    "h": 236.4,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-00576318",
@@ -1113,21 +1110,7 @@
    "w": 37,
    "d": 28,
    "h": 45,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-40627684",
-   "slot": "night",
-   "store": "ikea",
-   "name": "FÅGELFJÄLLET Noćni ormarić, krem, 42x41x56 cm",
-   "url": "https://www.ikea.com/hr/hr/p/fagelfjaellet-nocni-ormaric-krem-40627684/",
-   "price": 59.99,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 42,
-   "d": 41,
-   "h": 56,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-60561743",
@@ -1143,7 +1126,21 @@
    "w": 53,
    "d": 43,
    "h": 69,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-40627684",
+   "slot": "night",
+   "store": "ikea",
+   "name": "FÅGELFJÄLLET Noćni ormarić, krem, 42x41x56 cm",
+   "url": "https://www.ikea.com/hr/hr/p/fagelfjaellet-nocni-ormaric-krem-40627684/",
+   "price": 59.99,
+   "color": "bijela",
+   "hex": "#ffffff",
+   "w": 42,
+   "d": 41,
+   "h": 56,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10234942",
@@ -1157,7 +1154,7 @@
    "w": 39,
    "d": 41,
    "h": 53,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-20570221",
@@ -1171,7 +1168,7 @@
    "w": 45,
    "d": 36,
    "h": 59,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-80574711",
@@ -1185,7 +1182,7 @@
    "w": 66,
    "d": 66,
    "h": 52,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-30321373",
@@ -1197,20 +1194,19 @@
    "color": "žuta / bijela",
    "hex": "#ffdb00",
    "h": 55,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-60573538",
+   "id": "hr-ik-80501258",
    "slot": "lamps",
    "store": "ikea",
-   "name": "STORSEGEL Stolna lampa, jasen/bijela",
-   "url": "https://www.ikea.com/hr/hr/p/storsegel-stolna-lampa-jasen-bijela-60573538/",
-   "price": 9.99,
+   "name": "BLIDVÄDER Stolna lampa, krem keramička/bež, 50 cm",
+   "url": "https://www.ikea.com/hr/hr/p/blidvaeder-stolna-lampa-krem-keramicka-bez-80501258/",
+   "price": 39.99,
    "color": "bež / bijela",
    "hex": "#f4f3d7",
-   "w": 18,
-   "h": 30,
-   "checked": "2026-11-22"
+   "h": 50,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-60523765",
@@ -1224,7 +1220,7 @@
    "w": 59.5,
    "d": 57.2,
    "h": 85.5,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-70525467",
@@ -1238,21 +1234,7 @@
    "w": 59.5,
    "d": 62.8,
    "h": 85.5,
-   "checked": "2026-11-22"
-  },
-  {
-   "id": "hr-ik-00397307",
-   "slot": "hall",
-   "store": "ikea",
-   "name": "TRONES Element za obuću/odlaganje, bijela, 52x18x39 cm",
-   "url": "https://www.ikea.com/hr/hr/p/trones-element-za-obucu-odlaganje-bijela-00397307/",
-   "price": 24.99,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "w": 52,
-   "d": 18,
-   "h": 39,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-50530262",
@@ -1266,7 +1248,7 @@
    "w": 79,
    "d": 29,
    "h": 148,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10530221",
@@ -1280,21 +1262,36 @@
    "w": 49,
    "d": 28,
    "h": 135,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-60530266",
+   "id": "hr-ik-00397307",
    "slot": "hall",
    "store": "ikea",
-   "name": "STÄLL Element za obuću, 4 odjeljka, bijela, 96x17x90 cm",
-   "url": "https://www.ikea.com/hr/hr/p/staell-element-za-obucu-4-odjeljka-bijela-60530266/",
-   "price": 109,
+   "name": "TRONES Element za obuću/odlaganje, bijela, 52x18x39 cm",
+   "url": "https://www.ikea.com/hr/hr/p/trones-element-za-obucu-odlaganje-bijela-00397307/",
+   "price": 24.99,
    "color": "bijela",
    "hex": "#ffffff",
-   "w": 96,
-   "d": 17,
-   "h": 90,
-   "checked": "2026-11-22"
+   "w": 52,
+   "d": 18,
+   "h": 39,
+   "checked": "2026-11-23"
+  },
+  {
+   "id": "hr-ik-40587697",
+   "slot": "hall",
+   "store": "ikea",
+   "name": "GULLABERG Element za obuću, 2 odjeljka, siva, 88x30x122 cm",
+   "url": "https://www.ikea.com/hr/hr/p/gullaberg-element-za-obucu-2-odjeljka-siva-40587697/",
+   "price": 99.99,
+   "color": "siva",
+   "regular": 129,
+   "until": "2027-03-03",
+   "w": 88,
+   "d": 30,
+   "h": 122,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-70238541",
@@ -1306,7 +1303,8 @@
    "color": "bijela",
    "hex": "#ffffff",
    "w": 43,
-   "checked": "2026-11-22"
+   "h": 1.4,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-60291708",
@@ -1322,7 +1320,7 @@
    "w": 19,
    "d": 7,
    "h": 78,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10415594",
@@ -1335,7 +1333,7 @@
    "hex": "#ffffff",
    "w": 63,
    "h": 169,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-69898415",
@@ -1346,7 +1344,7 @@
    "price": 59.99,
    "color": "smeđa / crna",
    "hex": "#814820",
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-89575363",
@@ -1356,7 +1354,7 @@
    "url": "https://www.ikea.com/hr/hr/p/laeckoe-stol-i-2-stolice-vanjski-siva-kuddarna-svijetlosivo-bez-s89575363/",
    "price": 101.99,
    "color": "siva/Kuddarna svijetlosivo-bež",
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-59634665",
@@ -1366,7 +1364,7 @@
    "url": "https://www.ikea.com/hr/hr/p/laeckoe-vassholmen-stol-i-2-stolice-vanjski-siva-crna-bijela-s59634665/",
    "price": 189.99,
    "color": "siva crna/bijela",
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-60594885",
@@ -1381,7 +1379,7 @@
    "d": 2,
    "h": 300,
    "pack": 2,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-90597175",
@@ -1396,24 +1394,24 @@
    "d": 2,
    "h": 300,
    "pack": 2,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-60491038",
+   "id": "hr-ik-50493976",
    "slot": "curtains",
    "store": "ikea",
-   "name": "SILVERLÖNN Prozirne zavjese, 1 par, bijela/s gornjom trakom, 145x300 cm",
-   "url": "https://www.ikea.com/hr/hr/p/silverloenn-prozirne-zavjese-1-par-bijela-s-gornjom-trakom-20491040/",
+   "name": "SILVERLÖNN Prozirne zavjese, 1 par, bež/s gornjom trakom, 145x300 cm",
+   "url": "https://www.ikea.com/hr/hr/p/silverloenn-prozirne-zavjese-1-par-bez-s-gornjom-trakom-10493978/",
    "price": 15.99,
-   "color": "bijela",
-   "hex": "#ffffff",
+   "color": "bež",
+   "hex": "#f4f3d7",
    "regular": 19.99,
    "until": "2026-11-30",
    "w": 145,
    "d": 2,
    "h": 300,
    "pack": 2,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-10070262",
@@ -1428,7 +1426,7 @@
    "d": 2,
    "h": 300,
    "pack": 2,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-49634091",
@@ -1439,7 +1437,7 @@
    "price": 17.99,
    "color": "sa zidnim/stropnim nosačima/sa završecima bijela",
    "w": 385,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-09634074",
@@ -1450,7 +1448,7 @@
    "price": 14.98,
    "color": "sa zidnim/stropnim nosačima/sa završecima bijela",
    "w": 385,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-79634061",
@@ -1461,7 +1459,7 @@
    "price": 7.49,
    "color": "sa zidnim/stropnim nosačima/sa završecima bijela",
    "w": 120,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-20450520",
@@ -1472,18 +1470,19 @@
    "price": 29.99,
    "color": "bijela",
    "hex": "#ffffff",
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-90582758",
+   "id": "hr-ik-79626914",
    "slot": "pendant",
    "store": "ikea",
-   "name": "RÖDFLIK Visilica, sivo-zelena",
-   "url": "https://www.ikea.com/hr/hr/p/roedflik-visilica-sivo-zelena-90582758/",
-   "price": 29.99,
-   "color": "siva / zelena",
-   "hex": "#949494",
-   "checked": "2026-11-22"
+   "name": "KVÄLLSDOPP / SKAFTET Visilica, mjedeno, 52 cm",
+   "url": "https://www.ikea.com/hr/hr/p/kvaellsdopp-skaftet-visilica-mjedeno-s79626914/",
+   "price": 27.98,
+   "color": "žuta",
+   "hex": "#ffdb00",
+   "w": 52,
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-ik-70311697",
@@ -1496,19 +1495,18 @@
    "hex": "#f4f3d7",
    "w": 50,
    "h": 54,
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
-   "id": "hr-ik-10522481",
+   "id": "hr-ik-90582758",
    "slot": "pendant",
    "store": "ikea",
-   "name": "ZEBRASÄV Visilica, bijela/plastika, 46 cm",
-   "url": "https://www.ikea.com/hr/hr/p/zebrasaev-visilica-bijela-plastika-10522481/",
-   "price": 3.99,
-   "color": "bijela",
-   "hex": "#ffffff",
-   "h": 24,
-   "checked": "2026-11-22"
+   "name": "RÖDFLIK Visilica, sivo-zelena",
+   "url": "https://www.ikea.com/hr/hr/p/roedflik-visilica-sivo-zelena-90582758/",
+   "price": 29.99,
+   "color": "siva / zelena",
+   "hex": "#949494",
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-chip-43e7s",
@@ -1524,7 +1522,7 @@
    "h": 56,
    "model": "43E7S",
    "note": "dimenzije približne, provjeriti na stranici",
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   },
   {
    "id": "hr-chip-50p7l",
@@ -1540,7 +1538,7 @@
    "h": 65,
    "model": "50P7L",
    "note": "dimenzije približne, provjeriti na stranici",
-   "checked": "2026-11-22"
+   "checked": "2026-11-23"
   }
  ]
 }
