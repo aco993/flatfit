@@ -372,6 +372,7 @@ const de: Record<Key, string> = {
   'help.title': 'Tastenkürzel',
   'help.views': 'Kameraansicht wechseln',
   'help.look': 'Umsehen / drehen',
+  'help.walk': 'Gehen (oder auf den Boden klicken; die Ringe führen in den nächsten Raum)',
   'help.zoom': 'Zoomen',
   'help.render': 'Fotorealistisches Bild',
   'help.edit': 'Grundriss bearbeiten',

@@ -4,11 +4,22 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import type { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import type { SlotId, View } from '../types';
 import { interiorFov } from './camera';
+import { EYE } from '../domain/walk';
 
 export interface Label {
   text: string;
   x: number;
   z: number;
+}
+/** A ring on the floor that leads into the next room. */
+export interface WalkTarget {
+  x: number;
+  z: number;
+  /** where the label floats (the doorway), if not above the ring */
+  lx?: number;
+  lz?: number;
+  label: string;
+  go: () => void;
 }
 export interface Pose {
   x: number;
@@ -46,6 +57,11 @@ interface PmremInternals {
   _boxMesh: THREE.Mesh;
 }
 
+const RING = new THREE.RingGeometry(0.15, 0.2, 48),
+  DISC = new THREE.CircleGeometry(0.15, 48);
+const WALK_RING = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false }),
+  WALK_DISC = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.35, depthWrite: false, toneMapped: false });
+
 export class Viewer {
   renderer: THREE.WebGLRenderer;
   scene = new THREE.Scene();
@@ -54,10 +70,30 @@ export class Viewer {
   root: THREE.Object3D | null = null;
   interior = false;
   onPick: (slot: SlotId | null) => void = () => {};
+  /** a click on the floor inside a room (the app decides whether one may walk there) */
+  onFloor: (x: number, z: number) => void = () => {};
+  /** the camera has finished walking to a point */
+  onArrive: (x: number, z: number) => void = () => {};
   drag: DragHandler | null = null;
   /** true while a piece is being dragged (tests and the app read it) */
   dragging = false;
   private look = { yaw: 0, pitch: 0 };
+  private walkG = new THREE.Group();
+  private walkEls: { el: HTMLButtonElement; p: THREE.Vector3 }[] = [];
+  private walkHost: HTMLElement | null = null;
+  /** the rest of a walk with several legs (to the doorway, then through it) */
+  private walkQueue: [number, number][] = [];
+  private walkLook: [number, number] | undefined;
+  private walkAnim: {
+    from: THREE.Vector3;
+    to: THREE.Vector3;
+    y0: number;
+    y1: number;
+    p0: number;
+    p1: number;
+    t0: number;
+    dur: number;
+  } | null = null;
   private dirty = true;
   private anim: { from: THREE.Vector3; to: THREE.Vector3; ft: THREE.Vector3; tt: THREE.Vector3; t0: number; dur: number } | null = null;
   private sel: THREE.Box3Helper | null = null;
@@ -121,6 +157,11 @@ export class Viewer {
     Object.assign(sun.shadow.camera, { left: -9, right: 9, top: 9, bottom: -9, near: 1, far: 40 });
     sun.target.position.set(3.5, 0, 3);
     this.scene.add(sun, sun.target);
+    this.walkG.visible = false;
+    this.scene.add(this.walkG);
+    this.walkHost = document.createElement('div');
+    this.walkHost.className = 'walk-spots';
+    host.appendChild(this.walkHost);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
@@ -300,6 +341,8 @@ export class Viewer {
   }
 
   setView(v: View, instant = false) {
+    this.walkAnim = null;
+    this.walkQueue = [];
     this.interior = v.interior;
     this.controls.enabled = !v.interior;
     const to = new THREE.Vector3(...v.pos),
@@ -495,7 +538,7 @@ export class Viewer {
         return;
       }
       if (g) this.controls.enabled = !this.interior;
-      if (down && !down.moved) this.pick(e);
+      if (down && !down.moved && !(this.interior && this.walkClick(e))) this.pick(e);
       down = null;
     });
     el.addEventListener('pointercancel', () => {
@@ -648,6 +691,84 @@ export class Viewer {
     this.applyLook();
   }
 
+  /** Rings on the floor of the room the camera stands in, each leading into the next room. */
+  setWalk(list: WalkTarget[]) {
+    if (!this.walkHost) return;
+    this.walkG.clear();
+    this.walkHost.innerHTML = '';
+    this.walkEls = [];
+    for (const w of list) {
+      const ring = new THREE.Mesh(RING, WALK_RING),
+        disc = new THREE.Mesh(DISC, WALK_DISC);
+      for (const m of [ring, disc]) {
+        m.rotation.x = -Math.PI / 2;
+        m.position.set(w.x, 0.015, w.z);
+        m.renderOrder = 5;
+        m.userData.go = w.go;
+        this.walkG.add(m);
+      }
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'walk-spot';
+      el.textContent = `› ${w.label}`;
+      el.onclick = () => w.go();
+      this.walkHost.appendChild(el);
+      // the label floats in the doorway a little below the eyes: a ring right at your feet is below the picture
+      this.walkEls.push({ el, p: new THREE.Vector3(w.lx ?? w.x, 1.45, w.lz ?? w.z) });
+    }
+    this.dirty = true;
+  }
+  /** Where the camera stands on the floor, and which way it faces (yaw, radians). */
+  get standing() {
+    return { x: this.camera.position.x, z: this.camera.position.z, yaw: this.look.yaw };
+  }
+  /** Walk the camera to a floor point at eye height; `face` turns it the way it walks, as a person would. */
+  walkTo(x: number, z: number, face = false, rest: [number, number][] = [], look?: [number, number]) {
+    if (!this.interior) return;
+    this.walkQueue = rest;
+    this.walkLook = look;
+    const from = this.camera.position.clone(),
+      to = new THREE.Vector3(x, EYE, z),
+      d = to.clone().sub(from);
+    d.y = 0;
+    const dist = d.length();
+    let y1 = this.look.yaw,
+      p1 = this.look.pitch;
+    if (face && dist > 0.4) {
+      y1 = Math.atan2(d.x, d.z);
+      p1 = -0.12;
+    }
+    // at the end of the walk into a room, turn to look into it
+    if (look && !rest.length) {
+      y1 = Math.atan2(look[0] - x, look[1] - z);
+      p1 = -0.15;
+    }
+    y1 = this.look.yaw + Math.atan2(Math.sin(y1 - this.look.yaw), Math.cos(y1 - this.look.yaw));
+    this.anim = null;
+    const dur = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : Math.min(1200, 300 + dist * 300);
+    this.walkAnim = { from, to, y0: this.look.yaw, y1, p0: this.look.pitch, p1, t0: performance.now(), dur };
+    this.dirty = true;
+  }
+  /** A click inside a room: a ring walks to the next room, the floor walks there; furniture is left to pick(). */
+  private walkClick(e: { clientX: number; clientY: number }) {
+    if (this.walkAnim || !this.root) return false;
+    this.setRay(e);
+    if (this.walkG.visible) {
+      const ring = this.ray.intersectObjects(this.walkG.children, false)[0];
+      if (ring) {
+        (ring.object.userData.go as () => void)();
+        return true;
+      }
+    }
+    const h = this.ray.intersectObject(this.root, true).find(x => (x.object as THREE.Mesh).isMesh && x.object.visible);
+    // the rug is floor to walk on; clicking it walks instead of opening its card
+    const slot = h?.object.userData.slot;
+    if (h && (slot === 'rug' || (h.object.userData.room && !slot))) {
+      this.onFloor(h.point.x, h.point.z);
+      return slot === 'rug';
+    }
+    return false;
+  }
   setLabels(list: Label[]) {
     this.labelHost.innerHTML = '';
     this.labelEls = [];
@@ -668,6 +789,14 @@ export class Viewer {
         hide = this.interior || v.z > 1;
       if (el.hidden !== hide) el.hidden = hide;
       if (!hide) el.style.transform = `translate(-50%,-50%) translate(${((v.x + 1) / 2) * w}px, ${((1 - v.y) / 2) * h}px)`;
+    }
+    const showWalk = this.interior && !this.walkAnim;
+    this.walkG.visible = showWalk;
+    for (const { el, p } of this.walkEls) {
+      const v = p.clone().project(this.camera),
+        hide = !showWalk || v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05;
+      if (el.hidden !== hide) el.hidden = hide;
+      if (!hide) el.style.transform = `translate(-50%,-100%) translate(${((v.x + 1) / 2) * w}px, ${((1 - v.y) / 2) * h}px)`;
     }
   }
   private size = { w: 0, h: 0 };
@@ -703,7 +832,21 @@ export class Viewer {
   }
 
   private tick() {
-    if (this.anim) {
+    if (this.walkAnim) {
+      const a = this.walkAnim,
+        k = a.dur ? Math.min(1, (performance.now() - a.t0) / a.dur) : 1,
+        e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+      this.camera.position.lerpVectors(a.from, a.to, e);
+      this.look.yaw = a.y0 + (a.y1 - a.y0) * e;
+      this.look.pitch = a.p0 + (a.p1 - a.p0) * e;
+      this.applyLook();
+      if (k >= 1) {
+        this.walkAnim = null;
+        const next = this.walkQueue.shift();
+        if (next) this.walkTo(next[0], next[1], true, this.walkQueue, this.walkLook);
+        else this.onArrive(a.to.x, a.to.z);
+      }
+    } else if (this.anim) {
       const k = Math.min(1, (performance.now() - this.anim.t0) / this.anim.dur),
         e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
       this.camera.position.lerpVectors(this.anim.from, this.anim.to, e);

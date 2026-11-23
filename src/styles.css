@@ -346,6 +346,34 @@ input[type="password"] {
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
+.walk-spots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.walk-spot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: auto;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1d1f22;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.walk-spot:hover,
+.walk-spot:focus-visible {
+  background: #fff;
+  outline: 2px solid var(--accent, #c2410c);
+}
 .toolbar {
   position: absolute;
   right: 12px;

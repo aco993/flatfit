@@ -368,6 +368,7 @@ const en = {
   'help.title': 'Keyboard shortcuts',
   'help.views': 'Switch camera view',
   'help.look': 'Look around / orbit',
+  'help.walk': 'Walk (or click the floor; the rings lead to the next room)',
   'help.zoom': 'Zoom',
   'help.render': 'Photoreal render',
   'help.edit': 'Edit floor plan',

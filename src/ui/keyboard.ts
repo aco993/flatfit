@@ -2,6 +2,7 @@ import { LANGS, getLang, t, type Key } from '../i18n';
 import type { App } from './app';
 import { $, esc } from './dom';
 import { openEditor } from './editor';
+import { step } from './walk';
 
 /** Keyboard shortcuts for the whole page; they stay quiet while the user types or a dialog is open. */
 export function onKey(app: App, e: KeyboardEvent) {
@@ -40,6 +41,14 @@ export function onKey(app: App, e: KeyboardEvent) {
     return;
   }
   if ((k === 't' || k === 'T') && app.nudge(0, 0, true)) return;
+  // inside a room W A S D walk: forward, left, back, right
+  const walk: Record<string, [number, number]> = { w: [1, 0], s: [-1, 0], a: [0, -1], d: [0, 1] };
+  const wk = walk[k.toLowerCase()];
+  if (wk && app.viewer?.interior && !inTabs) {
+    e.preventDefault();
+    step(app, ...wk);
+    return;
+  }
   const look: Record<string, [number, number]> = {
     ArrowLeft: [0.12, 0],
     ArrowRight: [-0.12, 0],
@@ -84,6 +93,7 @@ export function showHelp() {
   const rows: [string, Key][] = [
     ['0–9', 'help.views'],
     ['← → ↑ ↓', 'help.look'],
+    ['W A S D', 'help.walk'],
     ['+ −', 'help.zoom'],
     ['R', 'help.render'],
     ['E', 'help.edit'],

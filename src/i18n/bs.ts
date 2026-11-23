@@ -369,6 +369,7 @@ const bs: Record<Key, string> = {
   'help.title': 'Prečice na tastaturi',
   'help.views': 'Promijeni pogled kamere',
   'help.look': 'Razgledanje / okretanje',
+  'help.walk': 'Hodanje (ili klik na pod; krugovi vode u sljedeću prostoriju)',
   'help.zoom': 'Zum',
   'help.render': 'Fotorealistična slika',
   'help.edit': 'Uredi osnovu stana',

@@ -48,6 +48,7 @@ import { openPayback } from './payback';
 import { openFinish } from './finish';
 import { openStylist } from './stylist';
 import { openOwn, removeOwn } from './own';
+import { refreshWalk, step, walkTo } from './walk';
 
 export { fmtNum, fmtDate, dimTxt, localeOf } from './format';
 
@@ -88,6 +89,8 @@ export class App {
   history = new History<Snapshot>();
   views: View[] = [];
   viewIdx = 0;
+  /** where the camera stands inside a room, for the rings that lead to the next room */
+  walkAt: [number, number] | null = null;
   selected: SlotId | null = null;
   viewer: Viewer | null = null;
   /** made with the 3D view, which loads after the list (see load3D) */
@@ -156,6 +159,8 @@ export class App {
         try {
           this.viewer = new kit.Viewer($('#viewer'), $('#labels'));
           this.viewer.onPick = s => this.select(s, false);
+          this.viewer.onFloor = (x, z) => walkTo(this, x, z);
+          this.viewer.onArrive = (x, z) => refreshWalk(this, [x, z], true);
           this.viewer.drag = this.dragHandler();
         } catch (e) {
           // no WebGL (old GPU, blocked, headless browser): the list and prices still work without the 3D view
@@ -447,7 +452,7 @@ export class App {
   }
 
   // ---------- moving furniture ----------
-  private D = (s: SlotId) => dimsOf(this.product(s), s);
+  D = (s: SlotId) => dimsOf(this.product(s), s);
   pose(key: SlotId): Pose | null {
     const p = this.layout?.placements.find(x => x.slot === key);
     return p ? { x: p.x, z: p.z, rot: p.rot } : null;
@@ -527,10 +532,20 @@ export class App {
           z: r.z + r.d / 2,
         }));
     this.viewer.setLabels(labels);
+    // furniture may have moved: the rings keep clear of it
+    refreshWalk(this, null);
   }
   setView(i: number, instant = false, forceBuild = false) {
     if (!this.views[i]) return;
     const wasInterior = this.views[this.viewIdx]?.interior;
+    this.markTab(i);
+    if (wasInterior !== this.views[i].interior || forceBuild) this.rebuild();
+    this.viewer?.setView(this.views[i], instant);
+    $('#viewer').classList.toggle('interior', this.views[i].interior);
+    refreshWalk(this, [this.views[i].pos[0], this.views[i].pos[2]]);
+  }
+  /** Mark a view's tab as the current one, without moving the camera (after walking into another room). */
+  markTab(i: number) {
     this.viewIdx = i;
     $('#views')
       .querySelectorAll('button')
@@ -538,9 +553,6 @@ export class App {
         b.setAttribute('aria-selected', String(k === i));
         b.tabIndex = k === i ? 0 : -1;
       });
-    if (wasInterior !== this.views[i].interior || forceBuild) this.rebuild();
-    this.viewer?.setView(this.views[i], instant);
-    $('#viewer').classList.toggle('interior', this.views[i].interior);
   }
   roomName(id: string) {
     // an extension of an L- or U-shaped room has the name of the room it extends
@@ -741,6 +753,9 @@ export class App {
     $('#start-3d').addEventListener('click', () => void this.ensure3D(true));
     document.querySelectorAll<HTMLElement>('[data-turn]').forEach(b => {
       b.addEventListener('click', () => this.viewer?.turn(b.dataset.turn === 'left' ? 0.35 : -0.35, 0));
+    });
+    document.querySelectorAll<HTMLElement>('[data-walk]').forEach(b => {
+      b.addEventListener('click', () => step(this, Number(b.dataset.walk), 0));
     });
     for (const d of document.querySelectorAll('dialog')) {
       d.addEventListener('click', e => {
