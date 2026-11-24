@@ -11,9 +11,12 @@ const tab = (page: Page) => page.locator('#views [aria-selected=true]');
 /** Turn on the spot until the ring that leads to `room` is on screen. */
 async function face(page: Page, room: string) {
   const spot = page.locator('.walk-spot', { hasText: room });
+  // on CI the 3D view is drawn on the CPU and lags behind the keys: wait for the next drawn frame after each turn
+  const frame = () => page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+  await frame();
   for (let i = 0; i < 60 && !(await spot.isVisible()); i++) {
     await page.keyboard.press('ArrowRight');
-    await page.waitForTimeout(60);
+    await frame();
   }
   await expect(spot).toBeVisible();
   return spot;
