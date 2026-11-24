@@ -8,17 +8,32 @@ import { expect, test, type Page } from '@playwright/test';
 const standing = (page: Page) => page.evaluate(() => window.flatfit.viewer!.standing);
 const tab = (page: Page) => page.locator('#views [aria-selected=true]');
 
-/** Turn on the spot until the ring that leads to `room` is on screen. */
+/**
+ * Look at the doorway that leads to `room` (as one turns towards a door) and check its label shows up there.
+ * The bedroom door of the demo flat is in the wall x = 4, z 2.35–3.10.
+ */
 async function face(page: Page, room: string) {
   const spot = page.locator('.walk-spot', { hasText: room });
-  // on CI the 3D view is drawn on the CPU and lags behind the keys: wait for the next drawn frame after each turn
-  const frame = () => page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
-  await frame();
-  for (let i = 0; i < 60 && !(await spot.isVisible()); i++) {
-    await page.keyboard.press('ArrowRight');
-    await frame();
+  await page.evaluate(() => {
+    const v = window.flatfit.viewer!;
+    v.lookAtPoint(v.camera.position.clone().set(4, 1.45, 2.72));
+  });
+  try {
+    await expect(spot).toBeVisible({ timeout: 10_000 });
+  } catch (e) {
+    // what the camera and the labels were doing, for a failure on CI
+    console.log(
+      await page.evaluate(() => {
+        const v = window.flatfit.viewer!;
+        return JSON.stringify({
+          standing: v.standing,
+          interior: v.interior,
+          labels: [...document.querySelectorAll<HTMLElement>('.walk-spot')].map(b => [b.textContent, b.hidden, b.style.transform]),
+        });
+      }),
+    );
+    throw e;
   }
-  await expect(spot).toBeVisible();
   return spot;
 }
 /** Wait until the camera has finished walking, every leg of it. */
