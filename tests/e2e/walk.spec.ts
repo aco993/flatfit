@@ -18,15 +18,10 @@ async function face(page: Page, room: string) {
   await expect(spot).toBeVisible();
   return spot;
 }
-/** Wait until the camera stops walking. */
+/** Wait until the camera has finished walking, every leg of it. */
 async function settle(page: Page) {
-  let last = '';
-  for (let i = 0; i < 40; i++) {
-    const now = JSON.stringify(await standing(page));
-    if (now === last) return;
-    last = now;
-    await page.waitForTimeout(250);
-  }
+  await page.waitForTimeout(50);
+  await expect.poll(() => page.evaluate(() => window.flatfit.viewer!.walking), { timeout: 10_000 }).toBe(false);
 }
 
 test.describe('Tea · walks through the flat', () => {

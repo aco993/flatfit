@@ -718,6 +718,10 @@ export class Viewer {
     }
     this.dirty = true;
   }
+  /** true while the camera walks (tests wait for the end of a walk with several legs) */
+  get walking() {
+    return !!this.walkAnim || this.walkQueue.length > 0;
+  }
   /** Where the camera stands on the floor, and which way it faces (yaw, radians). */
   get standing() {
     return { x: this.camera.position.x, z: this.camera.position.z, yaw: this.look.yaw };
@@ -738,8 +742,9 @@ export class Viewer {
       y1 = Math.atan2(d.x, d.z);
       p1 = -0.12;
     }
-    // at the end of the walk into a room, turn to look into it
-    if (look && !rest.length) {
+    // at the end of the walk into a room, turn to look into it; in a small room (a bathroom, a kitchen niche) its
+    // middle is right in front of you, and looking on the way you walked shows more of it
+    if (look && !rest.length && Math.hypot(look[0] - x, look[1] - z) > 1) {
       y1 = Math.atan2(look[0] - x, look[1] - z);
       p1 = -0.15;
     }

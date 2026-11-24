@@ -22,12 +22,33 @@ export function walkBlocked(app: App) {
   return (x: number, z: number) => rects.some(r => x > r.x1 - BODY && x < r.x2 + BODY && z > r.z1 - BODY && z < r.z2 + BODY);
 }
 
+/**
+ * The room a camera stands in. A view's camera can stand exactly on the line between two open-plan rooms, or
+ * outside the front door looking in (a hall seen from the stairwell): then it counts as in the nearest room.
+ */
+function nearRoom(app: App, x: number, z: number) {
+  const here = roomAt(app.project, x, z);
+  if (here) return here;
+  let best: string | null = null,
+    bd = 1.0;
+  for (const r of app.project.rooms) {
+    const d = Math.hypot(Math.max(r.x - x, 0, x - r.x - r.w), Math.max(r.z - z, 0, z - r.z - r.d));
+    if (d < bd) {
+      bd = d;
+      best = roomAt(app.project, r.x + r.w / 2, r.z + r.d / 2);
+    }
+  }
+  return best;
+}
+
 /** Walk to a floor point, if one can get there in a straight line and stand there. */
 export function walkTo(app: App, x: number, z: number) {
   const v = app.viewer;
   if (!v?.interior) return false;
   const s = v.standing;
-  if (!canStep(app.project, [s.x, s.z], [x, z]) || !standable(app.project, x, z, walkBlocked(app))) return false;
+  // from the front door (outside the flat) the first step in needs no doorway check: the view stands in it
+  const outside = !roomAt(app.project, s.x, s.z);
+  if ((!outside && !canStep(app.project, [s.x, s.z], [x, z])) || !standable(app.project, x, z, walkBlocked(app))) return false;
   v.walkTo(x, z);
   return true;
 }
@@ -52,7 +73,7 @@ export function refreshWalk(app: App, at: [number, number] | null, markTab = fal
   const v = app.viewer;
   if (!v) return;
   if (at) app.walkAt = at;
-  const room = app.walkAt && v.interior ? roomAt(app.project, ...app.walkAt) : null;
+  const room = app.walkAt && v.interior ? nearRoom(app, ...app.walkAt) : null;
   if (!room) {
     v.setWalk([]);
     return;
@@ -71,7 +92,10 @@ export function refreshWalk(app: App, at: [number, number] | null, markTab = fal
   );
   if (!markTab) return;
   const cur = app.views[app.viewIdx];
-  if (cur?.room && mainId(app.project, cur.room) === room) return;
-  const i = app.views.findIndex(w => w.interior && w.room && mainId(app.project, w.room) === room);
-  if (i >= 0) app.markTab(i);
+  // the tab of the room one is in; back from the terrace, the living room's tab is marked again
+  const i =
+    cur?.room && mainId(app.project, cur.room) === room
+      ? app.viewIdx
+      : app.views.findIndex(w => w.room && mainId(app.project, w.room) === room);
+  if (i >= 0) app.markTab(i, !app.views[i].interior);
 }

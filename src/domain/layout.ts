@@ -564,8 +564,9 @@ export function autoViews(p: Project, blocked: (x: number, z: number) => boolean
         pick = order.find(free) || order[0];
       }
     }
-    // a small open-plan room (kitchen niche): look at it from the room it opens into
-    if (!door && Math.min(r.w, r.d) < 2.0) {
+    // a small open-plan room (kitchen niche, a hall open to the dining room): look at it from the room it opens
+    // into, even when a door of the next room is on its wall: from that doorway one sees the next room, not this one
+    if (Math.min(r.w, r.d) < 2.0) {
       const openSide = sideInfo(p, r).find(x => !x.wall);
       if (openSide) {
         const [nx, nz] = inward(openSide.side),

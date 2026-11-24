@@ -78,9 +78,9 @@ const at = (ps: Passage, t: number, off: number, n: [number, number]): [number, 
   ps.axis === 'x' ? [t + n[0] * off, ps.c + n[1] * off] : [ps.c + n[0] * off, t + n[1] * off];
 
 /** Whether the camera may stand here: inside the flat, off the walls (or in a doorway), not in furniture. */
-export function standable(p: Project, x: number, z: number, blocked: (x: number, z: number) => boolean) {
+export function standable(p: Project, x: number, z: number, blocked: (x: number, z: number) => boolean, inDoor = true) {
   if (blocked(x, z)) return false;
-  if (passages(p).some(ps => inDoorway(ps, x, z))) return true;
+  if (inDoor && passages(p).some(ps => inDoorway(ps, x, z))) return true;
   const r = roomAt(p, x, z);
   if (!r) return false;
   // a wall within MARGIN shows as a neighbouring point outside this room (an L-shaped room is one room)
@@ -136,7 +136,8 @@ export function walkSpots(p: Project, room: string, blocked: (x: number, z: numb
       mid = (ps.lo + ps.hi) / 2,
       nin = into(p, ps, room),
       nout: [number, number] = [-nin[0], -nin[1]];
-    const ok = (c: [number, number]) => roomAt(p, ...c) === next && standable(p, ...c, blocked);
+    // where one arrives is clear of the walls, not just inside the doorway
+    const ok = (c: [number, number]) => roomAt(p, ...c) === next && standable(p, ...c, blocked, false);
     // where to cross: the middle of the passage, or along it (a dining table can stand behind an open seam)
     const ts = [0];
     for (let k = 0.3; k < (ps.hi - ps.lo) / 2; k += 0.3) ts.push(-k, k);
@@ -162,10 +163,53 @@ export function walkSpots(p: Project, room: string, blocked: (x: number, z: numb
         }
       if (found) break;
     }
+    // furniture all round the doorway (a TV bench and an armchair behind a balcony door): the nearest free spot in
+    // the next room, so no room is a dead end
+    if (!found) {
+      const door = at(ps, mid, 0, nout);
+      let best: [number, number] | null = null,
+        bd = Infinity;
+      for (const r of p.rooms.filter(r => mainId(p, r.id) === next))
+        for (let gx = r.x + 0.1; gx < r.x + r.w; gx += 0.15)
+          for (let gz = r.z + 0.1; gz < r.z + r.d; gz += 0.15) {
+            const d = Math.hypot(gx - door[0], gz - door[1]);
+            if (d < bd && ok([gx, gz])) {
+              bd = d;
+              best = [gx, gz];
+            }
+          }
+      if (best) found = { t: mid, path: [at(ps, mid, 0.3, nout), best] };
+    }
     if (!found) continue;
     const [x, z] = at(ps, found.t, 0.45, nin);
-    const nr = p.rooms.find(r => r.id === next) || p.rooms.find(r => mainId(p, r.id) === next)!;
-    out.push({ room: next, x, z, path: found.path, look: [nr.x + nr.w / 2, nr.z + nr.d / 2], door: at(ps, found.t, 0, nin) });
+    const end = found.path[found.path.length - 1];
+    out.push({ room: next, x, z, path: found.path, look: lookInto(p, next, ...end), door: at(ps, found.t, 0, nin) });
   }
   return out;
+}
+
+/**
+ * Where to look on arriving in a room: the way one sees furthest across it, leaning towards its middle. In a
+ * kitchen niche that is along the units, not into the cabinet in front of you.
+ */
+export function lookInto(p: Project, room: string, x: number, z: number): [number, number] {
+  const parts = p.rooms.filter(r => mainId(p, r.id) === room);
+  const mid = parts[0] ? [parts[0].x + parts[0].w / 2, parts[0].z + parts[0].d / 2] : [x, z];
+  const toMid = Math.atan2(mid[0] - x, mid[1] - z);
+  let best: [number, number] = [mid[0], mid[1]],
+    bs = -Infinity;
+  for (let k = 0; k < 16; k++) {
+    const a = (k / 16) * 2 * Math.PI,
+      dx = Math.sin(a),
+      dz = Math.cos(a);
+    // how far one sees along this way before leaving the room
+    let d = 0;
+    while (d < 8 && roomAt(p, x + dx * (d + 0.1), z + dz * (d + 0.1)) === room) d += 0.1;
+    const sc = d + 0.6 * Math.cos(a - toMid);
+    if (sc > bs) {
+      bs = sc;
+      best = [x + dx * d, z + dz * d];
+    }
+  }
+  return best;
 }

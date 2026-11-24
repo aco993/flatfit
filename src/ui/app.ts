@@ -544,9 +544,12 @@ export class App {
     $('#viewer').classList.toggle('interior', this.views[i].interior);
     refreshWalk(this, [this.views[i].pos[0], this.views[i].pos[2]]);
   }
-  /** Mark a view's tab as the current one, without moving the camera (after walking into another room). */
-  markTab(i: number) {
-    this.viewIdx = i;
+  /**
+   * Mark a view's tab as the current one, without moving the camera (after walking into another room). A room
+   * seen from outside (the terrace) only gets its tab marked: the view, and with it the wall height, stays.
+   */
+  markTab(i: number, keepView = false) {
+    if (!keepView) this.viewIdx = i;
     $('#views')
       .querySelectorAll('button')
       .forEach((b, k) => {

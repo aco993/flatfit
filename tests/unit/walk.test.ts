@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEMO } from '../../src/data/demo';
 import { fromTemplate } from '../../src/data/templates';
-import { canStep, passages, roomAt, standable, walkSpots } from '../../src/domain/walk';
+import { canStep, lookInto, passages, roomAt, standable, walkSpots } from '../../src/domain/walk';
 
 const free = () => false;
 const pair = (a: string, b: string) => [a, b].sort().join('|');
@@ -52,6 +52,12 @@ describe('walking through the flat', () => {
     const [tx, tz] = s.path[1];
     expect(wardrobe(tx, tz)).toBe(false);
     expect(roomAt(DEMO, tx, tz)).toBe('bedroom');
+  });
+  it('on arrival looks the way one sees furthest: along a kitchen niche, not into its cabinets', () => {
+    // the demo kitchen niche is 2.6 m wide and 0.6 m deep
+    const [lx, lz] = lookInto(DEMO, 'kitchen', 1.3, 6.5);
+    expect(Math.abs(lx - 1.3)).toBeGreaterThan(Math.abs(lz - 6.5));
+    expect(roomAt(DEMO, lx * 0.98 + 1.3 * 0.02, lz * 0.98 + 6.5 * 0.02)).toBe('kitchen');
   });
   it('works for the templates too: every room can be reached from every other', () => {
     for (const t of ['studio', 'tworoom'] as const) {
